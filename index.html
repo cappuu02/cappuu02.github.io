@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Static Page</title>
+
+    <!-- Inline CSS in the head -->
+    <style>
+        /* General Page Styling */
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        /* Navbar Styling */
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 1rem 2rem;
+            color: #fff;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            padding: 0 1rem;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        
+        .nav-links a:hover {
+            background-color: #555;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        /* Home Section Styling */
+        
+        #home {
+            padding: 3rem;
+            text-align: center;
+            background-color: #eaeaea;
+        }
+        
+        #home h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+        
+        #home p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+        /* About Section Styling */
+        
+        #about {
+            padding: 3rem;
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        #about h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+        
+        #about p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+        /* Contact Section Styling */
+        
+        #contact {
+            padding: 3rem;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        
+        #contact h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+        
+        #contact p {
+            font-size: 1rem;
+            color: #666;
+        }
+        /* Button Styling */
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .btn:hover {
+            background-color: #555;
+        }
+        /* Footer Styling */
+        
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">MyWebsite</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <h1>Welcome to My Website</h1>
+        <p>This is a simple interactive static page created using HTML, CSS, and JavaScript. Navigate through the sections using the navbar.</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We are a passionate team of developers creating beautiful and functional websites to help businesses grow online.</p>
+        <button class="btn" onclick="showAlert()">Click Me!</button>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Email us at contact@mywebsite.com or give us a call at +123 456 7890</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 MyWebsite. All rights reserved.
+    </footer>
+
+    <!-- JavaScript for Button Interaction -->
+    <script>
+        function showAlert() {
+            alert("Thank you for clicking the button!");
+        }
+    </script>
+</body>
+
+</html>
