@@ -97,25 +97,32 @@ function drawHistogram(penetrationData, systems) {
 
     // Disegna gli assi dell'istogramma
     histogramCtx.beginPath();
-    histogramCtx.moveTo(50, 30);
-    histogramCtx.lineTo(50, histogramCanvas.height - 30);
-    histogramCtx.lineTo(histogramCanvas.width - 30, histogramCanvas.height - 30);
+    histogramCtx.moveTo(50, 30); // Punto di partenza (sinistra in alto)
+    histogramCtx.lineTo(50, histogramCanvas.height - 30); // Asse Y
+    histogramCtx.lineTo(histogramCanvas.width - 30, histogramCanvas.height - 30); // Asse X
     histogramCtx.strokeStyle = '#007bff';
     histogramCtx.stroke();
     histogramCtx.closePath();
 
-    // Disegna le barre dell'istogramma
-    const barWidth = (histogramCanvas.width - 100) / systems;
+    // Disegna le barre orizzontali dell'istogramma
+    const barHeight = (histogramCanvas.height - 60) / systems; // Altezza di ogni barra
     const totalAttackers = penetrationData.length; // Numero totale di attaccanti
 
     for (let i = 0; i < systems; i++) {
         const frequencyRelative = levelCounts[i] / totalAttackers; // Frequenza relativa
-        const barHeight = frequencyRelative * (histogramCanvas.height - 60); // Normalizza l'altezza delle barre
-        histogramCtx.fillStyle = '#007bff';
-        histogramCtx.fillRect(50 + i * barWidth, histogramCanvas.height - 30 - barHeight, barWidth - 5, barHeight);
-        histogramCtx.fillText((frequencyRelative * 100).toFixed(2) + '%', 50 + i * barWidth + barWidth / 2 - 25, histogramCanvas.height - 35); // Etichetta con frequenza relativa in percentuale
+        const barWidth = frequencyRelative * (histogramCanvas.width - 100); // Normalizza la larghezza delle barre
 
-        // Aggiungi etichette sui livelli
-        histogramCtx.fillText(i + 1, 50 + i * barWidth + barWidth / 2 - 5, histogramCanvas.height - 10); // Etichette dei sistemi
+        // Disegna le barre: inverte l'ordine disegnando dall'alto verso il basso
+        histogramCtx.fillStyle = '#007bff';
+        histogramCtx.fillRect(50, 30 + (systems - i - 1) * barHeight, barWidth, barHeight - 5);
+
+        // Posiziona l'etichetta percentuale sopra la barra
+        const percentageText = (frequencyRelative * 100).toFixed(2) + '%';
+        histogramCtx.fillStyle = '#000'; // Testo nero per contrasto
+        histogramCtx.fillText(percentageText, 50 + 5, 30 + (systems - i - 1) * barHeight + barHeight / 2 + 5);
+
+        // Aggiungi etichette sui livelli (sistemi) lungo l'asse Y, invertendo l'ordine
+        histogramCtx.fillStyle = '#000'; // Colore del testo per i livelli
+        histogramCtx.fillText(i + 1, 30, 30 + (systems - i - 1) * barHeight + barHeight / 2 + 5); // Etichette dei sistemi
     }
 }
