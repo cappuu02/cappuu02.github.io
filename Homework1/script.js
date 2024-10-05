@@ -24,15 +24,11 @@ function drawChart(attackers, systems, probability) {
     ctx.stroke(); // Esegui il tracciamento delle linee
     ctx.closePath(); // Chiudi il tracciamento delle linee
 
-
-
     // Disegna le etichette sull'asse X
     for (let j = 0; j < systems; j++) {
         const xLabel = 50 + (j * (canvas.width - 100) / (systems - 1)); // Calcola la posizione X
         ctx.fillText(j + 1, xLabel - 5, canvas.height - 10); // Disegna il numero del sistema
     }
-
-
 
     // Array per registrare il punteggio di penetrazione di ogni aggressore
     const penetrationData = [];
@@ -53,12 +49,9 @@ function drawChart(attackers, systems, probability) {
                 yPosition += 1; // Incrementa se penetra
             }
 
-            // Limita yPosition per non superare il numero massimo di aggressori
-            yPosition = Math.min(yPosition, attackers); // Limita a un massimo pari al numero di aggressori
-
             // Disegna la linea verticale
             const x = 50 + (j * (canvas.width - 100) / (systems - 1)); // Calcola la posizione X
-            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / attackers); // Calcola la posizione Y
+            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / systems); // Calcola la posizione Y
 
             ctx.lineTo(x, y); // Disegna la linea verso la nuova posizione calcolata
         }
