@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luca Capuccini Blog</title>
 
-    <!-- Inline CSS in the head -->
     <style>
         /* General Page Styling */
         
@@ -17,10 +16,16 @@
             padding: 0;
             background-color: #f4f4f9;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         /* Navbar Styling */
         
         .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -46,46 +51,45 @@
             padding: 0.5rem;
             border-radius: 5px;
         }
-        /* Home Section Styling */
+        /* Centered Div Styling */
         
-        #home {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            /* Full viewport height */
+        .centered-div {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
             text-align: center;
-            background-color: #eaeaea;
         }
         
-        #home h1 {
-            font-size: 2.5rem;
+        .centered-div h1 {
+            font-size: 2rem;
             color: #333;
         }
         
-        #home p {
+        .centered-div p {
             font-size: 1.2rem;
             color: #666;
-            max-width: 600px;
-            margin: 1rem auto;
         }
-        /* Footer Styling */
+        /* Footer for information */
         
         footer {
-            padding: 2rem;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
             text-align: center;
+            padding: 1rem;
             background-color: #333;
             color: white;
+            font-size: 0.9rem;
         }
     </style>
-
 </head>
 
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's blog</div>
+        <div class="navbar-brand">Luca Capuccini's Blog</div>
         <div class="nav-links">
             <a href="#home">Home</a>
             <a href="./About.html">About</a>
@@ -93,17 +97,16 @@
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home">
+    <!-- Centered Div Content -->
+    <div class="centered-div">
         <h1>Welcome to my blog!</h1>
         <p>Hello, my name is Luca Capuccini and this is my personal blog. This site will be used as a bulletin board to present various university projects in the computer science course related to cybersecurity.</p>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer>
-        &copy; 2024 MyWebsite. All rights reserved.
+        <p>© 2024 Luca Capuccini. All Rights Reserved.</p>
     </footer>
-
 </body>
 
 </html>

@@ -12,96 +12,117 @@
         
         body,
         html {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         /* Navbar Styling */
         
         .navbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
+            /* Allinea a destra */
             align-items: center;
             background-color: #333;
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
+            /* Padding aumentato per evitare uscita dalla visuale */
             color: #fff;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Ombra leggera */
         }
         
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
+            margin-right: auto;
+            /* Spazio tra il brand e i link */
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            /* Spazio tra i link */
         }
         
         .nav-links a {
             color: white;
-            padding: 0 1rem;
+            padding: 0.5rem 1rem;
+            /* Padding per uniformare l'aspetto dei link */
             text-decoration: none;
             font-size: 1rem;
+            border-radius: 5px;
+            /* Bordi arrotondati */
+            transition: background-color 0.3s;
+            /* Transizione per l'effetto hover */
         }
         
         .nav-links a:hover {
             background-color: #555;
-            padding: 0.5rem;
-            border-radius: 5px;
+            /* Colore di hover */
         }
-        /* Content Section Styling */
+        /* Container for centering the card */
         
-        #content {
+        .container {
             display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding-top: 2rem;
-            padding-left: 2rem;
+            justify-content: center;
+            align-items: center;
             height: calc(100vh - 60px);
-            /* Minus the height of the navbar */
+            /* Altezza completa meno la navbar */
+            padding: 2rem;
             background-color: #eaeaea;
         }
         /* Card Styling */
         
         .card {
             background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
             padding: 2rem;
             max-width: 400px;
             text-align: left;
-            margin-top: 1rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
         }
         
         .card h2 {
             font-size: 1.8rem;
             color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card h3 {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 1rem;
         }
         
         .card p {
             font-size: 1rem;
             color: #666;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .card a {
             display: inline-block;
             margin-top: 1rem;
-            color: #007BFF;
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
             text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
         
         .card a:hover {
-            text-decoration: underline;
-        }
-        /* Footer Styling */
-        
-        footer {
-            padding: 2rem;
-            text-align: center;
-            background-color: #333;
-            color: white;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -109,7 +130,7 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="navbar-brand">Blog</div>
+        <div class="navbar-brand">Luca Capuccini Blog</div>
         <div class="nav-links">
             <a href="./index.html">Home</a>
             <a href="./About.html">About</a>
@@ -117,23 +138,18 @@
         </div>
     </nav>
 
-    <!-- Content Section -->
-    <section id="content">
-        <!-- Card Section Positioned Below the Navbar and to the Left -->
+    <!-- Main Container for the card -->
+    <div class="container">
         <div class="card">
             <h2>Homework 1</h2>
             <h3>Hackers and attacks on computer systems</h3>
             <p>We have n servers (system) with n attackers. The hacker (each) has the probability 0.7 to penetrate the system. Make a graphical representation where each attacker is represented like a line that if it penetrates makes a jump of 1 else stay
                 flat. At time n we want to count how many reached each level. (frequency distribution) Most of the hacker will go to the min, but they can also go anywhere. To make the jump we can use randomizer such as RANDOM → 0 , 1 if the number is
-                minus 0.7 (we decide this value to do some tests) stay flat else is bigger than 0.7 do a jump</p>
-            <a href="./index.html">Click The Card</a>
+                minus 0.7 (we decide this value to do some tests) stay flat else is bigger than 0.7 do a jump.</p>
+            <a href="./Homework1/index.html">Click The Card</a>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        &copy; 2024 MyWebsite. All rights reserved.
-    </footer>
 </body>
 
 </html>

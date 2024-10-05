@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="script.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione Aggressori</title>
+    <style>
+        /* General Page Styling */
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #007bff;
+        }
+        
+        h2 {
+            color: #555;
+        }
+        
+        input,
+        button {
+            padding: 10px;
+            margin: 10px 5px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        #chartBlock {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        canvas {
+            border: 1px solid #007bff;
+            background-color: white;
+        }
+        
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        #checkboxContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        #checkboxContainer label {
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #checkboxContainer input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        /* Navbar Styling */
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 1rem 2rem;
+            color: #fff;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            padding: 0 1rem;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        
+        .nav-links a:hover {
+            background-color: #555;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">Luca Capuccini's blog</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../About.html">About</a>
+            <a href="../Statistic.html">Homework</a>
+        </div>
+    </nav>
+
+    <h1>Simulazione Aggressori</h1>
+    <h2>Luca Capuccini</h2>
+    <p>Matricola 347711</p>
+
+    <div>
+        <label for="servers">Servers:</label>
+        <input type="number" id="servers" value="11" min="1" />
+
+        <label for="attackers">Attackers:</label>
+        <input type="number" id="attackers" value="11" min="1" />
+
+        <label for="probability">Probability:</label>
+        <input type="number" step="0.1" id="probability" value="0.6" min="0" max="1" />
+
+        <button id="submitButton">Run Simulation</button>
+    </div>
+
+    <div id="checkboxContainer"></div>
+
+    <div id="chartBlock">
+        <div id="lineChartContainer">
+            <canvas id="myCanvas" width="600" height="400"></canvas>
+        </div>
+    </div>
+
+    <footer>
+        <p>Progetto di simulazione per l'analisi degli attacchi informatici.</p>
+    </footer>
+
+</body>
+
+</html>
