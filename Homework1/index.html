@@ -48,8 +48,17 @@
         
         #chartBlock {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            /* Centra i grafici orizzontalmente */
+            align-items: flex-end;
+            /* Allinea i grafici nella parte inferiore */
             margin-top: 20px;
+        }
+        
+        #lineChartContainer,
+        #histogramChartContainer {
+            margin: 0 10px;
+            /* Margine tra i grafici */
         }
         
         canvas {
@@ -144,6 +153,8 @@
     <div id="chartBlock">
         <div id="lineChartContainer">
             <canvas id="myCanvas" width="600" height="400"></canvas>
+        </div>
+        <div id="histogramChartContainer">
             <canvas id="histogramCanvas" width="600" height="400"></canvas>
         </div>
     </div>

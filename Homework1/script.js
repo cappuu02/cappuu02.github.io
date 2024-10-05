@@ -16,18 +16,18 @@ function drawChart(attackers, systems, probability) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Disegna gli assi
-    ctx.beginPath(); // Avvio un nuovo tracciamento
-    ctx.moveTo(50, 30); // Punto di partenza dell'asse Y
-    ctx.lineTo(50, canvas.height - 30); // Asse Y
-    ctx.lineTo(canvas.width - 30, canvas.height - 30); // Asse X
-    ctx.strokeStyle = '#007bff'; // Stile delle linee
-    ctx.stroke(); // Esegui il tracciamento delle linee
-    ctx.closePath(); // Chiudi il tracciamento delle linee
+    ctx.beginPath();
+    ctx.moveTo(50, 30);
+    ctx.lineTo(50, canvas.height - 30);
+    ctx.lineTo(canvas.width - 30, canvas.height - 30);
+    ctx.strokeStyle = '#007bff';
+    ctx.stroke();
+    ctx.closePath();
 
     // Disegna le etichette sull'asse X
     for (let j = 0; j < systems; j++) {
-        const xLabel = 50 + (j * (canvas.width - 100) / (systems - 1)); // Calcola la posizione X
-        ctx.fillText(j + 1, xLabel - 5, canvas.height - 10); // Disegna il numero del sistema
+        const xLabel = 50 + (j * (canvas.width - 100) / (systems - 1));
+        ctx.fillText(j + 1, xLabel - 5, canvas.height - 10);
     }
 
     // Array per registrare il punteggio di penetrazione di ogni aggressore
@@ -36,31 +36,76 @@ function drawChart(attackers, systems, probability) {
     // Disegna le linee per ogni aggressore
     for (let i = 0; i < attackers; i++) {
         ctx.beginPath();
-        ctx.moveTo(50, canvas.height - 30); // Inizio della linea (0 sistemi hackerati)
+        ctx.moveTo(50, canvas.height - 30);
 
-        let yPosition = 0; // Inizia a zero per ogni aggressore
+        let yPosition = 0;
 
         // Simula i tentativi di penetrazione
         for (let j = 0; j < systems; j++) {
-            // Genera un numero casuale e controlla se penetra
             const penetrated = Math.random() > probability;
 
             if (penetrated) {
-                yPosition += 1; // Incrementa se penetra
+                yPosition += 1;
             }
 
-            // Disegna la linea verticale
-            const x = 50 + (j * (canvas.width - 100) / (systems - 1)); // Calcola la posizione X
-            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / systems); // Calcola la posizione Y
+            const x = 50 + (j * (canvas.width - 100) / (systems - 1));
+            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / systems);
 
-            ctx.lineTo(x, y); // Disegna la linea verso la nuova posizione calcolata
+            ctx.lineTo(x, y);
         }
 
-        ctx.strokeStyle = `hsl(${(i / attackers) * 360}, 100%, 50%)`; // Colore differente per ogni aggressore
-        ctx.lineWidth = 2; // Spessore della linea
-        ctx.stroke(); // Esegui il tracciamento della linea
+        ctx.strokeStyle = `hsl(${(i / attackers) * 360}, 100%, 50%)`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
         ctx.closePath();
 
-        penetrationData.push(yPosition); // Registra il punteggio di penetrazione
+        penetrationData.push(yPosition);
+    }
+
+    // Disegna l'istogramma
+    drawHistogram(penetrationData, systems);
+}
+
+/*
+function drawHistogram(penetrationData, systems) {
+    // Recuperato Canvas per l'istogramma e creato un contesto bidimensionale
+    const histogramCanvas = document.getElementById('histogramCanvas');
+    const histogramCtx = histogramCanvas.getContext('2d');
+
+    // Pulisci il canvas per rimuovere grafici precedenti
+    histogramCtx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
+
+    // Array per contare il numero di hacker per ogni livello
+    const levelCounts = new Array(systems).fill(0);
+
+    // Conta quanti hacker hanno raggiunto ciascun livello
+    penetrationData.forEach(penetration => {
+        if (penetration > 0) {
+            levelCounts[penetration - 1] += 1; // Incrementa il conteggio per il livello raggiunto
+        }
+    });
+
+    // Disegna gli assi dell'istogramma
+    histogramCtx.beginPath();
+    histogramCtx.moveTo(50, 30);
+    histogramCtx.lineTo(50, histogramCanvas.height - 30);
+    histogramCtx.lineTo(histogramCanvas.width - 30, histogramCanvas.height - 30);
+    histogramCtx.strokeStyle = '#007bff';
+    histogramCtx.stroke();
+    histogramCtx.closePath();
+
+    // Disegna le barre dell'istogramma
+    const barWidth = (histogramCanvas.width - 100) / systems;
+    const maxLevelCount = Math.max(...levelCounts);
+
+    for (let i = 0; i < systems; i++) {
+        const barHeight = (levelCounts[i] / maxLevelCount) * (histogramCanvas.height - 60); // Normalizza l'altezza delle barre
+        histogramCtx.fillStyle = '#007bff';
+        histogramCtx.fillRect(50 + i * barWidth, histogramCanvas.height - 30 - barHeight, barWidth - 5, barHeight);
+        histogramCtx.fillText(levelCounts[i], 50 + i * barWidth + barWidth / 2 - 5, histogramCanvas.height - 35); // Etichetta con il conteggio
+
+        // Aggiungi etichette sui livelli
+        histogramCtx.fillText(i + 1, 50 + i * barWidth + barWidth / 2 - 5, histogramCanvas.height - 10); // Etichette dei sistemi
     }
 }
+*/
