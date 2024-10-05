@@ -62,11 +62,21 @@ function drawChart(attackers, systems, probability) {
         penetrationData.push(yPosition);
     }
 
+    // Disegna le etichette sull'asse Y
+    const maxScore = systems; // Il punteggio massimo possibile
+    const yLabelCount = 5; // Numero di etichette sull'asse Y
+    for (let k = 0; k <= yLabelCount; k++) {
+        const yScore = Math.floor((k * maxScore) / yLabelCount);
+        const yLabel = canvas.height - 30 - (yScore * (canvas.height - 60) / systems);
+        ctx.fillText(yScore, 25, yLabel + 5); // 25 è la posizione fissa a sinistra per le etichette
+    }
+
     // Disegna l'istogramma
     drawHistogram(penetrationData, systems);
 }
 
-/*
+
+
 function drawHistogram(penetrationData, systems) {
     // Recuperato Canvas per l'istogramma e creato un contesto bidimensionale
     const histogramCanvas = document.getElementById('histogramCanvas');
@@ -96,16 +106,16 @@ function drawHistogram(penetrationData, systems) {
 
     // Disegna le barre dell'istogramma
     const barWidth = (histogramCanvas.width - 100) / systems;
-    const maxLevelCount = Math.max(...levelCounts);
+    const totalAttackers = penetrationData.length; // Numero totale di attaccanti
 
     for (let i = 0; i < systems; i++) {
-        const barHeight = (levelCounts[i] / maxLevelCount) * (histogramCanvas.height - 60); // Normalizza l'altezza delle barre
+        const frequencyRelative = levelCounts[i] / totalAttackers; // Frequenza relativa
+        const barHeight = frequencyRelative * (histogramCanvas.height - 60); // Normalizza l'altezza delle barre
         histogramCtx.fillStyle = '#007bff';
         histogramCtx.fillRect(50 + i * barWidth, histogramCanvas.height - 30 - barHeight, barWidth - 5, barHeight);
-        histogramCtx.fillText(levelCounts[i], 50 + i * barWidth + barWidth / 2 - 5, histogramCanvas.height - 35); // Etichetta con il conteggio
+        histogramCtx.fillText((frequencyRelative * 100).toFixed(2) + '%', 50 + i * barWidth + barWidth / 2 - 25, histogramCanvas.height - 35); // Etichetta con frequenza relativa in percentuale
 
         // Aggiungi etichette sui livelli
         histogramCtx.fillText(i + 1, 50 + i * barWidth + barWidth / 2 - 5, histogramCanvas.height - 10); // Etichette dei sistemi
     }
 }
-*/
