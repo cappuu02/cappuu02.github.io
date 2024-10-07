@@ -23,47 +23,35 @@
         /* Navbar Styling */
         
         .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
             display: flex;
-            justify-content: flex-end;
-            /* Allinea a destra */
+            justify-content: space-between;
             align-items: center;
             background-color: #333;
-            padding: 0.75rem 2rem;
-            /* Padding aumentato per evitare uscita dalla visuale */
+            padding: 1rem 2rem;
             color: #fff;
-            width: 100%;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* Ombra leggera */
         }
         
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
-            margin-right: auto;
-            /* Spazio tra il brand e i link */
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            /* Spazio tra i link */
+            margin-left: 2%;
         }
         
         .nav-links a {
             color: white;
-            padding: 0.5rem 1rem;
-            /* Padding per uniformare l'aspetto dei link */
+            padding: 0 1rem;
             text-decoration: none;
             font-size: 1rem;
-            border-radius: 5px;
-            /* Bordi arrotondati */
-            transition: background-color 0.3s;
-            /* Transizione per l'effetto hover */
         }
         
         .nav-links a:hover {
             background-color: #555;
-            /* Colore di hover */
+            padding: 0.5rem;
+            border-radius: 5px;
         }
         /* Container for centering the card */
         
@@ -130,10 +118,9 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini Blog</div>
+        <div class="navbar-brand">Luca Capuccini's Blog</div>
         <div class="nav-links">
             <a href="./index.html">Home</a>
-            <a href="./About.html">About</a>
             <a href="./Statistic.html">Homework</a>
         </div>
     </nav>
