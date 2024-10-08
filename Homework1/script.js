@@ -126,9 +126,3 @@ function computeAverage(scores, index = 0, sum = 0) {
     return computeAverage(scores, index + 1, sum);
 }
 
-// Aggiungi questa parte nel ciclo principale di drawChart
-const totalPenetration = penetrationData.reduce((acc, score) => acc + score, 0);
-const averagePenetrationScore = computeAverage(penetrationData);
-
-// Aggiorna il valore della media nell'HTML
-document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2); // Mostra la media formattata a 2 decimali

@@ -193,7 +193,154 @@
              `
 # Analysis of the code
 
+## Function DrawChart
 
+\`\`\`javascript
+function drawChart(attackers, systems, probability) {
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const marginX = 50;
+    const marginY = 30;
+    const chartWidth = canvas.width - marginX * 2;
+    const chartHeight = canvas.height - marginY * 2;
+    const maxScoreX = canvas.width - marginX - (chartWidth * 0.25);
+    const xStep = (maxScoreX - marginX) / (systems - 1);
+
+    // Disegna gli assi
+    ctx.beginPath();
+    ctx.moveTo(marginX, marginY); 
+    ctx.lineTo(marginX, canvas.height - marginY); 
+    ctx.lineTo(canvas.width - marginX, canvas.height - marginY);
+    ctx.strokeStyle = '#007bff';
+    ctx.stroke();
+    ctx.closePath();
+
+    const penetrationData = [];
+
+    // Simula attacchi e raccoglie i punteggi di penetrazione
+    for (let i = 0; i < attackers; i++) {
+        ctx.beginPath();
+        ctx.moveTo(marginX, canvas.height - marginY); 
+        let yPosition = 0;
+
+        for (let j = 0; j < systems; j++) {
+            const penetrated = Math.random() > probability;
+
+            if (penetrated) {
+                yPosition += 1;
+            }
+
+            const x = marginX + (j * xStep);
+            const y = canvas.height - marginY - (yPosition * chartHeight / systems);
+            ctx.lineTo(x, y);
+
+            if (i === 0) {
+                ctx.fillStyle = '#000';
+                ctx.font = '12px Arial';
+                ctx.fillText({j + 1}, x - 10, canvas.height - 10);
+            }
+        }
+
+        ctx.strokeStyle = hsl({(i / attackers) * 360}, 100%, 50%);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        // Aggiungi il punteggio finale per ogni aggressore
+        penetrationData.push(yPosition);
+    }
+
+    // Aggiungi il calcolo della media dopo il ciclo
+    const averagePenetrationScore = computeAverage(penetrationData);
+
+    // Aggiorna la media nell'HTML
+    document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2);
+
+    // Codice per disegnare il resto del grafico (istogramma e linea rossa)
+    ctx.beginPath();
+    ctx.moveTo(maxScoreX, marginY);
+    ctx.lineTo(maxScoreX, canvas.height - marginY);
+    ctx.strokeStyle = '#ff5733';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    const levelCounts = new Array(systems).fill(0);
+    penetrationData.forEach(penetration => {
+        if (penetration > 0) {
+            levelCounts[penetration - 1] += 1;
+        }
+    });
+
+    const totalAttackers = penetrationData.length;
+
+    // Disegna l'istogramma
+    for (let i = 0; i < systems; i++) {
+        const frequencyRelative = levelCounts[i] / totalAttackers;
+        const lineWidth = frequencyRelative * (canvas.width - maxScoreX - marginX) * (1 + attackers * 0.1);
+
+        ctx.beginPath();
+        const startY = canvas.height - marginY - ((i + 1) * chartHeight / systems);
+        ctx.moveTo(maxScoreX, startY);
+        ctx.lineTo(maxScoreX + lineWidth, startY);
+        ctx.strokeStyle = '#007bff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        if (frequencyRelative > 0) {
+            const percentage = (frequencyRelative * 100).toFixed(2);
+            ctx.fillStyle = '#000';
+            ctx.font = '12px Arial';
+            ctx.fillText({percentage}, maxScoreX + lineWidth + 5, startY);
+        }
+    }
+}
+\`\`\`
+
+1. **Canvas and Context Initialization**
+The function starts by getting a reference to the HTML canvas element with the ID myCanvas and its 2D drawing context (ctx). The ctx.clearRect function clears any previous content drawn on the canvas, cleaning the area to draw a new chart.
+
+2. **Defining Margins and Chart Dimensions**
+Margins (marginX and marginY) are defined to center the chart properly. The width (chartWidth) and height (chartHeight) of the chart are calculated based on the canvas's width and height, taking the margins into account. maxScoreX represents the maximum X-axis position, and xStep indicates the space between points on the X-axis, based on the number of systems (systems).
+
+3. **Drawing the Axes**
+A vertical line representing the Y-axis and a horizontal line representing the X-axis are drawn, with the line style set to blue (#007bff).
+
+4. **Simulating Attacks and Collecting Data**
+An empty array penetrationData is created to store the penetration scores of each attacker. A for loop simulates attacks for each attacker. Each attacker draws a line starting from the axis origin and, based on the probability (probability), decides if an attack succeeds (increasing yPosition). For each successful attack, the new position (X, Y) is calculated and a line is drawn on the chart. The first attacker also draws the system numbers on the X-axis. Each line is drawn with a different color using hsl, based on the attacker's percentage.
+
+5. **Calculating the Average Penetration Score**
+After simulating the attacks, the computeAverage function is called to calculate the average of the recorded penetration scores. The calculated average value is displayed in the HTML element with the ID averageScoreValue, formatted to two decimal places.
+
+6. **Drawing a Vertical Line**
+A red vertical line (#ff5733) is drawn on the right side of the chart, serving as a reference point for visualization.
+
+7. **Counting Penetration Levels**
+An array levelCounts is created to record the number of attackers that reached each level of penetration. The total number of attackers is stored in totalAttackers.
+
+8. **Drawing the Histogram**
+A for loop draws the histogram, which represents the distribution of penetration levels. For each level, the relative frequency (frequencyRelative) is calculated, and the width of the histogram bar is determined. Each bar is drawn in blue (#007bff), with the corresponding percentage displayed next to the bar.
+
+## Function ComputeAverage
+\`\`\` javascript
+function computeAverage(scores, index = 0, sum = 0) {
+    // Condizione di uscita
+    if (index >= scores.length) {
+        return sum / scores.length; // Calcola e restituisce la media
+    }
+    
+    // Accumula il punteggio corrente
+    sum += scores[index];
+    
+    // Chiama ricorsivamente la funzione con il prossimo indice
+    return computeAverage(scores, index + 1, sum);
+}
+\`\`\`
+
+**Explaination:** The computeAverage function is a recursive function designed to calculate the average of an array of scores. It takes three parameters: an array of numbers called scores, an initial index index (defaulted to 0), and an accumulated sum sum (initially set to 0). The function begins by checking if the current index is equal to or greater than the length of the array, which serves as the base case to stop the recursion. When this condition is met, the function returns the result of the accumulated sum divided by the length of the array, thus calculating the average score. If the base case is not met, the function adds the score at the current index to the accumulated sum and recursively calls itself with the next index (index + 1) and the updated sum. This process continues until all the scores in the array have been added. Once the recursion is complete, the overall average is returned. Through this mechanism, the function iterates over all the elements of the array recursively, calculating the average without using explicit loops.
 
 # Statistic overview
 Statistics is a branch of mathematics that focuses on the scientific methodologies for collecting, organizing, summarizing, presenting, and analyzing data. It also involves drawing valid conclusions and making informed decisions based on such analyses. In today's world, statistics are omnipresent, encompassing areas such as economic statistics, geophysical statistics, employment statistics, accident statistics, financial statistics, population statistics, and many others.
@@ -210,7 +357,7 @@ Statistics is a branch of mathematics that focuses on the scientific methodologi
  
 - **Average**:  The average is a measure of central tendency that indicates a typical value within a dataset. It serves to summarize the data using a single representative value.
 	- **Arithmetic mean**, is a measure of central tendency that calculates the total of a set of values divided by the number of values in that set. This yields a single value that encapsulates the data, representing a typical value within the dataset.
-	$$\text{Arithmetical mean} \hspace{0.5cm} = \hspace{0.5cm} \sum_{i=1}^n \frac{x_i}{n}$$
+	![Description of the image](../images/formula1.png)
 
 	- **Median**: Is a more general concept. The median is the middle value when a data set is ordered from least to greatest.
 	- **Mode**: The **mode** is a measure of central tendency that represents the value that appears most frequently in a dataset. The mode focuses on frequency.
