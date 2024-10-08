@@ -3,7 +3,7 @@ document.getElementById('submitButton').addEventListener('click', function() {
     const systemValue = parseInt(document.getElementById('servers').value);
     const probability = parseFloat(document.getElementById('probability').value);
 
-    // Disegna il grafico
+    // Draw the chart
     drawChart(attackersValue, systemValue, probability);
 });
 
@@ -19,10 +19,10 @@ function drawChart(attackers, systems, probability) {
     const maxScoreX = canvas.width - marginX - (chartWidth * 0.25);
     const xStep = (maxScoreX - marginX) / (systems - 1);
 
-    // Disegna gli assi
+    // Draw the axes
     ctx.beginPath();
-    ctx.moveTo(marginX, marginY); 
-    ctx.lineTo(marginX, canvas.height - marginY); 
+    ctx.moveTo(marginX, marginY);
+    ctx.lineTo(marginX, canvas.height - marginY);
     ctx.lineTo(canvas.width - marginX, canvas.height - marginY);
     ctx.strokeStyle = '#007bff';
     ctx.stroke();
@@ -30,10 +30,10 @@ function drawChart(attackers, systems, probability) {
 
     const penetrationData = [];
 
-    // Simula attacchi e raccoglie i punteggi di penetrazione
+    // Simulate attacks and gather penetration scores
     for (let i = 0; i < attackers; i++) {
         ctx.beginPath();
-        ctx.moveTo(marginX, canvas.height - marginY); 
+        ctx.moveTo(marginX, canvas.height - marginY);
         let yPosition = 0;
 
         for (let j = 0; j < systems; j++) {
@@ -59,17 +59,17 @@ function drawChart(attackers, systems, probability) {
         ctx.stroke();
         ctx.closePath();
 
-        // Aggiungi il punteggio finale per ogni aggressore
+        // Add the final score for each attacker
         penetrationData.push(yPosition);
     }
 
-    // Aggiungi il calcolo della media dopo il ciclo
+    // Add the average calculation after the loop
     const averagePenetrationScore = computeAverage(penetrationData);
 
-    // Aggiorna la media nell'HTML
+    // Update the average in the HTML
     document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2);
 
-    // Codice per disegnare il resto del grafico (istogramma e linea rossa)
+    // Draw the vertical line
     ctx.beginPath();
     ctx.moveTo(maxScoreX, marginY);
     ctx.lineTo(maxScoreX, canvas.height - marginY);
@@ -87,10 +87,13 @@ function drawChart(attackers, systems, probability) {
 
     const totalAttackers = penetrationData.length;
 
-    // Disegna l'istogramma
+    // Draw the histogram
     for (let i = 0; i < systems; i++) {
         const frequencyRelative = levelCounts[i] / totalAttackers;
-        const lineWidth = frequencyRelative * (canvas.width - maxScoreX - marginX) * (1 + attackers * 0.1);
+
+        // Calculate a scaling factor based on the number of attackers
+        const scaleFactor = 1 + (attackers / 100); // You can adjust the denominator to modify the effect
+        const lineWidth = Math.min(frequencyRelative * (canvas.width - maxScoreX - marginX) * scaleFactor, (canvas.width - maxScoreX - marginX));
 
         ctx.beginPath();
         const startY = canvas.height - marginY - ((i + 1) * chartHeight / systems);
@@ -99,30 +102,20 @@ function drawChart(attackers, systems, probability) {
         ctx.strokeStyle = '#007bff';
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.closePath();
-
-        if (frequencyRelative > 0) {
-            const percentage = (frequencyRelative * 100).toFixed(2);
-            ctx.fillStyle = '#000';
-            ctx.font = '12px Arial';
-            ctx.fillText(`${percentage}%`, maxScoreX + lineWidth + 5, startY);
-        }
+        ctx.closePath();    
     }
 }
 
-
-
-// Funzione ricorsiva per calcolare la media
+// Recursive function to calculate the average
 function computeAverage(scores, index = 0, sum = 0) {
-    // Condizione di uscita
+    // Exit condition
     if (index >= scores.length) {
-        return sum / scores.length; // Calcola e restituisce la media
+        return sum / scores.length; // Calculate and return the average
     }
     
-    // Accumula il punteggio corrente
+    // Accumulate the current score
     sum += scores[index];
     
-    // Chiama ricorsivamente la funzione con il prossimo indice
+    // Recursively call the function with the next index
     return computeAverage(scores, index + 1, sum);
 }
-

@@ -153,7 +153,7 @@
 
     <h1>Hacker Attack Simulation</h1>
     <h2>Luca Capuccini</h2>
-    <p>Matr. 347711</p>
+    <b><p>Matr. 2200930</p></b>
 
     <div>
         <label for="servers">Servers:</label>
@@ -208,10 +208,10 @@ function drawChart(attackers, systems, probability) {
     const maxScoreX = canvas.width - marginX - (chartWidth * 0.25);
     const xStep = (maxScoreX - marginX) / (systems - 1);
 
-    // Disegna gli assi
+    // Draw the axes
     ctx.beginPath();
-    ctx.moveTo(marginX, marginY); 
-    ctx.lineTo(marginX, canvas.height - marginY); 
+    ctx.moveTo(marginX, marginY);
+    ctx.lineTo(marginX, canvas.height - marginY);
     ctx.lineTo(canvas.width - marginX, canvas.height - marginY);
     ctx.strokeStyle = '#007bff';
     ctx.stroke();
@@ -219,10 +219,10 @@ function drawChart(attackers, systems, probability) {
 
     const penetrationData = [];
 
-    // Simula attacchi e raccoglie i punteggi di penetrazione
+    // Simulate attacks and gather penetration scores
     for (let i = 0; i < attackers; i++) {
         ctx.beginPath();
-        ctx.moveTo(marginX, canvas.height - marginY); 
+        ctx.moveTo(marginX, canvas.height - marginY);
         let yPosition = 0;
 
         for (let j = 0; j < systems; j++) {
@@ -248,17 +248,17 @@ function drawChart(attackers, systems, probability) {
         ctx.stroke();
         ctx.closePath();
 
-        // Aggiungi il punteggio finale per ogni aggressore
+        // Add the final score for each attacker
         penetrationData.push(yPosition);
     }
 
-    // Aggiungi il calcolo della media dopo il ciclo
+    // Add the average calculation after the loop
     const averagePenetrationScore = computeAverage(penetrationData);
 
-    // Aggiorna la media nell'HTML
+    // Update the average in the HTML
     document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2);
 
-    // Codice per disegnare il resto del grafico (istogramma e linea rossa)
+    // Draw the vertical line
     ctx.beginPath();
     ctx.moveTo(maxScoreX, marginY);
     ctx.lineTo(maxScoreX, canvas.height - marginY);
@@ -276,10 +276,13 @@ function drawChart(attackers, systems, probability) {
 
     const totalAttackers = penetrationData.length;
 
-    // Disegna l'istogramma
+    // Draw the histogram
     for (let i = 0; i < systems; i++) {
         const frequencyRelative = levelCounts[i] / totalAttackers;
-        const lineWidth = frequencyRelative * (canvas.width - maxScoreX - marginX) * (1 + attackers * 0.1);
+
+        // Calculate a scaling factor based on the number of attackers
+        const scaleFactor = 1 + (attackers / 100); // You can adjust the denominator to modify the effect
+        const lineWidth = Math.min(frequencyRelative * (canvas.width - maxScoreX - marginX) * scaleFactor, (canvas.width - maxScoreX - marginX));
 
         ctx.beginPath();
         const startY = canvas.height - marginY - ((i + 1) * chartHeight / systems);
@@ -288,41 +291,40 @@ function drawChart(attackers, systems, probability) {
         ctx.strokeStyle = '#007bff';
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.closePath();
-
-        if (frequencyRelative > 0) {
-            const percentage = (frequencyRelative * 100).toFixed(2);
-            ctx.fillStyle = '#000';
-            ctx.font = '12px Arial';
-            ctx.fillText({percentage}, maxScoreX + lineWidth + 5, startY);
-        }
+        ctx.closePath();    
     }
 }
 \`\`\`
 
-1. **Canvas and Context Initialization**
-The function starts by getting a reference to the HTML canvas element with the ID myCanvas and its 2D drawing context (ctx). The ctx.clearRect function clears any previous content drawn on the canvas, cleaning the area to draw a new chart.
+1. **Canvas Setup**
+The drawChart function begins by obtaining the canvas element with the ID myCanvas and its 2D drawing context (ctx). It first clears any existing drawings on the canvas to ensure that the new chart is displayed without overlapping previous graphics.
 
-2. **Defining Margins and Chart Dimensions**
-Margins (marginX and marginY) are defined to center the chart properly. The width (chartWidth) and height (chartHeight) of the chart are calculated based on the canvas's width and height, taking the margins into account. maxScoreX represents the maximum X-axis position, and xStep indicates the space between points on the X-axis, based on the number of systems (systems).
+2. **Defining Chart Dimensions**
+Next, margins (marginX and marginY) are defined to space the chart away from the edges of the canvas. The chart's width and height are calculated by subtracting the margins from the canvas size. The value of maxScoreX is then calculated to determine the x-coordinate for the histogram, ensuring enough space on the right side of the chart. Additionally, xStep calculates the horizontal spacing between points on the x-axis based on the number of systems.
 
 3. **Drawing the Axes**
-A vertical line representing the Y-axis and a horizontal line representing the X-axis are drawn, with the line style set to blue (#007bff).
+The function begins drawing the x and y axes using the moveTo and lineTo methods. It sets the stroke color for the axes and applies the stroke, creating a visual reference for the chart.
 
-4. **Simulating Attacks and Collecting Data**
-An empty array penetrationData is created to store the penetration scores of each attacker. A for loop simulates attacks for each attacker. Each attacker draws a line starting from the axis origin and, based on the probability (probability), decides if an attack succeeds (increasing yPosition). For each successful attack, the new position (X, Y) is calculated and a line is drawn on the chart. The first attacker also draws the system numbers on the X-axis. Each line is drawn with a different color using hsl, based on the attacker's percentage.
+4. **Simulating Attacks**
+A loop iterates for each attacker, simulating the attack. For each attacker, the y position is initialized to 0. A nested loop then examines each system: a random number is generated to determine whether the attack is successful based on the provided probability. If the attack succeeds, yPosition is incremented. The x and y coordinates are calculated for each penetration point, and the graph is drawn on the canvas. If it is the first attacker, each system is also labeled along the x-axis.
 
-5. **Calculating the Average Penetration Score**
-After simulating the attacks, the computeAverage function is called to calculate the average of the recorded penetration scores. The calculated average value is displayed in the HTML element with the ID averageScoreValue, formatted to two decimal places.
+5. **Stroking the Line**
+The function then dynamically sets the stroke color using the HSL color model, creating a gradient effect based on the attacker's index. The line is stroked, and the drawing path is closed.
 
-6. **Drawing a Vertical Line**
-A red vertical line (#ff5733) is drawn on the right side of the chart, serving as a reference point for visualization.
+6. **Average Calculation**
+After simulating all attacks, the final penetration scores for each attacker are stored in an array called penetrationData. The average penetration score is calculated using a helper function (computeAverage), and the result is displayed in the HTML document.
 
-7. **Counting Penetration Levels**
-An array levelCounts is created to record the number of attackers that reached each level of penetration. The total number of attackers is stored in totalAttackers.
+7. **Drawing the Vertical Line**
+The function then draws a vertical line to indicate a specific score on the x-axis, using a distinctive color to highlight it.
 
-8. **Drawing the Histogram**
-A for loop draws the histogram, which represents the distribution of penetration levels. For each level, the relative frequency (frequencyRelative) is calculated, and the width of the histogram bar is determined. Each bar is drawn in blue (#007bff), with the corresponding percentage displayed next to the bar.
+8. **Preparing for the Histogram**
+An array (levelCounts) is initialized to count how many attackers reached each penetration level. The function iterates through the penetration scores and updates the levelCounts array accordingly.
+
+9. **Drawing the Histogram**
+Finally, the function draws a histogram for each system, representing the frequency of attackers reaching that level of success. A scaling factor is calculated based on the number of attackers to adjust the width of each histogram bar. Each bar is drawn at the corresponding y-coordinate on the canvas, thus representing the relative frequency of attacks.
+
+
+
 
 ## Function ComputeAverage
 \`\`\` javascript
