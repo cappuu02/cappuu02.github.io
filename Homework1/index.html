@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked@2.1.3/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
     <script src="script.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hacker attack simulation</title>
+    <title>Hacker Attack Simulation</title>
     <style>
         /* General Page Styling */
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -16,15 +18,15 @@
             margin: 0;
             text-align: center;
         }
-        
+
         h1 {
             color: #007bff;
         }
-        
+
         h2 {
             color: #555;
         }
-        
+
         input,
         button {
             padding: 10px;
@@ -33,7 +35,7 @@
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         button {
             background-color: #007bff;
             color: white;
@@ -41,55 +43,52 @@
             font-size: 16px;
             transition: background-color 0.3s;
         }
-        
+
         button:hover {
             background-color: #0056b3;
         }
-        
+
         #chartBlock {
             display: flex;
             justify-content: center;
-            /* Centra i grafici orizzontalmente */
             align-items: flex-end;
-            /* Allinea i grafici nella parte inferiore */
             margin-top: 20px;
         }
-        
+
         #lineChartContainer,
         #histogramChartContainer {
             margin: 0 10px;
-            /* Margine tra i grafici */
         }
-        
+
         canvas {
             border: 1px solid #007bff;
             background-color: white;
         }
-        
+
         footer {
             margin-top: 20px;
             font-size: 12px;
             color: #666;
         }
-        
+
         #checkboxContainer {
             display: flex;
             justify-content: center;
             margin-top: 20px;
             flex-wrap: wrap;
         }
-        
+
         #checkboxContainer label {
             margin-right: 10px;
             display: flex;
             align-items: center;
         }
-        
+
         #checkboxContainer input[type="checkbox"] {
             margin-right: 5px;
         }
+
         /* Navbar Styling */
-        
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -98,24 +97,46 @@
             padding: 1rem 2rem;
             color: #fff;
         }
-        
+
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
         }
-        
+
         .nav-links a {
             color: white;
             padding: 0 1rem;
             text-decoration: none;
             font-size: 1rem;
         }
-        
+
         .nav-links a:hover {
             background-color: #555;
             padding: 0.5rem;
             border-radius: 5px;
         }
+
+        /* New section styling */
+        #markdownContent {
+            margin-top: 20px; /* Margine superiore per il contenuto Markdown */
+            text-align: left; /* Allinea il testo a sinistra */
+            max-width: 800px; /* Larghezza massima del contenuto */
+            margin-left: auto; /* Centra orizzontalmente */
+            margin-right: auto; /* Centra orizzontalmente */
+            background-color: #fff; /* Sfondo bianco per il contenuto Markdown */
+            padding: 20px; /* Padding per il contenuto Markdown */
+            border-radius: 5px; /* Angoli arrotondati */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+        }
+
+        pre {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            background-color: #f5f5f5; /* Sfondo grigio chiaro per il codice */
+        }
+
     </style>
 </head>
 
@@ -123,14 +144,14 @@
 
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's blog</div>
+        <div class="navbar-brand">Luca Capuccini's Blog</div>
         <div class="nav-links">
             <a href="../index.html">Home</a>
             <a href="../Statistic.html">Homework</a>
         </div>
     </nav>
 
-    <h1>Hacker attack simulation</h1>
+    <h1>Hacker Attack Simulation</h1>
     <h2>Luca Capuccini</h2>
     <p>Matr. 347711</p>
 
@@ -158,15 +179,293 @@
         </div>
     </div>
 
+    <div id="averageScore" style="margin-top: 20px; font-size: 18px; color: #333;">
+        Average Penetration Score: <span id="averageScoreValue">0</span>
+    </div>
+
     <footer>
         <p>Simulation project for cyber attack analysis.</p>
     </footer>
 
-    <!-- Visualizzazione PDF -->
-    <h1>Research about the main concept of Statistic</h1>
-    <iframe src="./PDF/Research Homework1 finale.pdf" width="90%" height="600px"></iframe>
+    <div id="markdownContent"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Il tuo testo in Markdown
+            const markdownText =
+             `
+# Analysis of the code
+
+## Function DrawChart
+
+\`\`\`javascript
+function drawChart(attackers, systems, probability) {
+    // Get the canvas element by its ID and get its 2D rendering context
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Clear the previous chart
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    
+    ctx.beginPath(); //new path to draw axes
+    ctx.moveTo(50, 30);
+    ctx.lineTo(50, canvas.height - 30);
+    ctx.lineTo(canvas.width - 30, canvas.height - 30);
+    ctx.strokeStyle = '#007bff';
+    ctx.stroke();
+    ctx.closePath();
+
+    // Draw X-axis labels
+    for (let j = 0; j < systems; j++) {
+        const xLabel = 50 + (j * (canvas.width - 100) / (systems - 1));//calculate x position fot he label
+        ctx.fillText(j + 1, xLabel - 5, canvas.height - 10); //drwa label
+    }
+
+    // Array to store each attacker's penetration score
+    const penetrationData = [];
+
+    // Draw lines for each attacker
+    for (let i = 0; i < attackers; i++) {
+        // Draw a line for each attacker
+        ctx.beginPath(); 
+        //move to the starting point
+        ctx.moveTo(50, canvas.height - 30);
+
+        //initialize y position for his attacker
+        let yPosition = 0;
+
+        // Simulate the attack for each system
+        for (let j = 0; j < systems; j++) {
+            //determinate if the attacker penetrates the system based on probability
+            const penetrated = Math.random() > probability;
+
+            //penetration is successful, attacker line jump up
+            if (penetrated) {
+                yPosition += 1;
+            }
+
+            // Calculate the X position for the current system
+            const x = 50 + (j * (canvas.width - 100) / (systems - 1));
+             // Calculate the corresponding Y position based on the penetration score
+            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / systems);
+            // Draw a line to the calculated X and Y positions
+            ctx.lineTo(x, y);
+        }
+
+        //Set the stroke color for his attacker's line
+        ctx.strokeStyle = hsl({(i / attackers) * 360}, 100%, 50%);
+        ctx.lineWidth = 2;
+        // Render the line on the canvas
+        ctx.stroke();
+        //close the path for this attacker's line
+        ctx.closePath();
+         // Store the final Y position (penetration score) in the array
+        penetrationData.push(yPosition);
+    }
+
+    // Calculate recursive average penetration score
+    const averageScore = recursiveAverage(penetrationData, penetrationData.length);
+    document.getElementById('averageScoreValue').textContent = averageScore.toFixed(2); // Display average score
+
+    // Draw Y-axis labels
+    const maxScore = systems;
+    const yLabelCount = 5;
+    for (let k = 0; k <= yLabelCount; k++) {
+        const yScore = Math.floor((k * maxScore) / yLabelCount);
+        const yLabel = canvas.height - 30 - (yScore * (canvas.height - 60) / systems);
+        ctx.fillText(yScore, 25, yLabel + 5);
+    }
+
+    // Draw histogram
+drawHistogram(penetrationData, systems);
+}
+\`\`\`
+
+The function drawChart creates a chart on a canvas element to visualize the results of simulated attacks on different systems. Here is a detailed description of its functionality:
+
+- **Canvas Initialization**: The function begins by retrieving the canvas element via its ID (myCanvas) and obtaining the 2D rendering context, which allows drawing on the canvas.
+
+- **Clearing the Previous Chart**: Before drawing a new chart, the context is cleared to remove any previous charts, ensuring a clear visualization.
+
+- **Drawing the Axes**: The axes system of the chart is drawn. The X-axis is drawn horizontally and the Y-axis vertically. The axes are represented in blue.
+
+- **X-axis Labels**: A series of labels for the X-axis is created, numbering the systems from 1 to the provided number of systems. The labels are positioned based on their location on the X-axis.
+
+- **Penetration Data**: An array penetrationData is created to store the penetration scores of each attacker.
+
+- **Simulating Attacks**: For each attacker, the function draws a line representing their penetration score:
+    - For each system, an attack is simulated using a given probability. If the attack is "successful," the penetration score for that attacker increases.
+    - The X and Y positions are calculated for each system, and a line is drawn from the starting point to the corresponding Y position based on the accumulated penetration score.
+
+- **Line Colors**: Each line for each attacker has a unique color, generated using an HSL function that varies based on the attacker's index, creating a color gradient.
+
+- **Calculating the Average Penetration Scores**: Once all lines are drawn, the function calculates the average of the penetration scores using the recursiveAverage function. The average score is displayed in an HTML element with the ID averageScoreValue.
+
+- **Y-axis Labels**: Labels are drawn along the Y-axis, showing the maximum penetration scores divided into intervals, to facilitate the reading of the chart.
+
+- **Drawing the Histogram**: Finally, the drawHistogram function is called to graphically represent the penetration data in a histogram, allowing the visualization of the scores obtained by the attackers.
 
 
+
+## Function DrawHistogram
+\`\`\`javascript
+function drawHistogram(penetrationData, systems) {
+    const histogramCanvas = document.getElementById('histogramCanvas');
+    const histogramCtx = histogramCanvas.getContext('2d');
+
+    // Pulisci il canvas
+    histogramCtx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
+
+    // Inizializza l'array per contare i livelli
+    const levelCounts = new Array(systems).fill(0);
+
+    // Conta il numero di attacchi per ogni livello
+    penetrationData.forEach(penetration => {
+        if (penetration > 0) {
+            levelCounts[penetration - 1] += 1;
+        }
+    });
+
+    // Disegna gli assi dell'istogramma
+    histogramCtx.beginPath();
+    histogramCtx.moveTo(50, 30); // Asse Y
+    histogramCtx.lineTo(50, histogramCanvas.height - 30); // Asse Y
+    histogramCtx.lineTo(histogramCanvas.width - 30, histogramCanvas.height - 30); // Asse X
+    histogramCtx.strokeStyle = '#007bff';
+    histogramCtx.stroke();
+    histogramCtx.closePath();
+
+    const totalAttackers = penetrationData.length;
+    const barWidth = (histogramCanvas.width - 100) / systems; // Larghezza di ciascuna barra
+
+    for (let i = 0; i < systems; i++) {
+        const frequencyRelative = levelCounts[i] / totalAttackers; // Frequenza relativa
+
+        // Calcola l'altezza della barra in base alla frequenza relativa
+        const barHeight = frequencyRelative * (histogramCanvas.height - 60); // Altezza massima
+
+        // Disegna la barra verticale
+        histogramCtx.fillStyle = '#007bff';
+        histogramCtx.fillRect(50 + i * barWidth, histogramCanvas.height - 30 - barHeight, barWidth - 5, barHeight); // -5 per lo spazio tra le barre
+
+        // Disegna il testo con la percentuale
+        const percentageText = (frequencyRelative * 100).toFixed(2) + '%';
+        histogramCtx.fillStyle = '#000';
+        histogramCtx.fillText(percentageText, 50 + i * barWidth + 5, histogramCanvas.height - 30 - barHeight - 5); // Testo sopra la barra
+
+        // Disegna il numero dell'asse X
+        histogramCtx.fillStyle = '#000';
+        histogramCtx.fillText(i + 1, 50 + i * barWidth + 5, histogramCanvas.height - 15); // Numero sotto la barra
+    }
+}
+\`\`\`
+
+The drawHistogram function is responsible for rendering a histogram on a canvas element to visually represent the frequency of penetration scores obtained from simulated attacks. Here’s a breakdown of its operation:
+
+- **Canvas Initialization**: The function retrieves the histogram canvas element by its ID (histogramCanvas) and obtains its 2D rendering context, allowing for drawing on the canvas.
+
+- **Clearing the Canvas**: It clears the canvas to remove any previous drawings, ensuring a fresh start for the histogram display.
+
+- **Counting Levels**: An array levelCounts is initialized to keep track of the number of attacks for each penetration level. The array is filled with zeros and its length corresponds to the number of systems.
+
+- **Counting Penetration Scores**: The function iterates through the penetrationData array. For each penetration score greater than zero, it increments the corresponding index in the levelCounts array. This effectively counts how many attackers achieved each penetration level.
+
+- **Drawing the Axes**: The function draws the axes of the histogram:
+  - The Y-axis is drawn vertically on the left side.
+  - The X-axis is drawn horizontally at the bottom.
+  - Both axes are colored blue.
+
+- **Calculating Bar Width**: The width of each bar in the histogram is calculated based on the number of systems, ensuring that the bars are evenly spaced across the canvas.
+
+- **Drawing the Bars**: For each system, the function calculates the relative frequency of attacks that reached that penetration level:
+  - The height of each bar is determined by the relative frequency multiplied by a maximum height value, ensuring the bars fit within the canvas.
+  - The function then fills a rectangle on the canvas to represent each bar, using a blue color.
+
+- **Displaying Percentages**: Above each bar, the function displays the relative frequency as a percentage, formatted to two decimal places.
+
+- **Labeling the X-axis**: Finally, the function draws the labels for the X-axis, numbering each bar according to the system it represents.
+
+This function provides a visual representation of how many attackers successfully penetrated different systems, helping to analyze the performance of the attackers across the given systems.
+
+
+## Recursive average function
+\`\`\`javascript
+function recursiveAverage(arr, length) {
+    if (length === 0) {
+        return 0;
+    }
+    if (length === 1) {
+        return arr[0];
+    }
+    return (arr[length - 1] + recursiveAverage(arr, length - 1) * (length - 1)) / length;
+}
+\`\`\`
+
+**Explaination**: The recursiveAverage function calculates the average of an array of numbers recursively. It accepts two parameters: the array itself and its length. If the length is zero, the function returns zero to avoid calculations on an empty array. If the length is one, it returns the first (and only) element of the array as the average. If there are more elements, the function sums the last element of the array to the recursive average of the remaining elements, multiplied by the number of elements already considered. This sum is then divided by the total length to obtain the average. In this way, the function takes advantage of recursion to calculate the average in an elegant way and without the use of loops. This function is called in the drawchart function!
+
+# Statistic overview
+Statistics is a branch of mathematics that focuses on the scientific methodologies for collecting, organizing, summarizing, presenting, and analyzing data. It also involves drawing valid conclusions and making informed decisions based on such analyses. In today's world, statistics are omnipresent, encompassing areas such as economic statistics, geophysical statistics, employment statistics, accident statistics, financial statistics, population statistics, and many others.
+
+## Base Concept 
+
+- **Population**: refers to a set of individuals, objects, events, or measurements that share a common characteristic or variable of interest. It is the complete group relevant to a researcher's question or experiment. A statistical population can consist of a group of existing objects (such as a group of workers) or a hypothetical and potentially infinite group of objects, conceived as a generalization from experience (such as the set of all possible hands in a game of poker). A population is not static; it can change over time, as it represents a dynamic flow.
+
+- **Statistical Unit**: A statistical unit is a single member of a population, the group of entities being studied. It is a key concept in statistics, serving as the source of data or information from which conclusions are drawn. Depending on the nature of the study, statistical units can be individuals, households, businesses, events, or other entities. In each statistical unit we observe and study variables that can be multiple. 
+
+- **Distribution**: refers to the way in which the values of a random variable are spread or arranged. It describes the frequency or probability of different outcomes in a dataset and provides insight into the underlying patterns or characteristics of the data. A distribution can be classified in two ways based on the nature of the random variable it describes:
+	- In a **discrete distribution**, the random variable can take on a finite or countably infinite number of distinct values.
+	- In a **continuous distribution**, the random variable can take on an infinite number of values within a given range.
+ 
+- **Average**:  The average is a measure of central tendency that indicates a typical value within a dataset. It serves to summarize the data using a single representative value.
+	- **Arithmetic mean**, is a measure of central tendency that calculates the total of a set of values divided by the number of values in that set. This yields a single value that encapsulates the data, representing a typical value within the dataset.
+	$$\text{Arithmetical mean} \hspace{0.5cm} = \hspace{0.5cm} \sum_{i=1}^n \frac{x_i}{n}$$
+
+	- **Median**: Is a more general concept. The median is the middle value when a data set is ordered from least to greatest.
+	- **Mode**: The **mode** is a measure of central tendency that represents the value that appears most frequently in a dataset. The mode focuses on frequency.
+
+
+## Computational problems with floating point representation 
+**Floating Point Representation** is a method used in computer systems to represent real numbers, allowing for a wide range of values by using a format that separates a number into its significant digits (the **mantissa**) and its exponent.
+
+This type of representation is commonly used in statistics when we compute averages or perform other statistical calculations. Unfortunately, this type of representation has multiple problems that can  affect the results:
+
+- **Precision Issue**: In operations involving very large and very small numbers, precision may be lost.
+- **Rounding Errors**: Floating point arithmetic can lead to rounding errors because not all decimal numbers can be represented exactly in binary. This is especially problematic in statistical calculations where precise values are essential.
+- **Overflow and Underflow**: During calculations, particularly with large datasets or extreme values, you might encounter overflow (resulting in infinity) or underflow (resulting in zero). This can distort the results
+- **Accumulation of Errors**: When performing multiple calculations, such as summing a large dataset, small rounding errors can accumulate, potentially leading to significant inaccuracies in the final result. This is known as numerical instability.
+### Structure 
+![Description of the image](../images/hm1.png)
+
+- the _sign_ indicates if the number is positive or negative
+- _mantissa_ is composed by the significant digits of the number
+- _exponent_ determinates the scale of the number
+
+## Numerical Solution and Knuth’s Contribution
+
+Numerical solutions refer to mathematical techniques used to obtain approximate solutions to problems that may be difficult or impossible to solve analytically. **Donald Knut**, a renowned computer scientist, is famous for his significant contributions to algorithms and numerical analysis. His work laid the groundwork for many aspects of computer science and programming.
+In his famous book called: "_The Art of Computer Programming_" provided treatments and techniques for minimazing errors. Below are a few of them:
+
+- **Careful algorithm design**: Choose algorithms that maintain numerical stability, meaning they produce small changes in output for small changes in input.
+- **Error Analysis**: Knuth underline the importance of errors analysis to understand how errors propagate through computations. By estimating the upper bounds of rounding errors, programmers can better gauge the reliability of their results.
+- **Numerical representation**: Knuth provides guidelines for effectively using floating point representation, including how to avoid pitfalls such as overflow and underflow.
+- **Adaptive methods**: Use adaptive algorithms that adjust their parameters based on the behavior of the data or the error observed in intermediate computations. This help to maintain accuracy.
+- **Verification and Validation**: Implementing checks against known results or using multiple methods to solve the same problem can help verify the accuracy of computations. This technique can catch errors due to incorrect algorithm implementation or unexpected numerical behavior.
+- **Data Structure choices**: Using data structures that minimize computational overhead and reduce the likelihood of errors during numerical operations is crucial.
+            `;
+
+            // Convert Markdown to HTML
+            const htmlContent = marked(markdownText);
+            document.getElementById("markdownContent").innerHTML = htmlContent;
+
+            // Render MathJax
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "markdownContent"]);
+
+            Prism.highlightAll();
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 </body>
 
 </html>
