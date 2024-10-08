@@ -3,150 +3,132 @@ document.getElementById('submitButton').addEventListener('click', function() {
     const systemValue = parseInt(document.getElementById('servers').value);
     const probability = parseFloat(document.getElementById('probability').value);
 
-    // Draw the chart and calculate the average penetration score
+    // Disegna il grafico
     drawChart(attackersValue, systemValue, probability);
 });
 
 function drawChart(attackers, systems, probability) {
-    // Get the canvas element by its ID and get its 2D rendering context
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
-
-    // Clear the previous chart
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    
-    ctx.beginPath(); //new path to draw axes
-    ctx.moveTo(50, 30);
-    ctx.lineTo(50, canvas.height - 30);
-    ctx.lineTo(canvas.width - 30, canvas.height - 30);
+    const marginX = 50;
+    const marginY = 30;
+    const chartWidth = canvas.width - marginX * 2;
+    const chartHeight = canvas.height - marginY * 2;
+    const maxScoreX = canvas.width - marginX - (chartWidth * 0.25);
+    const xStep = (maxScoreX - marginX) / (systems - 1);
+
+    // Disegna gli assi
+    ctx.beginPath();
+    ctx.moveTo(marginX, marginY); 
+    ctx.lineTo(marginX, canvas.height - marginY); 
+    ctx.lineTo(canvas.width - marginX, canvas.height - marginY);
     ctx.strokeStyle = '#007bff';
     ctx.stroke();
     ctx.closePath();
 
-    // Draw X-axis labels
-    for (let j = 0; j < systems; j++) {
-        const xLabel = 50 + (j * (canvas.width - 100) / (systems - 1));//calculate x position fot he label
-        ctx.fillText(j + 1, xLabel - 5, canvas.height - 10); //drwa label
-    }
-
-    // Array to store each attacker's penetration score
     const penetrationData = [];
 
-    // Draw lines for each attacker
+    // Simula attacchi e raccoglie i punteggi di penetrazione
     for (let i = 0; i < attackers; i++) {
-        // Draw a line for each attacker
-        ctx.beginPath(); 
-        //move to the starting point
-        ctx.moveTo(50, canvas.height - 30);
-
-        //initialize y position for his attacker
+        ctx.beginPath();
+        ctx.moveTo(marginX, canvas.height - marginY); 
         let yPosition = 0;
 
-        // Simulate the attack for each system
         for (let j = 0; j < systems; j++) {
-            //determinate if the attacker penetrates the system based on probability
             const penetrated = Math.random() > probability;
 
-            //penetration is successful, attacker line jump up
             if (penetrated) {
                 yPosition += 1;
             }
 
-            // Calculate the X position for the current system
-            const x = 50 + (j * (canvas.width - 100) / (systems - 1));
-             // Calculate the corresponding Y position based on the penetration score
-            const y = canvas.height - 30 - (yPosition * (canvas.height - 60) / systems);
-            // Draw a line to the calculated X and Y positions
+            const x = marginX + (j * xStep);
+            const y = canvas.height - marginY - (yPosition * chartHeight / systems);
             ctx.lineTo(x, y);
+
+            if (i === 0) {
+                ctx.fillStyle = '#000';
+                ctx.font = '12px Arial';
+                ctx.fillText(`${j + 1}`, x - 10, canvas.height - 10);
+            }
         }
 
-        //Set the stroke color for his attacker's line
         ctx.strokeStyle = `hsl(${(i / attackers) * 360}, 100%, 50%)`;
         ctx.lineWidth = 2;
-        // Render the line on the canvas
         ctx.stroke();
-        //close the path for this attacker's line
         ctx.closePath();
-         // Store the final Y position (penetration score) in the array
+
+        // Aggiungi il punteggio finale per ogni aggressore
         penetrationData.push(yPosition);
     }
 
-    // Calculate recursive average penetration score
-    const averageScore = recursiveAverage(penetrationData, penetrationData.length);
-    document.getElementById('averageScoreValue').textContent = averageScore.toFixed(2); // Display average score
+    // Aggiungi il calcolo della media dopo il ciclo
+    const averagePenetrationScore = computeAverage(penetrationData);
 
-    // Draw Y-axis labels
-    const maxScore = systems;
-    const yLabelCount = 5;
-    for (let k = 0; k <= yLabelCount; k++) {
-        const yScore = Math.floor((k * maxScore) / yLabelCount);
-        const yLabel = canvas.height - 30 - (yScore * (canvas.height - 60) / systems);
-        ctx.fillText(yScore, 25, yLabel + 5);
-    }
+    // Aggiorna la media nell'HTML
+    document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2);
 
-    // Draw histogram
-    drawHistogram(penetrationData, systems);
-}
+    // Codice per disegnare il resto del grafico (istogramma e linea rossa)
+    ctx.beginPath();
+    ctx.moveTo(maxScoreX, marginY);
+    ctx.lineTo(maxScoreX, canvas.height - marginY);
+    ctx.strokeStyle = '#ff5733';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
 
-// Recursive function to calculate average
-function recursiveAverage(arr, length) {
-    if (length === 0) {
-        return 0;
-    }
-    if (length === 1) {
-        return arr[0];
-    }
-    return (arr[length - 1] + recursiveAverage(arr, length - 1) * (length - 1)) / length;
-}
-
-function drawHistogram(penetrationData, systems) {
-    const histogramCanvas = document.getElementById('histogramCanvas');
-    const histogramCtx = histogramCanvas.getContext('2d');
-
-    // Pulisci il canvas
-    histogramCtx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
-
-    // Inizializza l'array per contare i livelli
     const levelCounts = new Array(systems).fill(0);
-
-    // Conta il numero di attacchi per ogni livello
     penetrationData.forEach(penetration => {
         if (penetration > 0) {
             levelCounts[penetration - 1] += 1;
         }
     });
 
-    // Disegna gli assi dell'istogramma
-    histogramCtx.beginPath();
-    histogramCtx.moveTo(50, 30); // Asse Y
-    histogramCtx.lineTo(50, histogramCanvas.height - 30); // Asse Y
-    histogramCtx.lineTo(histogramCanvas.width - 30, histogramCanvas.height - 30); // Asse X
-    histogramCtx.strokeStyle = '#007bff';
-    histogramCtx.stroke();
-    histogramCtx.closePath();
-
     const totalAttackers = penetrationData.length;
-    const barWidth = (histogramCanvas.width - 100) / systems; // Larghezza di ciascuna barra
 
+    // Disegna l'istogramma
     for (let i = 0; i < systems; i++) {
-        const frequencyRelative = levelCounts[i] / totalAttackers; // Frequenza relativa
+        const frequencyRelative = levelCounts[i] / totalAttackers;
+        const lineWidth = frequencyRelative * (canvas.width - maxScoreX - marginX) * (1 + attackers * 0.1);
 
-        // Calcola l'altezza della barra in base alla frequenza relativa
-        const barHeight = frequencyRelative * (histogramCanvas.height - 60); // Altezza massima
+        ctx.beginPath();
+        const startY = canvas.height - marginY - ((i + 1) * chartHeight / systems);
+        ctx.moveTo(maxScoreX, startY);
+        ctx.lineTo(maxScoreX + lineWidth, startY);
+        ctx.strokeStyle = '#007bff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
 
-        // Disegna la barra verticale
-        histogramCtx.fillStyle = '#007bff';
-        histogramCtx.fillRect(50 + i * barWidth, histogramCanvas.height - 30 - barHeight, barWidth - 5, barHeight); // -5 per lo spazio tra le barre
-
-        // Disegna il testo con la percentuale
-        const percentageText = (frequencyRelative * 100).toFixed(2) + '%';
-        histogramCtx.fillStyle = '#000';
-        histogramCtx.fillText(percentageText, 50 + i * barWidth + 5, histogramCanvas.height - 30 - barHeight - 5); // Testo sopra la barra
-
-        // Disegna il numero dell'asse X
-        histogramCtx.fillStyle = '#000';
-        histogramCtx.fillText(i + 1, 50 + i * barWidth + 5, histogramCanvas.height - 15); // Numero sotto la barra
+        if (frequencyRelative > 0) {
+            const percentage = (frequencyRelative * 100).toFixed(2);
+            ctx.fillStyle = '#000';
+            ctx.font = '12px Arial';
+            ctx.fillText(`${percentage}%`, maxScoreX + lineWidth + 5, startY);
+        }
     }
 }
 
+
+
+// Funzione ricorsiva per calcolare la media
+function computeAverage(scores, index = 0, sum = 0) {
+    // Condizione di uscita
+    if (index >= scores.length) {
+        return sum / scores.length; // Calcola e restituisce la media
+    }
+    
+    // Accumula il punteggio corrente
+    sum += scores[index];
+    
+    // Chiama ricorsivamente la funzione con il prossimo indice
+    return computeAverage(scores, index + 1, sum);
+}
+
+// Aggiungi questa parte nel ciclo principale di drawChart
+const totalPenetration = penetrationData.reduce((acc, score) => acc + score, 0);
+const averagePenetrationScore = computeAverage(penetrationData);
+
+// Aggiorna il valore della media nell'HTML
+document.getElementById('averageScoreValue').innerText = averagePenetrationScore.toFixed(2); // Mostra la media formattata a 2 decimali
