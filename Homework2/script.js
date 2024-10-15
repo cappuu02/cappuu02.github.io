@@ -77,12 +77,11 @@ function drawChartAbsolute(attackers, systems, probability) {
         penetrationData.push(yPosition);
     }
 
+
     // Calcolo della media e della varianza
     const mean = penetrationDataTempoT.reduce((a, b) => a + b, 0) / penetrationDataTempoT.length;
-
     const variance = penetrationDataTempoT.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / penetrationDataTempoT.length;
 
-    // Mostra la media e la varianza negli input
     document.getElementById('meanInput').value = mean.toFixed(2);
     document.getElementById('varianceInput').value = variance.toFixed(2);
 
