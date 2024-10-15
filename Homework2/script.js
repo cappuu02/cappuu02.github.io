@@ -52,7 +52,7 @@ function drawChartAbsolute(attackers, systems, probability) {
         let yPosition = 0;
 
         for (let j = 0; j <= systems; j++) {
-            const penetrated = Math.random() > probability;
+            const penetrated = Math.random() < probability;
 
             // Modifica la posizione Y
             if (j === 0) {
@@ -63,29 +63,19 @@ function drawChartAbsolute(attackers, systems, probability) {
                 yPosition -= 1; // Decremento
             }
 
-            // Calcola la posizione Y, centralizzandola sull'asse Y
-            const y = initialY - (yPosition * (chartHeight / systems)); // Centralizza sull'asse Y
+            // Normalizza la posizione Y per il canvas
+            yPosition = Math.max(-systems, Math.min(systems, yPosition)); // Limita yPosition tra -systems e systems
+            const y = initialY - (yPosition * (chartHeight / (2 * systems))); // Centralizza sull'asse Y e normalizza
 
-            // Limita la posizione Y al canvas
-            if (y < marginY) {
-                ctx.lineTo(marginX + (j * xStep), marginY);
-            } else if (y > canvas.height - marginY) {
-                ctx.lineTo(marginX + (j * xStep), canvas.height - marginY);
-            } else {
-                ctx.lineTo(marginX + (j * xStep), y);
-            }
+            // Disegna la linea
+            ctx.lineTo(marginX + (j * xStep), y);
 
             if(j === randomLineT) {
                 penetrationDataTempoT.push(yPosition);
                 console.log("yposition", yPosition);
             }
 
-            // Disegna le etichette sull'asse X
-            if (i === 0) {
-                ctx.fillStyle = '#000';
-                ctx.font = '12px Arial';
-                ctx.fillText(`${j}`, marginX + (j * xStep) - 10, canvas.height - 10);
-            }
+            
         }
 
         ctx.strokeStyle = '#009dff96';
@@ -138,7 +128,7 @@ function drawChartAbsolute(attackers, systems, probability) {
         const frequencyRelative = frequencyAbsolute / totalAttackers; // Frequenza relativa
 
         // Disegna le barre dell'istogramma
-        const startY = initialY - (i * (chartHeight / systems)); // Centralizza l'istogramma in Y
+        const startY = initialY - (i * (chartHeight / (2 * systems))); // Centralizza l'istogramma in Y
 
         ctx.beginPath();
         ctx.moveTo(maxScoreX, startY);
@@ -164,9 +154,8 @@ function drawChartAbsolute(attackers, systems, probability) {
         const frequencyRelative = frequencyAbsolute / attackers; // Frequenza relativa
 
         // Disegna le linee orizzontali per ciascun livello
-        const startY = initialY - (i * (chartHeight / systems)); // Posizione Y per il livello i
+        const startY = initialY - (i * (chartHeight / (2 * systems))); // Posizione Y per il livello i
         const lineLength = Math.max(frequencyRelative * 300, 1); // Assicurati che la lunghezza sia almeno 1
-
 
         ctx.beginPath();
         ctx.moveTo(marginX + randomLineT * xStep, startY); // Parte dalla posizione a tempo t
@@ -177,6 +166,7 @@ function drawChartAbsolute(attackers, systems, probability) {
         ctx.closePath();
     }
 }
+
 
 
 function drawChartRelative(attackers, systems, probability) {
@@ -202,9 +192,22 @@ function drawChartRelative(attackers, systems, probability) {
     ctx.stroke();
     ctx.closePath();
 
+
+    const randomLineT = Math.floor(systems / 2);
     const penetrationData = [];
     const penetrationDataTempoT = [];
-    const randomLineT = Math.floor(systems / 2); // Arrotonda per difetto
+
+    // Array di colori per le linee
+    const colors = [
+        '#009dff', // Colore 1
+        '#ff5733', // Colore 2
+        '#06c91b', // Colore 3
+        '#ffcc00', // Colore 4
+        '#c70039', // Colore 5
+        '#900c3f', // Colore 6
+        '#581845', // Colore 7
+        '#34495e'  // Colore 8
+    ];
 
     // Simula gli attacchi e raccoglie i punteggi di penetrazione
     for (let i = 0; i < attackers; i++) {
@@ -212,36 +215,33 @@ function drawChartRelative(attackers, systems, probability) {
         ctx.moveTo(marginX, initialY); // Inizia dal basso del canvas
         let successes = 0; // Numero di sistemi manomessi con successo
 
+        // Scegli un colore per la linea corrente
+        const lineColor = colors[i % colors.length];
+        ctx.strokeStyle = lineColor; // Applica il colore alla linea corrente
+
         for (let j = 1; j <= systems; j++) { // Inizia da 1 invece che da 0
-            const penetrated = Math.random() > probability;
+            const penetrated = Math.random() < probability;
 
             // Calcola il numero di successi e il relativo rapporto
             if (penetrated) {
                 successes += 1;
+            }            
 
-                // Calcola la nuova posizione Y normalizzata
-                const y = initialY - (successes * (chartHeight / attackers)); // Salita verticale
-                console.log('Y', y);
+            // Calcola il punteggio relativo (successi / sistema attuale)
+            const relativeScore = successes / j;
+            const y = initialY - (relativeScore * chartHeight); // Posizione Y normalizzata
 
-                // Disegna la linea verticale per il successo
-                ctx.lineTo(marginX + ((j - 1) * xStep), y); // Sale verticalmente
-                ctx.stroke();
 
-                // Ora, sposta orizzontalmente al sistema successivo
-                ctx.lineTo(marginX + (j * xStep), y); // Sposta orizzontalmente
-            } else {
-                // Se non riesce, rimane alla stessa Y
-                const y = initialY - (successes * (chartHeight / attackers));
-                
-                // Muovi orizzontalmente senza cambiare Y
-                ctx.lineTo(marginX + (j * xStep), y);
+            if(j === randomLineT) {
+                penetrationDataTempoT.push(y);
             }
 
-            // Salva il numero di successi a tempo T
-            if (j === randomLineT) {
-                penetrationDataTempoT.push(successes);
-            }
+            // Disegna la linea verticale per il punteggio relativo
+            ctx.lineTo(marginX + ((j - 1) * xStep), y); // Sale verticalmente
+            ctx.lineTo(marginX + (j * xStep), y); // Sposta orizzontalmente
+            
 
+            
             // Disegna le etichette sull'asse X
             if (i === 0) {
                 ctx.fillStyle = '#000';
@@ -250,9 +250,8 @@ function drawChartRelative(attackers, systems, probability) {
             }
         }
 
-        ctx.strokeStyle = '#009dff96';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.lineWidth = 2; // Spessore della linea
+        ctx.stroke(); // Disegna la linea
         ctx.closePath();
 
         // Aggiungi il punteggio finale (numero di successi) per ogni aggressore
@@ -311,6 +310,9 @@ function drawChartRelative(attackers, systems, probability) {
         ctx.closePath();
     }
 }
+
+
+
 
 
 
