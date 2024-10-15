@@ -42,7 +42,7 @@ function drawChartAbsolute(attackers, systems, probability) {
 
     const penetrationData = [];
     const penetrationDataTempoT = [];
-    const randomLineT = systems / 2;
+    const randomLineT = Math.floor(systems / 2);
     console.log("randomLineT", randomLineT);
 
     // Simula gli attacchi e raccoglie i punteggi di penetrazione
@@ -165,7 +165,8 @@ function drawChartAbsolute(attackers, systems, probability) {
 
         // Disegna le linee orizzontali per ciascun livello
         const startY = initialY - (i * (chartHeight / systems)); // Posizione Y per il livello i
-        const lineLength = frequencyRelative * 300; // Aumenta la lunghezza proporzionale alla frequenza relativa
+        const lineLength = Math.max(frequencyRelative * 300, 1); // Assicurati che la lunghezza sia almeno 1
+
 
         ctx.beginPath();
         ctx.moveTo(marginX + randomLineT * xStep, startY); // Parte dalla posizione a tempo t
@@ -203,7 +204,7 @@ function drawChartRelative(attackers, systems, probability) {
 
     const penetrationData = [];
     const penetrationDataTempoT = [];
-    const randomLineT = systems / 2;
+    const randomLineT = Math.floor(systems / 2); // Arrotonda per difetto
 
     // Simula gli attacchi e raccoglie i punteggi di penetrazione
     for (let i = 0; i < attackers; i++) {
@@ -218,9 +219,10 @@ function drawChartRelative(attackers, systems, probability) {
             if (penetrated) {
                 successes += 1;
 
-                // Calcola la nuova posizione Y
+                // Calcola la nuova posizione Y normalizzata
                 const y = initialY - (successes * (chartHeight / attackers)); // Salita verticale
-                
+                console.log('Y', y);
+
                 // Disegna la linea verticale per il successo
                 ctx.lineTo(marginX + ((j - 1) * xStep), y); // Sale verticalmente
                 ctx.stroke();
@@ -302,13 +304,14 @@ function drawChartRelative(attackers, systems, probability) {
 
         ctx.beginPath();
         ctx.moveTo(maxScoreX, startY);
-        ctx.lineTo(maxScoreX + frequencyRelative * 300, startY); // Modifica per la lunghezza relativa
+        ctx.lineTo(maxScoreX + frequencyRelative * (chartWidth / 2), startY); // Modifica per la lunghezza relativa
         ctx.strokeStyle = '#06c91b'; // Colore giallo per le barre
         ctx.lineWidth = 4; // Aumenta lo spessore delle barre
         ctx.stroke();
         ctx.closePath();
     }
 }
+
 
 
 
