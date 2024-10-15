@@ -78,12 +78,18 @@ function drawChartAbsolute(attackers, systems, probability) {
     }
 
 
-    // Calcolo della media e della varianza
-    const mean = penetrationDataTempoT.reduce((a, b) => a + b, 0) / penetrationDataTempoT.length;
-    const variance = penetrationDataTempoT.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / penetrationDataTempoT.length;
-
+    // Calcolo media e varianza al tempo finale
+    const mean = penetrationData.reduce((a, b) => a + b, 0) / penetrationData.length;
+    const variance = penetrationData.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / penetrationData.length;
     document.getElementById('meanInput').value = mean.toFixed(2);
     document.getElementById('varianceInput').value = variance.toFixed(2);
+
+    // Calcolo media e varianza al tempo T
+    const meanT = penetrationDataTempoT.reduce((a, b) => a + b, 0) / penetrationDataTempoT.length;
+    const varianceT = penetrationDataTempoT.reduce((a, b) => a + Math.pow(b - meanT, 2), 0) / penetrationDataTempoT.length;  // Usare meanT
+    document.getElementById('meanInputTimeT').value = meanT.toFixed(2);
+    document.getElementById('varianceInputTimeT').value = varianceT.toFixed(2);
+
 
     // Disegna la linea verticale nel sistema selezionato casualmente
     const randomSystemX = marginX + (randomLineT * xStep);
@@ -219,13 +225,22 @@ function drawChartRelative(attackers, systems, probability) {
         penetrationData.push(successes);
     }
 
-    // Calcola media e varianza
+    // Calcola media e varianza al tempo finale (globale)
     const mean = penetrationData.reduce((acc, val) => acc + val, 0) / attackers;
     const variance = penetrationData.reduce((acc, val) => acc + (val - mean) ** 2, 0) / attackers;
 
-    // Visualizza la media e la varianza negli input
+    // Visualizza la media e la varianza negli input (finale)
     document.getElementById('meanInput').value = mean.toFixed(2);
     document.getElementById('varianceInput').value = variance.toFixed(2);
+
+    // Calcola media e varianza al tempo T
+    const successesAtT = penetrationDataTempoT.map(penetration => penetration.successes);
+    const meanT = successesAtT.reduce((acc, val) => acc + val, 0) / successesAtT.length;
+    const varianceT = successesAtT.reduce((acc, val) => acc + (val - meanT) ** 2, 0) / successesAtT.length;
+
+    // Visualizza la media e la varianza al tempo T
+    document.getElementById('meanInputTimeT').value = meanT.toFixed(2);
+    document.getElementById('varianceInputTimeT').value = varianceT.toFixed(2);
 
     // Disegna la linea verticale nel sistema T
     const randomSystemX = marginX + (randomLineT * xStep);
