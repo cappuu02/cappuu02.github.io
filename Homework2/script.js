@@ -77,6 +77,14 @@ function drawChartAbsolute(attackers, systems, probability) {
         penetrationData.push(yPosition);
     }
 
+    // Calcolo della media e della varianza
+    const mean = penetrationDataTempoT.reduce((a, b) => a + b, 0) / penetrationDataTempoT.length;
+
+    const variance = penetrationDataTempoT.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / penetrationDataTempoT.length;
+
+    // Mostra la media e la varianza negli input
+    document.getElementById('meanInput').value = mean.toFixed(2);
+    document.getElementById('varianceInput').value = variance.toFixed(2);
 
     // Disegna la linea verticale nel sistema selezionato casualmente
     const randomSystemX = marginX + (randomLineT * xStep);
@@ -147,11 +155,6 @@ function drawChartAbsolute(attackers, systems, probability) {
 }
 
 
-
-
-
-
-
 function drawChartRelative(attackers, systems, probability) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -216,6 +219,14 @@ function drawChartRelative(attackers, systems, probability) {
 
         penetrationData.push(successes);
     }
+
+    // Calcola media e varianza
+    const mean = penetrationData.reduce((acc, val) => acc + val, 0) / attackers;
+    const variance = penetrationData.reduce((acc, val) => acc + (val - mean) ** 2, 0) / attackers;
+
+    // Visualizza la media e la varianza negli input
+    document.getElementById('meanInput').value = mean.toFixed(2);
+    document.getElementById('varianceInput').value = variance.toFixed(2);
 
     // Disegna la linea verticale nel sistema T
     const randomSystemX = marginX + (randomLineT * xStep);
@@ -285,6 +296,7 @@ function drawChartRelative(attackers, systems, probability) {
         ctx.closePath();
     }
 }
+
 
 
 
