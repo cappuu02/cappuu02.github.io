@@ -16,7 +16,7 @@ document.getElementById('submitButton2').addEventListener('click', function() {
     drawChartRelative(attackersValue, systemValue, probability);
 });
 
-//FUNZIONE PER GENERAREB GRAFICO CON FREQUENZA ASSOLUTA!
+//FUNZIONE PER GENERARE GRAFICO CON FREQUENZA ASSOLUTA!
 function drawChartAbsolute(attackers, systems, probability) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -159,7 +159,7 @@ function drawChartAbsolute(attackers, systems, probability) {
     }
 }
 
-
+//FUNZIONE PER GENERARE GRAFICO CON FREQUENZA RELATIVA!
 function drawChartRelative(attackers, systems, probability) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
