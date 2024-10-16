@@ -183,6 +183,12 @@ function drawChartRelative(attackers, systems, probability) {
     ctx.stroke();
     ctx.closePath();
 
+    // Disegna le etichette per l'asse Y
+    ctx.fillStyle = '#000'; // Colore del testo
+    ctx.font = '16px Arial'; // Font del testo
+    ctx.fillText('1', marginX - 30, marginY + 5); // Etichetta in cima
+    ctx.fillText('-1', marginX - 30, canvas.height - marginY); // Etichetta in fondo
+
     const randomLineT = Math.floor(systems / 2); // Tempo casuale
     const penetrationData = [];
     const penetrationDataTempoT = [];
@@ -205,13 +211,13 @@ function drawChartRelative(attackers, systems, probability) {
 
             if (penetrated) {
                 successes += 1;
-            }            
+            }
 
             const relativeScore = successes / j;
             const y = initialY - (relativeScore * chartHeight); // Posizione Y normalizzata
 
             if (j === randomLineT) {
-                penetrationDataTempoT.push({successes, y}); // Salva i successi e la posizione Y al tempo t
+                penetrationDataTempoT.push({ successes, y }); // Salva i successi e la posizione Y al tempo t
             }
 
             ctx.lineTo(marginX + ((j - 1) * xStep), y); // Sale verticalmente
@@ -225,23 +231,33 @@ function drawChartRelative(attackers, systems, probability) {
         penetrationData.push(successes);
     }
 
-    // Calcola media e varianza al tempo finale (globale)
-    const mean = penetrationData.reduce((acc, val) => acc + val, 0) / attackers;
-    const variance = penetrationData.reduce((acc, val) => acc + (val - mean) ** 2, 0) / attackers;
+    // Calcola la media al tempo T
+    let totalSuccessesAtT = 0;
+    penetrationDataTempoT.forEach(penetration => {
+        totalSuccessesAtT += penetration.successes;
+    });
 
-    // Visualizza la media e la varianza negli input (finale)
-    document.getElementById('meanInput').value = mean.toFixed(2);
-    document.getElementById('varianceInput').value = variance.toFixed(2);
+    const meanAtT = totalSuccessesAtT / penetrationDataTempoT.length;
 
-    // Calcola media e varianza al tempo T
-    const successesAtT = penetrationDataTempoT.map(penetration => penetration.successes);
-    const meanT = successesAtT.reduce((acc, val) => acc + val, 0) / successesAtT.length;
-    const varianceT = successesAtT.reduce((acc, val) => acc + (val - meanT) ** 2, 0) / successesAtT.length;
+    // Calcola la varianza al tempo T
+    let varianceAtT = 0;
+    penetrationDataTempoT.forEach(penetration => {
+        varianceAtT += Math.pow(penetration.successes - meanAtT, 2);
+    });
 
-    // Visualizza la media e la varianza al tempo T
-    document.getElementById('meanInputTimeT').value = meanT.toFixed(2);
-    document.getElementById('varianceInputTimeT').value = varianceT.toFixed(2);
+    varianceAtT = varianceAtT / penetrationDataTempoT.length;
 
+    // Ora puoi stampare o usare i valori calcolati
+    document.getElementById('meanInputTimeT').value = meanAtT;
+    document.getElementById('varianceInputTimeT').value = varianceAtT;
+
+
+    // Calcoli media e varianza al tempo N finale
+    const mean = penetrationData.reduce((sum, val) => sum + val, 0) / attackers;
+    const variance = penetrationData.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / attackers;
+    document.getElementById('meanInput').value = mean;
+    document.getElementById('varianceInput').value = variance;
+    
     // Disegna la linea verticale nel sistema T
     const randomSystemX = marginX + (randomLineT * xStep);
     ctx.beginPath();
@@ -277,7 +293,7 @@ function drawChartRelative(attackers, systems, probability) {
             ctx.closePath();
         }
     }
-    
+
     // Disegna la linea verticale finale
     ctx.beginPath();
     ctx.moveTo(maxScoreX, marginY);
@@ -303,13 +319,15 @@ function drawChartRelative(attackers, systems, probability) {
 
         ctx.beginPath();
         ctx.moveTo(maxScoreX, startY);
-        ctx.lineTo(maxScoreX + frequencyRelative * (chartWidth / 2), startY); 
+        ctx.lineTo(maxScoreX + frequencyRelative * (chartWidth / 2), startY);
         ctx.strokeStyle = '#06c91b';
         ctx.lineWidth = 4;
         ctx.stroke();
         ctx.closePath();
     }
 }
+
+
 
 
 
