@@ -136,6 +136,17 @@
             overflow-x: auto;
             background-color: #f5f5f5;
         }
+        .centered-div {
+            width: 80%; /* Adjust width as needed */
+            max-width: 600px; /* Optional: limits the maximum width */
+            margin: 0 auto; /* Centers the div horizontally */
+            padding: 20px; /* Optional: adds padding around the content */
+            border: 1px solid #ddd; /* Optional: adds a border for visibility */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+        }
+        .paragrafo_poisson {
+            text-align: left; /* Ensures text is aligned to the left */
+        }
 
     </style>
 </head>
@@ -155,6 +166,15 @@
     <h2>Luca Capuccini</h2>
     <b><p>Matr. 2200930</p></b>
 
+    <div class="centered-div">
+        <h2>Poisson Distribution</h2>
+        <p class="paragrafo_poisson">
+            The Poisson distribution is a discrete probability distribution used in statistics to model the number of times an event occurs within a fixed interval of time or space. 
+            It is applicable in scenarios where events happen independently and at a constant average rate. 
+            The distribution is characterized by a single parameter, λ (lambda), which represents the average number of occurrences in the given interval.
+            The Poisson distribution is particularly useful for analyzing rare events and provides insights into the likelihood of a specific number of events happening within that interval.
+        </p>
+    </div>
     <div>
         <label for="Intervals">Intervals:</label>
         <input type="number" id="Intervals" value="1000" min="1" />
@@ -213,6 +233,10 @@
             }
         });
     </script>
+
+<iframe src="/Homework3/PDF/Teoria Homework 3.pdf" width="1800" height="1200">
+    <a href="/Homework3/PDF/Teoria Homework 3.pdf">Downaload The PDF</a>.
+</iframe>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 </body>
