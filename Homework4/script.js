@@ -131,6 +131,6 @@ function drawChart(attackers, systems, probability) {
     // Disegna l'istogramma per la metà (n/2) sulla linea verde
     drawHistogram(midPenetrationData, midLineX);
 
-    // Disegna l'istogramma per la fine (n) sulla linea rossa
+    // Disegna l'istogramma per la fine (n) sulla linea rossa!!
     drawHistogram(finalPenetrationData, maxScoreX);
 }
