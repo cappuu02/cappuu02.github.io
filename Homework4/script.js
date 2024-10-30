@@ -7,7 +7,6 @@ document.getElementById('submitButton').addEventListener('click', function() {
     drawChart(attackersValue, systemValue, probability);
 });
 
-
 function drawChart(attackers, systems, probability) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -28,7 +27,7 @@ function drawChart(attackers, systems, probability) {
     const midPenetrationData = []; // Dati per i livelli a n/2
     const finalPenetrationData = []; // Dati per i livelli a n
 
-    // Disegna l'asse y principale (linea verticale centrale per i valori positivi e negativi)
+    // Disegna l'asse y principale
     ctx.beginPath();
     ctx.moveTo(marginX, marginY);
     ctx.lineTo(marginX, canvas.height - marginY);
@@ -37,14 +36,23 @@ function drawChart(attackers, systems, probability) {
     ctx.stroke();
     ctx.closePath();
 
-    // Disegna l'asse x principale (linea orizzontale centrale)
+    // Disegna l'asse x principale
     ctx.beginPath();
     ctx.moveTo(marginX, yCenter);
-    ctx.lineTo(marginX + chartWidth, yCenter); // Disegna da margine a margine
+    ctx.lineTo(marginX + chartWidth, yCenter);
     ctx.strokeStyle = '#000'; // Colore nero per l'asse x
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
+
+    // Etichetta del valore massimo su Y (+sqrt(systems))
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#000';
+    ctx.textAlign = 'right';
+    ctx.fillText(`+${yMax.toFixed(2)}`, marginX - 10, marginY + 5);
+
+    // Etichetta del valore minimo su Y (-sqrt(systems))
+    ctx.fillText(`-${yMax.toFixed(2)}`, marginX - 10, canvas.height - marginY - 5);
 
     // Simula gli attacchi e traccia le linee per ciascun attaccante
     for (let i = 0; i < attackers; i++) {
@@ -55,18 +63,18 @@ function drawChart(attackers, systems, probability) {
         let midPosition = 0;
 
         for (let j = 0; j < systems; j++) {
-            // Determina il salto in base alla probabilità di successo
-            const jump = (Math.random() < probability) ? jumpSize : -jumpSize;
-            yPosition += jump;
+            if (j > 0) {
+                const jump = (Math.random() < probability) ? jumpSize : -jumpSize;
+                yPosition += jump;
 
-            // Limita yPosition tra -sqrt(systems) e sqrt(systems)
-            yPosition = Math.max(-yMax, Math.min(yPosition, yMax));
+                yPosition = Math.max(-yMax, Math.min(yPosition, yMax));
+            }
 
             const x = marginX + (j * xStep);
-            const y = yCenter - (yPosition * yStep); // Scala rispetto al centro per valori positivi e negativi
+            const y = yCenter - (yPosition * yStep);
 
             if (j === midIndex) {
-                midPosition = yPosition; // Salva la posizione a metà percorso
+                midPosition = yPosition;
             }
 
             ctx.lineTo(x, y);
@@ -77,65 +85,63 @@ function drawChart(attackers, systems, probability) {
         ctx.stroke();
         ctx.closePath();
 
-        midPenetrationData.push(midPosition); // Salva il livello raggiunto a n/2
-        finalPenetrationData.push(yPosition); // Salva il livello raggiunto alla fine
+        midPenetrationData.push(midPosition);
+        finalPenetrationData.push(yPosition);
     }
 
-        // Linee verticali di riferimento: linea verde a metà e linea rossa alla fine
-        const midLineX = marginX + (midIndex * xStep);
-        ctx.beginPath();
-        ctx.moveTo(midLineX, marginY);
-        ctx.lineTo(midLineX, canvas.height - marginY);
-        ctx.strokeStyle = '#33ff57'; // Verde per la linea centrale
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.closePath();
-    
-        const maxScoreX = marginX + chartWidth;
-        ctx.beginPath();
-        ctx.moveTo(maxScoreX, marginY);
-        ctx.lineTo(maxScoreX, canvas.height - marginY);
-        ctx.strokeStyle = '#ff5733'; // Rosso per la linea finale
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.closePath();
-    
-        // Funzione per disegnare l'istogramma basato solo sui livelli continui raggiunti dagli attaccanti
-        function drawHistogram(data, startX) {
-            const frequencyMap = {};
-    
-            // Calcola le frequenze senza alcun arrotondamento, considerando i valori continui
-            for (let i = 0; i < data.length; i++) {
-                const level = data[i];
-                frequencyMap[level] = (frequencyMap[level] || 0) + 1;
-            }
-    
-            const maxFrequency = Math.max(...Object.values(frequencyMap)); // Frequenza massima per calcolare la lunghezza relativa delle barre
-    
-            // Disegna le linee orizzontali dell'istogramma basandosi sui livelli continui degli attaccanti
-            for (let level in frequencyMap) {
-                const freq = frequencyMap[level];
-                const y = yCenter - (parseFloat(level) * yStep); // Usa il valore continuo di 'level' per il calcolo di y
-    
-                // Calcola la lunghezza della barra in base alla frequenza relativa
-                const barLength = (freq / maxFrequency) * 100; // Lunghezza relativa massima di 100 pixel
-    
-                ctx.beginPath();
-                ctx.moveTo(startX, y);
-                ctx.lineTo(startX + barLength, y);
-                ctx.strokeStyle = '#0000FF'; // Colore blu per le barre dell'istogramma
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.closePath();
-            }
+    // Linee verticali di riferimento: linea verde a metà e linea rossa alla fine
+    const midLineX = marginX + (midIndex * xStep);
+    ctx.beginPath();
+    ctx.moveTo(midLineX, marginY);
+    ctx.lineTo(midLineX, canvas.height - marginY);
+    ctx.strokeStyle = '#33ff57'; // Verde per la linea centrale
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    const maxScoreX = marginX + chartWidth;
+    ctx.beginPath();
+    ctx.moveTo(maxScoreX, marginY);
+    ctx.lineTo(maxScoreX, canvas.height - marginY);
+    ctx.strokeStyle = '#ff5733'; // Rosso per la linea finale
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    // Funzione per disegnare l'istogramma basato solo sui livelli continui raggiunti dagli attaccanti
+    function drawHistogram(data, startX) {
+        const frequencyMap = {};
+
+        // Calcola le frequenze senza alcun arrotondamento, considerando i valori continui
+        for (let i = 0; i < data.length; i++) {
+            const level = data[i];
+            frequencyMap[level] = (frequencyMap[level] || 0) + 1;
         }
-    
-        // Disegna l'istogramma per la metà (n/2) sulla linea verde
-        drawHistogram(midPenetrationData, midLineX);
-    
-        // Disegna l'istogramma per la fine (n) sulla linea rossa!!
-        drawHistogram(finalPenetrationData, maxScoreX);
+
+        const maxFrequency = Math.max(...Object.values(frequencyMap)); // Frequenza massima per calcolare la lunghezza relativa delle barre
+
+        // Disegna le linee orizzontali dell'istogramma basandosi sui livelli continui degli attaccanti
+        for (let level in frequencyMap) {
+            const freq = frequencyMap[level];
+            const y = yCenter - (parseFloat(level) * yStep); // Usa il valore continuo di 'level' per il calcolo di y
+
+            // Calcola la lunghezza della barra in base alla frequenza relativa
+            const barLength = (freq / maxFrequency) * 100; // Lunghezza relativa massima di 100 pixel
+
+            ctx.beginPath();
+            ctx.moveTo(startX, y);
+            ctx.lineTo(startX + barLength, y);
+            ctx.strokeStyle = '#0000FF'; // Colore blu per le barre dell'istogramma
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.closePath();
+        }
+    }
+
+    // Disegna l'istogramma per la metà (n/2) sulla linea verde
+    drawHistogram(midPenetrationData, midLineX);
+
+    // Disegna l'istogramma per la fine (n) sulla linea rossa!!
+    drawHistogram(finalPenetrationData, maxScoreX);
 }
-
-
 

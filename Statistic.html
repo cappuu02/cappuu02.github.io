@@ -58,8 +58,10 @@
             align-items: flex-start;
             gap: 20px;
             padding: 2rem;
-            padding-top: 100px; /* Spazio per evitare la sovrapposizione con la navbar */
+            padding-top: 100px; /* Space to avoid overlap with the navbar */
             background-color: #eaeaea;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            height: auto;
         }
 
         /* Card Styling */
@@ -69,7 +71,7 @@
             border-radius: 15px;
             padding: 2rem;
             width: 300px;
-            height: 400px; /* Altezza fissa per tutte le card */
+            height: 500px; /* Fixed height for all cards */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -84,12 +86,14 @@
             font-size: 1.8rem;
             color: #333;
             margin-bottom: 0.5rem;
+            text-align: center; /* Center align title */
         }
 
         .card h3 {
             font-size: 1.2rem;
             color: #555;
             margin-bottom: 1rem;
+            text-align: center; /* Center align subtitle */
         }
 
         .card p {
@@ -97,6 +101,7 @@
             color: #666;
             line-height: 1.6;
             flex-grow: 1;
+            text-align: center; /* Center align text */
         }
 
         .card a {
@@ -107,6 +112,7 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            text-align: center; /* Center align button text */
             transition: background-color 0.3s;
         }
 
@@ -132,25 +138,25 @@
             <h2>Homework 1</h2>
             <h3>Hackers and attacks on computer systems</h3>
             <p>We have n servers (system) with n attackers. The hacker (each) has the probability 0.7 to penetrate the system...</p>
-            <a href="./Homework1/index.html">Click The Card</a>
+            <a href="./Homework1/index.html">Absolute Distribution</a>
         </div>
         <div class="card">
             <h2>Homework 2</h2>
             <h3>Hackers and attacks on computer systems</h3>
             <p>By the previous scheme, now for each penetrate system hacker jump is 1 and for each system not penetrate is -1...</p>
-            <a href="./Homework2/HMW2.html">Click The Card</a>
+            <a href="./Homework2/HMW2.html">Relative Distribution</a>
         </div>
         <div class="card">
             <h2>Homework 3</h2>
             <h3>Hackers and attacks on computer systems</h3>
-            <p></p>
-            <a href="./Homework3/index.html">Click The Card</a>
+            <p>Poisson Distribution: In this scenario, each jump is represented by either 1 or 0. Consequently, the probability has changed from λ to the average rate of occurrence.</p>
+            <a href="./Homework3/index.html">Poisson</a>
         </div>
         <div class="card">
             <h2>Homework 4</h2>
             <h3>Hackers and attacks on computer systems</h3>
-            <p></p>
-            <a href="./Homework4/HMW4.html">Click The Card</a>
+            <p>Brownian Distribution: In this context, each jump is represented by the hacker gaining or losing control of a system. Additionally, this assignment includes research on the relationship between statistical independence and the Brownian distribution, particularly in relation to Donsker's theorem.</p>
+            <a href="./Homework4/HMW4.html">Brownian</a>
         </div>
     </div>
 
