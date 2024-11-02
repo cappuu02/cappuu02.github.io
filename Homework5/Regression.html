@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Regression Graph</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0; /* Removed margin */
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            width: calc(100% - 22px);
+            max-width: 300px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #graphCanvas {
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 1rem 2rem;
+            color: #fff;
+            position: fixed; /* Make navbar fixed */
+            top: 0; /* Attach it to the top */
+            width: 100%; /* Full width */
+            z-index: 1000; /* Ensure it's on top of other elements */
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            padding: 0 1rem;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            background-color: #555;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        /* Add some top margin to main content */
+        .content {
+            margin-top: 80px; /* Space for fixed navbar */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">Luca Capuccini's Blog</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../Statistic.html">Homework</a>
+        </div>
+    </nav>
+
+    <div class="content"> <!-- Wrapped content to provide top margin -->
+        <h1>Linear Regression Graph</h1>
+        <div>
+            <label for="numPoints">Number of Points:</label>
+            <input type="number" id="numPoints" value="150" min="1" max="100">
+            <button onclick="simulate()">Generate Graph</button>
+        </div>
+        
+        <canvas id="graphCanvas" width="700" height="500"></canvas>
+        
+        <div >
+            <h1>Cauchy-Schwarz Inequality</h1>
+            <p>The Cauchy-Schwarz inequality states that for any vectors \( \mathbf{u} \) and \( \mathbf{v} \) in an inner product space, the following holds:</p>
+            <p>
+                \[
+                |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
+                \]
+            </p>
+
+            <h2>Proof:</h2>
+            <p>Consider the expression:</p>
+            <p>
+                \[
+                f(t) = \langle \mathbf{u} + t \mathbf{v}, \mathbf{u} + t \mathbf{v} \rangle
+                \]
+            </p>
+            <p>which is always non-negative for all \( t \). Expanding this gives:</p>
+            <p>
+                \[
+                f(t) = \langle \mathbf{u}, \mathbf{u} \rangle + 2t \langle \mathbf{u}, \mathbf{v} \rangle + t^2 \langle \mathbf{v}, \mathbf{v} \rangle
+                \]
+            </p>
+            <p>As a quadratic in \( t \), this must be non-negative for all \( t \), meaning its discriminant must be less than or equal to zero:</p>
+            <p>
+                \[
+                (2 \langle \mathbf{u}, \mathbf{v} \rangle)^2 - 4 \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle \leq 0
+                \]
+            </p>
+            <p>This simplifies to:</p>
+            <p>
+                \[
+                |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
+                \]
+            </p>
+            <p>Thus, the Cauchy-Schwarz inequality is proven.</p>
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+        
+        <footer>
+            &copy; 2024 Luca Capuccini. All rights reserved.
+        </footer>
+    </div>
+
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
