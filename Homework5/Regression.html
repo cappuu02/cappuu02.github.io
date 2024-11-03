@@ -85,6 +85,20 @@
         .content {
             margin-top: 80px; /* Space for fixed navbar */
         }
+        ul, ol {
+            padding-left: 0; /* Rimuove il padding a sinistra */
+            list-style-position: inside; /* Posiziona i marcatori all'interno dell'elemento */
+        }
+
+        li {
+            text-align: center; /* Centra il testo all'interno dell'elemento li */
+        }
+        .pdf-container {
+            width: 100%;
+            height: 600px; /* Imposta l'altezza dell'iframe */
+            border: none; /* Rimuovi il bordo dell'iframe */
+        }
+
     </style>
 </head>
 <body>
@@ -107,51 +121,93 @@
         
         <canvas id="graphCanvas" width="700" height="500"></canvas>
         
-        <div >
-            <h1>Cauchy-Schwarz Inequality</h1>
-            <p>The Cauchy-Schwarz inequality states that for any vectors \( \mathbf{u} \) and \( \mathbf{v} \) in an inner product space, the following holds:</p>
-            <p>
-                \[
-                |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
-                \]
-            </p>
+        <div>
+                <h1>Cauchy-Schwarz Inequality</h1>
+                <p>The Cauchy-Schwarz inequality states that for any vectors \( \mathbf{u} \) and \( \mathbf{v} \) in an inner product space, the following holds:</p>
+                <p>
+                    \[
+                    |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
+                    \]
+                </p>
+    
+                <h2>Proof:</h2>
+                <p>Consider the expression:</p>
+                <p>
+                    \[
+                    f(t) = \langle \mathbf{u} + t \mathbf{v}, \mathbf{u} + t \mathbf{v} \rangle
+                    \]
+                </p>
+                <p>which is always non-negative for all \( t \). Expanding this gives:</p>
+                <p>
+                    \[
+                    f(t) = \langle \mathbf{u}, \mathbf{u} \rangle + 2t \langle \mathbf{u}, \mathbf{v} \rangle + t^2 \langle \mathbf{v}, \mathbf{v} \rangle
+                    \]
+                </p>
+                <p>As a quadratic in \( t \), this must be non-negative for all \( t \), meaning its discriminant must be less than or equal to zero:</p>
+                <p>
+                    \[
+                    (2 \langle \mathbf{u}, \mathbf{v} \rangle)^2 - 4 \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle \leq 0
+                    \]
+                </p>
+                <p>This simplifies to:</p>
+                <p>
+                    \[
+                    |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
+                    \]
+                </p>
+                <p>Thus, the Cauchy-Schwarz inequality is proven.</p>
+    
+                <h1>Independence</h1>
+    <p>Two random variables \(X\) and \(Y\) are said to be independent if knowing the value of one variable does not provide any useful information about the other. Formally, it can be expressed as:</p>
+    <ol>
+        <li><strong>Independence in terms of conditional distributions</strong>: 
+            <br>
+            The conditional distribution of \(X\) given \(Y\) is equal to the marginal distribution of \(X\), meaning that \(Y\) does not influence \(X\). 
+            <br>
+            \[ f_{X \mid Y = y_j} = f_{X = x_i} \]
+        </li>
+        <li><strong>Independence in terms of probabilities</strong>: 
+            <br>
+            The conditional probability of \(X\) given \(Y\) is equal to the marginal probability of \(X\). 
+            <br>
+            \[ P(X \mid Y) = P(X) \]
+        </li>
+        <li><strong>Independence in joint distributions</strong>: 
+            <br>
+            For joint distributions, with discrete or continuous variables, independence can also be represented as: 
+            <br>
+            \[ f_{XY} = f_X \cdot f_Y \]
+        </li>
+    </ol>
+    
+    <h1>Correlation</h1>
+    <p><strong>Correlation</strong> is a measure of the linear relationship between two random variables. It can take values ranging from -1 to 1:</p>
+    <ul>
+        <li>\(r = 1\) indicates a <strong>perfect positive correlation</strong>.</li>
+        <li>\(r = -1\) indicates a <strong>perfect negative correlation</strong>.</li>
+        <li>\(r = 0\) indicates a lack of <strong>linear correlation</strong>.</li>
+    </ul>
+    <p>Correlation is calculated as:</p>
+    \[
+    r = \frac{\sum_{i,j}(x_i - \bar{x})(y_j - \bar{y})}{\sum_j (x_j - \bar{x})^2 \sum_j (y_j - \bar{y})^2} = \frac{\sigma_{x,y}}{\sigma_x \sigma_y}
+    \]  
+    <p>where:</p>
+    <ul>
+        <li>\(\sigma_{x,y}\) represents the covariance between \(X\) and \(Y\)</li>
+        <li>\(\sigma_x\) and \(\sigma_y\) are the standard deviations of \(X\) and \(Y\)</li>
+    </ul>
+    
+    <h1>Relationship between independence and correlation in statistics</h1>
+    <ul>
+        <li><strong>Independence implies zero correlation</strong>: If \(X\) and \(Y\) are independent, their correlation will necessarily be zero. In other words, if there is no relationship between the two variables, there is also no linear correlation.</li>
+        <li><strong>Zero correlation does not imply independence</strong>: If \(r = 0\), this means there is no linear relationship between \(X\) and \(Y\), but it does not imply that \(X\) and \(Y\) are independent. There may be non-linear relationships between the two variables that are not captured by the correlation measure. For example, two variables may have a quadratic relationship (one variable is quadratic in relation to the other) and, therefore, may have zero correlation while being dependent.</li>
+    </ul>
+    
+    <p><strong>Independence</strong> indicates that two random variables do not influence each other, while correlation measures the degree to which they move together in a linear fashion. While independence leads to zero correlation, the absence of correlation does not necessarily indicate independence. Understanding these concepts is critical in fields such as statistics, machine learning, and data analysis, where making accurate predictions and understanding relationships between variables is key.</p>
 
-            <h2>Proof:</h2>
-            <p>Consider the expression:</p>
-            <p>
-                \[
-                f(t) = \langle \mathbf{u} + t \mathbf{v}, \mathbf{u} + t \mathbf{v} \rangle
-                \]
-            </p>
-            <p>which is always non-negative for all \( t \). Expanding this gives:</p>
-            <p>
-                \[
-                f(t) = \langle \mathbf{u}, \mathbf{u} \rangle + 2t \langle \mathbf{u}, \mathbf{v} \rangle + t^2 \langle \mathbf{v}, \mathbf{v} \rangle
-                \]
-            </p>
-            <p>As a quadratic in \( t \), this must be non-negative for all \( t \), meaning its discriminant must be less than or equal to zero:</p>
-            <p>
-                \[
-                (2 \langle \mathbf{u}, \mathbf{v} \rangle)^2 - 4 \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle \leq 0
-                \]
-            </p>
-            <p>This simplifies to:</p>
-            <p>
-                \[
-                |\langle \mathbf{u}, \mathbf{v} \rangle|^2 \leq \langle \mathbf{u}, \mathbf{u} \rangle \langle \mathbf{v}, \mathbf{v} \rangle
-                \]
-            </p>
-            <p>Thus, the Cauchy-Schwarz inequality is proven.</p>
-
-
-
-
-
-
-
-
-
-
+    <h1>Derivation of Regression Coefficients Using the Squares Method</h1>
+    <iframe class="pdf-container" src="./PDF/regression derivation.pdf" allow="fullscreen"></iframe>
+            </div>
         </div>
 
         
