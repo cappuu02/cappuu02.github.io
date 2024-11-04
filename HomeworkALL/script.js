@@ -14,6 +14,8 @@ document.getElementById('chartType').addEventListener('change', function() {
 
 
 
+
+
 document.getElementById('submitButton').addEventListener('click', function() {
     const attackersValue = parseInt(document.getElementById('attackers').value);
     const systemValue = parseInt(document.getElementById('servers').value);
@@ -48,7 +50,7 @@ function drawChartHMW1(attackers, systems, probability) {
     const maxScoreX = canvas.width - marginX - (chartWidth * 0.25);
     const xStep = (maxScoreX - marginX) / (systems - 1);
 
-    // Draw the axes
+    // Disegna gli assi
     ctx.beginPath();
     ctx.moveTo(marginX, marginY);
     ctx.lineTo(marginX, canvas.height - marginY);
@@ -59,27 +61,31 @@ function drawChartHMW1(attackers, systems, probability) {
 
     const penetrationData = [];
 
-    // Simulate attacks and gather penetration scores
+    // Simula gli attacchi e raccogli i punteggi di penetrazione
     for (let i = 0; i < attackers; i++) {
         ctx.beginPath();
-        ctx.moveTo(marginX, canvas.height - marginY);
+        ctx.moveTo(marginX, canvas.height - marginY); // Partenza dal sistema 0 sulla linea di base
+
         let yPosition = 0;
 
         for (let j = 0; j < systems; j++) {
             const penetrated = Math.random() > probability;
 
-            if (penetrated) {
+            // Inizia a contare i salti solo dal sistema 1 in poi
+            if (penetrated && j > 0) {
                 yPosition += 1;
             }
 
             const x = marginX + (j * xStep);
             const y = canvas.height - marginY - (yPosition * chartHeight / systems);
+            
             ctx.lineTo(x, y);
 
+            // Etichette solo per il primo attaccante
             if (i === 0) {
                 ctx.fillStyle = '#000';
                 ctx.font = '12px Arial';
-                ctx.fillText(`${j + 1}`, x - 10, canvas.height - 10);
+                ctx.fillText(`${j}`, x - 10, canvas.height - 10);
             }
         }
 
@@ -88,17 +94,17 @@ function drawChartHMW1(attackers, systems, probability) {
         ctx.stroke();
         ctx.closePath();
 
-        // Add the final score for each attacker
+        // Salva il punteggio di penetrazione finale (numero di sistemi penetrati) per ogni attaccante
         penetrationData.push(yPosition);
     }
 
-    // Add the average calculation after the loop
+    // Calcolo della media dei punteggi di penetrazione
     const averagePenetrationScore = computeAverage(penetrationData);
 
-    // Update the average in the HTML
+    // Aggiorna il punteggio medio nel DOM
     document.getElementById('averageInput').innerText = averagePenetrationScore.toFixed(2);
 
-    // Draw the vertical line
+    // Disegna la linea verticale
     ctx.beginPath();
     ctx.moveTo(maxScoreX, marginY);
     ctx.lineTo(maxScoreX, canvas.height - marginY);
@@ -107,6 +113,7 @@ function drawChartHMW1(attackers, systems, probability) {
     ctx.stroke();
     ctx.closePath();
 
+    // Conta il numero di attaccanti che hanno raggiunto ogni livello
     const levelCounts = new Array(systems).fill(0);
     penetrationData.forEach(penetration => {
         if (penetration > 0) {
@@ -116,12 +123,10 @@ function drawChartHMW1(attackers, systems, probability) {
 
     const totalAttackers = penetrationData.length;
 
-    // Draw the histogram
+    // Disegna l'istogramma
     for (let i = 0; i < systems; i++) {
         const frequencyRelative = levelCounts[i] / totalAttackers;
-
-        // Calculate a scaling factor based on the number of attackers
-        const scaleFactor = 1 + (attackers / 100); // You can adjust the denominator to modify the effect
+        const scaleFactor = 1 + (attackers / 100);
         const lineWidth = Math.min(frequencyRelative * (canvas.width - maxScoreX - marginX) * scaleFactor, (canvas.width - maxScoreX - marginX));
 
         ctx.beginPath();
@@ -134,19 +139,10 @@ function drawChartHMW1(attackers, systems, probability) {
         ctx.closePath();    
     }
 }
-
-//FUNZIONE AVERAGE HOMEWORK 1
-function computeAverage(scores, index = 0, sum = 0) {
-    // Exit condition
-    if (index >= scores.length) {
-        return sum / scores.length; // Calculate and return the average
-    }
-    
-    // Accumulate the current score
-    sum += scores[index];
-    
-    // Recursively call the function with the next index
-    return computeAverage(scores, index + 1, sum);
+// Funzione media
+function computeAverage(scores) {
+    const sum = scores.reduce((acc, score) => acc + score, 0);
+    return scores.length > 0 ? sum / scores.length : 0;
 }
 //----------------------------
 
@@ -293,7 +289,175 @@ function drawChartAbsoluteHMW2(attackers, systems, probability) {
     }
 }
 
+//FUNZIONE RELATIVE HOMEWORK 2
+function drawChartRelativeHMW2(attackers, systems, probability) {
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    const marginX = 50; // Margine sinistro e destro
+    const marginY = 30; // Margine superiore e inferiore
+    const chartWidth = canvas.width - marginX * 2; // Larghezza del grafico
+    const chartHeight = canvas.height - marginY * 2; // Altezza del grafico
+    const maxScoreX = canvas.width - marginX - (chartWidth * 0.25); // Posizione X massima per le linee
+    const xStep = (maxScoreX - marginX) / systems; // Passo per la posizione X in base ai sistemi
+
+    const initialY = canvas.height - marginY; // Posizione iniziale Y impostata in basso
+
+    // Disegna gli assi
+    ctx.beginPath();
+    ctx.moveTo(marginX, marginY);
+    ctx.lineTo(marginX, canvas.height - marginY);
+    ctx.lineTo(canvas.width - marginX, canvas.height - marginY);
+    ctx.strokeStyle = '#007bff';
+    ctx.stroke();
+    ctx.closePath();
+
+    // Disegna le etichette per l'asse Y
+    ctx.fillStyle = '#000'; // Colore del testo
+    ctx.font = '16px Arial'; // Font del testo
+    ctx.fillText('1', marginX - 30, marginY + 5); // Etichetta in cima
+    ctx.fillText('-1', marginX - 30, canvas.height - marginY); // Etichetta in fondo
+
+    const randomLineT = Math.floor(systems / 2); // Tempo casuale
+    const penetrationData = [];
+    const penetrationDataTempoT = [];
+
+    // Array di colori per le linee
+    const colors = ['#009dff', '#ff5733', '#06c91b', '#ffcc00', '#c70039', '#900c3f', '#581845', '#34495e'];
+
+    // Simula gli attacchi e raccoglie i punteggi di penetrazione
+    for (let i = 0; i < attackers; i++) {
+        ctx.beginPath();
+        ctx.moveTo(marginX, initialY); // Inizia dal basso del canvas
+        let successes = 0; // Numero di sistemi manomessi con successo
+
+        // Scegli un colore per la linea corrente
+        const lineColor = colors[i % colors.length];
+        ctx.strokeStyle = lineColor; // Applica il colore alla linea corrente
+
+        for (let j = 1; j <= systems; j++) {
+            const penetrated = Math.random() < probability;
+
+            if (penetrated) {
+                successes += 1;
+            }
+
+            const relativeScore = successes / j;
+            const y = initialY - (relativeScore * chartHeight); // Posizione Y normalizzata
+
+            if (j === randomLineT) {
+                penetrationDataTempoT.push({ successes, y }); // Salva i successi e la posizione Y al tempo t
+            }
+
+            ctx.lineTo(marginX + ((j - 1) * xStep), y); // Sale verticalmente
+            ctx.lineTo(marginX + (j * xStep), y); // Sposta orizzontalmente
+        }
+
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        penetrationData.push(successes);
+    }
+
+    // Calcola la media al tempo T
+    let totalSuccessesAtT = 0;
+    penetrationDataTempoT.forEach(penetration => {
+        totalSuccessesAtT += penetration.successes;
+    });
+
+    const meanAtT = totalSuccessesAtT / penetrationDataTempoT.length;
+
+    // Calcola la varianza al tempo T
+    let varianceAtT = 0;
+    penetrationDataTempoT.forEach(penetration => {
+        varianceAtT += Math.pow(penetration.successes - meanAtT, 2);
+    });
+
+    varianceAtT = varianceAtT / penetrationDataTempoT.length;
+
+    // Ora puoi stampare o usare i valori calcolati
+    document.getElementById('meanInputTimeT').value = meanAtT;
+    document.getElementById('varianceInputTimeT').value = varianceAtT;
+
+
+    // Calcoli media e varianza al tempo N finale
+    const mean = penetrationData.reduce((sum, val) => sum + val, 0) / attackers;
+    const variance = penetrationData.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / attackers;
+    document.getElementById('meanInput').value = mean;
+    document.getElementById('varianceInput').value = variance;
+    
+    // Disegna la linea verticale nel sistema T
+    const randomSystemX = marginX + (randomLineT * xStep);
+    ctx.beginPath();
+    ctx.moveTo(randomSystemX, marginY);
+    ctx.lineTo(randomSystemX, canvas.height - marginY);
+    ctx.strokeStyle = '#ff5733';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    // Disegna l'istogramma orizzontale al tempo t, usando le posizioni Y allineate con le linee
+    const totalAttackers = penetrationDataTempoT.length;
+    const levelCountsAtT = new Array(systems + 1).fill(0); // Conta gli attaccanti che hanno avuto successo
+
+    penetrationDataTempoT.forEach(penetration => {
+        levelCountsAtT[penetration.successes] += 1;
+    });
+
+    for (let i = 0; i <= systems; i++) {
+        const frequencyAbsolute = levelCountsAtT[i];
+        const frequencyRelative = frequencyAbsolute / totalAttackers;
+
+        // Trova l'altezza (y) corrispondente per ogni livello al tempo t
+        const y = penetrationDataTempoT.find(penetration => penetration.successes === i)?.y;
+
+        if (y !== undefined) {
+            ctx.beginPath();
+            ctx.moveTo(randomSystemX, y);
+            ctx.lineTo(randomSystemX + frequencyRelative * (chartWidth / 2), y);
+            ctx.strokeStyle = '#06c91b';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.closePath();
+        }
+    }
+
+    // Disegna la linea verticale finale
+    ctx.beginPath();
+    ctx.moveTo(maxScoreX, marginY);
+    ctx.lineTo(maxScoreX, canvas.height - marginY);
+    ctx.strokeStyle = '#ff5733';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    // Disegna l'istogramma finale (già presente nel codice)
+    const totalLevels = 2 * systems;
+    const levelCounts = new Array(totalLevels).fill(0);
+
+    penetrationData.forEach(penetration => {
+        levelCounts[penetration + systems] += 1; // Offset per consentire livelli negativi
+    });
+
+    for (let i = -systems; i <= systems; i++) {
+        const frequencyAbsolute = levelCounts[i + systems];
+        const frequencyRelative = frequencyAbsolute / totalAttackers;
+
+        const startY = initialY - (i * (chartHeight / systems));
+
+        ctx.beginPath();
+        ctx.moveTo(maxScoreX, startY);
+        ctx.lineTo(maxScoreX + frequencyRelative * (chartWidth / 2), startY);
+        ctx.strokeStyle = '#06c91b';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
+
+//FUNCTION POISSON HOMEWORK 3
 function drawChartHMW3(attackers, systems, Lambda) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -440,12 +604,9 @@ function drawChartHMW3(attackers, systems, Lambda) {
         ctx.closePath();
     }
 }
-
-
-
 //----------------------------
 
-//FUNZIONE HOMEWORK 4
+//FUNZIONE BROWNIAN HOMEWORK 4
 function drawChart(attackers, systems, probability) {
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -583,8 +744,112 @@ function drawChart(attackers, systems, probability) {
     // Disegna l'istogramma per la fine (n) sulla linea rossa!!
     drawHistogram(finalPenetrationData, maxScoreX);
 }
-//--------------------
+//----------------------------
 
+
+//FUNZIONE REGRESSIONE LINEARE
+function drawAxes() {
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+
+    // Draw X-axis
+    ctx.beginPath();
+    ctx.moveTo(margin, height - margin);
+    ctx.lineTo(width - margin, height - margin);
+    ctx.stroke();
+
+    // Draw Y-axis
+    ctx.beginPath();
+    ctx.moveTo(margin, margin);
+    ctx.lineTo(margin, height - margin);
+    ctx.stroke();
+
+    // Labels for axes
+    ctx.font = "16px Arial";
+    ctx.fillStyle = 'black'; // Changed color for axis labels
+    ctx.fillText("X", width - margin + 20, height - margin);
+    ctx.fillText("Y", margin + 20, margin);
+
+    // Draw tick marks and labels on X-axis
+    for (let i = 0; i <= 10; i++) {
+        const x = margin + i * ((width - 2 * margin) / 10);
+        ctx.beginPath();
+        ctx.moveTo(x, height - margin - 5);
+        ctx.lineTo(x, height - margin + 5);
+        ctx.stroke();
+        ctx.fillText(i, x - 5, height - margin + 20);
+    }
+
+    // Draw tick marks and labels on Y-axis
+    for (let i = 0; i <= 10; i++) {
+        const y = height - margin - i * ((height - 2 * margin) / 10);
+        ctx.beginPath();
+        ctx.moveTo(margin - 5, y);
+        ctx.lineTo(margin + 5, y);
+        ctx.stroke();
+        ctx.fillText(i, margin - 25, y + 5);
+    }
+}
+
+function simulate() {
+    const numPoints = parseInt(document.getElementById('numPoints').value);
+    const width = canvas.width - 2 * margin;
+    const height = canvas.height - 2 * margin;
+
+    drawAxes();
+
+    // Generate random points within the defined axis limits
+    const points = [];
+    for (let i = 0; i < numPoints; i++) {
+        const x = Math.random() * 10; // X between 0 and 10
+        const y = 0.5 * x + (Math.random() - 0.5) * 2; // Y related to X with some noise
+        points.push({ x, y });
+    }
+
+    // Calculate regression line
+    const { slope, intercept } = linearRegression(points);
+
+    // Plot points
+    ctx.fillStyle = 'green'; // Changed color for points
+    points.forEach(point => {
+        const px = margin + (point.x / 10) * width;
+        const py = canvas.height - margin - (point.y / 10) * height;
+        if (px >= margin && px <= canvas.width - margin && py >= margin && py <= canvas.height - margin) {
+            ctx.beginPath();
+            ctx.arc(px, py, 3, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    });
+
+    // Draw regression line
+    ctx.strokeStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(margin, canvas.height - margin - (intercept / 10) * height);
+    ctx.lineTo(margin + width, canvas.height - margin - ((slope * 10 + intercept) / 10) * height);
+    ctx.stroke();
+}
+
+function linearRegression(points) {
+    const n = points.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+    points.forEach(({ x, y }) => {
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    });
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return { slope, intercept };
+}
+//----------------------------
 
 
 
