@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <title>Probability Interval Histogram</title>
     <style>
         body {
@@ -102,6 +103,41 @@
             font-size: 1.2em;
             color: #333;
         }
+        
+        .theory {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        
+        .theory h1,
+        .theory h2,
+        .theory h3 {
+            color: #007bff;
+        }
+        
+        .theory p,
+        .theory ul,
+        .theory ol,
+        .theory .formula {
+            margin: 15px 0;
+            line-height: 1.7;
+        }
+        
+        .formula {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            background-color: #e1e1e1;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -121,11 +157,108 @@
 
         <div id="interval-inputs" class="interval-inputs"></div>
 
-        <button onclick="simulate()">Simulate</button>
+        <button class="btn_submit" onclick="simulate()">Simulate</button>
 
         <canvas id="chartCanvas" width="600" height="400"></canvas>
 
         <div class="results" id="results"></div>
+
+        <div class="theory">
+            <h1>Fundamental Theorem of Calculus and Its Relationship with Density and Cumulative Distribution Functions</h1>
+
+            <p>The <strong>Fundamental Theorem of Calculus (FTC)</strong> provides a key link between differentiation and integration and is essential in understanding the relationship between density functions and cumulative distribution functions (CDFs)
+                in probability theory. Here’s a breakdown of the theorem and how it applies to density functions and CDFs:</p>
+
+            <h2>The Fundamental Theorem of Calculus</h2>
+            <p>The FTC has two main parts:</p>
+
+            <h3>FTC Part 1</h3>
+            <p>If \( f \) is a continuous real-valued function on an interval \([a, b]\), and \( F(x) \) is defined as</p>
+            <div class="formula">
+                \( F(x) = \int_a^x f(t) \, dt \)
+            </div>
+            <p>then \( F \) is continuous on \([a, b]\), differentiable on \((a, b)\), and</p>
+            <div class="formula">
+                \( F'(x) = f(x) \).
+            </div>
+            <p>In other words, the derivative of the integral of \( f \) from \( a \) to \( x \) is the original function \( f(x) \).</p>
+
+            <h3>FTC Part 2</h3>
+            <p>If \( F \) is an antiderivative of \( f \) on \([a, b]\), meaning \( F'(x) = f(x) \), then</p>
+            <div class="formula">
+                \( \int_a^b f(x) \, dx = F(b) - F(a) \).
+            </div>
+            <p>This part of the theorem tells us how to compute a definite integral of \( f \) by evaluating its antiderivative at the endpoints of the interval.</p>
+
+            <h2>Relationship with Density Functions and CDFs</h2>
+            <p>In probability, we often work with two related concepts:</p>
+            <ul>
+                <li><strong>Probability Density Function (PDF):</strong> If \( X \) is a continuous random variable, the probability density function \( f(x) \) represents the density of probability at point \( x \).</li>
+                <li><strong>Cumulative Distribution Function (CDF):</strong> The cumulative distribution function \( F(x) \) represents the probability that \( X \) takes a value less than or equal to \( x \):
+                    <div class="formula">
+                        \( F(x) = P(X \leq x) = \int_{-\infty}^x f(t) \, dt \).
+                    </div>
+                </li>
+            </ul>
+
+            <p>The CDF \( F(x) \) can be seen as an integral of the PDF \( f(x) \) from \(-\infty\) to \( x \). Here, the <strong>FTC Part 1</strong> plays a crucial role:</p>
+
+            <p>By FTC Part 1, if \( F(x) \) is defined as</p>
+            <div class="formula">
+                \( F(x) = \int_{-\infty}^x f(t) \, dt \),
+            </div>
+            <p>then \( F \) is differentiable, and its derivative is the PDF \( f(x) \). This gives us:</p>
+            <div class="formula">
+                \( F'(x) = f(x) \).
+            </div>
+
+            <p>This tells us that the probability density function \( f(x) \) is the derivative of the cumulative distribution function \( F(x) \). This relationship is fundamental in probability theory, as it allows us to go back and forth between the PDF
+                and the CDF:</p>
+
+            <ol>
+                <li><strong>To obtain the CDF from the PDF:</strong> Integrate the PDF over the interval \((-\infty, x]\):
+                    <div class="formula">
+                        \( F(x) = \int_{-\infty}^x f(t) \, dt \).
+                    </div>
+                </li>
+                <li><strong>To obtain the PDF from the CDF:</strong> Differentiate the CDF with respect to \( x \):
+                    <div class="formula">
+                        \( f(x) = \frac{d}{dx} F(x) \).
+                    </div>
+                </li>
+            </ol>
+
+            <h2>Example: Relationship in Practice</h2>
+            <p>Suppose \( X \) is a continuous random variable with PDF \( f(x) = 2x \) on the interval \( [0, 1] \) (and \( f(x) = 0 \) elsewhere).</p>
+
+            <h3>Finding the CDF</h3>
+            <p>To find the CDF \( F(x) \), we integrate the PDF from \( 0 \) to \( x \) (since \( f(x) = 0 \) for values outside \( [0, 1] \)):</p>
+            <div class="formula">
+                \( F(x) = \int_0^x 2t \, dt = \left[ t^2 \right]_0^x = x^2, \quad \text{for } x \in [0, 1] \).
+            </div>
+            <p>For \( x
+                < 0 \), \( F(x)=0 \), and for \( x> 1 \), \( F(x) = 1 \), since the total probability must equal 1.</p>
+
+            <p>Thus, the CDF \( F(x) \) is:</p>
+            <div class="formula">
+                \( F(x) = \begin{cases} 0 & x
+                < 0, \\ x^2 & 0 \leq x \leq 1, \\ 1 & x> 1. \end{cases} \)
+            </div>
+
+            <h3>Finding the PDF from the CDF</h3>
+            <p>If we differentiate \( F(x) \) with respect to \( x \) in the interval \( [0, 1] \), we should get back the PDF:</p>
+            <div class="formula">
+                \( f(x) = \frac{d}{dx} F(x) = \frac{d}{dx} (x^2) = 2x, \quad \text{for } x \in [0, 1] \).
+            </div>
+
+            <h2>Summary</h2>
+            <p>The <strong>Fundamental Theorem of Calculus</strong> connects the CDF and PDF of a continuous random variable:</p>
+            <ul>
+                <li>The <strong>CDF \( F(x) \)</strong> is the integral of the <strong>PDF \( f(x) \)</strong> from \(-\infty\) to \( x \): \( F(x) = \int_{-\infty}^x f(t) \, dt \).</li>
+                <li>The <strong>PDF \( f(x) \)</strong> is the derivative of the <strong>CDF \( F(x) \)</strong>: \( f(x) = F'(x) \).</li>
+            </ul>
+            <p>This relationship is fundamental in probability and is heavily used in statistical analysis and probability modeling, as it allows us to move between the cumulative distribution and density representations of a random variable’s distribution.</p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
