@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <title>Probability Interval Histogram</title>
     <style>
         body {
@@ -13,334 +13,225 @@
             align-items: center;
             background-color: #f8f9fa;
             color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0 20px;
         }
-
+        
         .container {
-            margin-top: 20px;
-            text-align: center;
-            background-color: #ffffff;
-            padding: 30px;
+            background-color: #fff;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
         }
-
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .input-group label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .interval-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .interval-boundary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
         input[type="number"] {
             width: 80px;
             padding: 8px;
-            margin: 5px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: border-color 0.3s ease;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-
+        
         input[type="number"]:focus {
-            border-color: #0000b4;
+            border-color: #4c6ef5;
+            box-shadow: 0px 4px 8px rgba(76, 110, 245, 0.2);
             outline: none;
         }
-
-        #canvas-container {
-            position: relative;
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-        }
-
-        canvas {
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-
+        
         button {
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
+            background: linear-gradient(135deg, #4c6ef5, #339af0);
+            color: white;
             padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #intervalInputs input {
-            width: 80px;
-            margin: 5px;
-        }
-
-        #intervalInputs {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        #error {
-            color: #d9534f;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .theory {
-            width: 100%;
-            max-width: 700px;
-            margin: 40px auto;
-            background-color: #f5f5f5;
-            padding: 20px;
+            border: none;
             border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-
-        .theory h1, .theory h2, .theory h3 {
-            color: #007bff;
-        }
-
-        .theory p, .theory ul, .theory ol, .theory .formula {
-            margin: 15px 0;
-            line-height: 1.7;
-        }
-
-        .formula {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: bold;
-            color: #333;
-            background-color: #e1e1e1;
-            padding: 5px 10px;
-            border-radius: 4px;
-            display: inline-block;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-
+        
+        button:hover {
+            background: linear-gradient(135deg, #339af0, #4c6ef5);
+            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            background: linear-gradient(135deg, #1c7ed6, #339af0);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(1px);
+        }
+        
+        canvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .results {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="container">
-        <h1>Probability Interval Histogram</h1>
-        <label>Number of Draws (n):</label>
-        <input type="number" id="numDraws" value="1000"><br><br>
-        
-        <label>Number of Intervals:</label>
-        <input type="number" id="numIntervals" value="5"><br><br>
+        <h2>Probability Interval Histogram</h2>
 
-        <div id="intervalInputs">
-            <!-- Intervalli saranno generati qui -->
+        <div class="input-group">
+            <label for="draws">Number of Draws (n):</label>
+            <input type="number" id="draws" min="1" value="100">
         </div>
-        <button onclick="simulate()">Simulate Now</button>
-        <div id="error"></div>
-    </div>
+        <div class="input-group">
+            <label for="intervals">Number of Intervals:</label>
+            <input type="number" id="intervals" min="1" max="10" value="7">
+        </div>
 
-    <div id="canvas-container">
+        <div id="interval-inputs" class="interval-inputs"></div>
+
+        <button onclick="simulate()">Simulate</button>
+
         <canvas id="chartCanvas" width="600" height="400"></canvas>
+
+        <div class="results" id="results"></div>
     </div>
 
-    <div class="theory">
-        <h1>Fundamental Theorem of Calculus and Its Relationship with Density and Cumulative Distribution Functions</h1>
-
-    <p>The <strong>Fundamental Theorem of Calculus (FTC)</strong> provides a key link between differentiation and integration and is essential in understanding the relationship between density functions and cumulative distribution functions (CDFs) in probability theory. Here’s a breakdown of the theorem and how it applies to density functions and CDFs:</p>
-
-    <h2>The Fundamental Theorem of Calculus</h2>
-    <p>The FTC has two main parts:</p>
-
-    <h3>FTC Part 1</h3>
-    <p>If \( f \) is a continuous real-valued function on an interval \([a, b]\), and \( F(x) \) is defined as</p>
-    <div class="formula">
-        \( F(x) = \int_a^x f(t) \, dt \)
-    </div>
-    <p>then \( F \) is continuous on \([a, b]\), differentiable on \((a, b)\), and</p>
-    <div class="formula">
-        \( F'(x) = f(x) \).
-    </div>
-    <p>In other words, the derivative of the integral of \( f \) from \( a \) to \( x \) is the original function \( f(x) \).</p>
-
-    <h3>FTC Part 2</h3>
-    <p>If \( F \) is an antiderivative of \( f \) on \([a, b]\), meaning \( F'(x) = f(x) \), then</p>
-    <div class="formula">
-        \( \int_a^b f(x) \, dx = F(b) - F(a) \).
-    </div>
-    <p>This part of the theorem tells us how to compute a definite integral of \( f \) by evaluating its antiderivative at the endpoints of the interval.</p>
-
-    <h2>Relationship with Density Functions and CDFs</h2>
-    <p>In probability, we often work with two related concepts:</p>
-    <ul>
-        <li><strong>Probability Density Function (PDF):</strong> If \( X \) is a continuous random variable, the probability density function \( f(x) \) represents the density of probability at point \( x \).</li>
-        <li><strong>Cumulative Distribution Function (CDF):</strong> The cumulative distribution function \( F(x) \) represents the probability that \( X \) takes a value less than or equal to \( x \):
-            <div class="formula">
-                \( F(x) = P(X \leq x) = \int_{-\infty}^x f(t) \, dt \).
-            </div>
-        </li>
-    </ul>
-
-    <p>The CDF \( F(x) \) can be seen as an integral of the PDF \( f(x) \) from \(-\infty\) to \( x \). Here, the <strong>FTC Part 1</strong> plays a crucial role:</p>
-
-    <p>By FTC Part 1, if \( F(x) \) is defined as</p>
-    <div class="formula">
-        \( F(x) = \int_{-\infty}^x f(t) \, dt \),
-    </div>
-    <p>then \( F \) is differentiable, and its derivative is the PDF \( f(x) \). This gives us:</p>
-    <div class="formula">
-        \( F'(x) = f(x) \).
-    </div>
-
-    <p>This tells us that the probability density function \( f(x) \) is the derivative of the cumulative distribution function \( F(x) \). This relationship is fundamental in probability theory, as it allows us to go back and forth between the PDF and the CDF:</p>
-
-    <ol>
-        <li><strong>To obtain the CDF from the PDF:</strong> Integrate the PDF over the interval \((-\infty, x]\):
-            <div class="formula">
-                \( F(x) = \int_{-\infty}^x f(t) \, dt \).
-            </div>
-        </li>
-        <li><strong>To obtain the PDF from the CDF:</strong> Differentiate the CDF with respect to \( x \):
-            <div class="formula">
-                \( f(x) = \frac{d}{dx} F(x) \).
-            </div>
-        </li>
-    </ol>
-
-    <h2>Example: Relationship in Practice</h2>
-    <p>Suppose \( X \) is a continuous random variable with PDF \( f(x) = 2x \) on the interval \( [0, 1] \) (and \( f(x) = 0 \) elsewhere).</p>
-
-    <h3>Finding the CDF</h3>
-    <p>To find the CDF \( F(x) \), we integrate the PDF from \( 0 \) to \( x \) (since \( f(x) = 0 \) for values outside \( [0, 1] \)):</p>
-    <div class="formula">
-        \( F(x) = \int_0^x 2t \, dt = \left[ t^2 \right]_0^x = x^2, \quad \text{for } x \in [0, 1] \).
-    </div>
-    <p>For \( x < 0 \), \( F(x) = 0 \), and for \( x > 1 \), \( F(x) = 1 \), since the total probability must equal 1.</p>
-
-    <p>Thus, the CDF \( F(x) \) is:</p>
-    <div class="formula">
-        \( F(x) = \begin{cases} 
-          0 & x < 0, \\
-          x^2 & 0 \leq x \leq 1, \\
-          1 & x > 1.
-       \end{cases} \)
-    </div>
-
-    <h3>Finding the PDF from the CDF</h3>
-    <p>If we differentiate \( F(x) \) with respect to \( x \) in the interval \( [0, 1] \), we should get back the PDF:</p>
-    <div class="formula">
-        \( f(x) = \frac{d}{dx} F(x) = \frac{d}{dx} (x^2) = 2x, \quad \text{for } x \in [0, 1] \).
-    </div>
-
-    <h2>Summary</h2>
-    <p>The <strong>Fundamental Theorem of Calculus</strong> connects the CDF and PDF of a continuous random variable:</p>
-    <ul>
-        <li>The <strong>CDF \( F(x) \)</strong> is the integral of the <strong>PDF \( f(x) \)</strong> from \(-\infty\) to \( x \): \( F(x) = \int_{-\infty}^x f(t) \, dt \).</li>
-        <li>The <strong>PDF \( f(x) \)</strong> is the derivative of the <strong>CDF \( F(x) \)</strong>: \( f(x) = F'(x) \).</li>
-    </ul>
-    <p>This relationship is fundamental in probability and is heavily used in statistical analysis and probability modeling, as it allows us to move between the cumulative distribution and density representations of a random variable’s distribution.</p>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        function generateIntervalInputs() {
-            const numIntervals = document.getElementById("numIntervals").value;
-            const intervalInputs = document.getElementById("intervalInputs");
-            intervalInputs.innerHTML = "";
+        document.getElementById('intervals').addEventListener('input', generateIntervalInputs);
 
-            for (let i = 0; i < numIntervals - 1; i++) {
-                const input = document.createElement("input");
-                input.type = "number";
-                input.step = "0.01";
-                input.min = "0";
-                input.max = "1";
-                input.placeholder = `Boundary ${i + 1}`;
-                input.style.margin = "5px";
-                intervalInputs.appendChild(input);
+        function generateIntervalInputs() {
+            const numIntervals = parseInt(document.getElementById('intervals').value);
+            const intervalContainer = document.getElementById('interval-inputs');
+            intervalContainer.innerHTML = '';
+
+            const step = 1 / numIntervals;
+            for (let i = 0; i < numIntervals; i++) {
+                const boundaryValue = (step * (i + 1)).toFixed(4);
+
+                const boundaryGroup = document.createElement('div');
+                boundaryGroup.className = 'interval-boundary';
+
+                const label = document.createElement('label');
+                label.textContent = `Interval Boundary ${i + 1} (0 to 1):`;
+
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.step = '0.0001';
+                input.min = '0';
+                input.max = '1';
+                input.value = boundaryValue;
+
+                boundaryGroup.appendChild(label);
+                boundaryGroup.appendChild(input);
+                intervalContainer.appendChild(boundaryGroup);
             }
         }
 
-        document.getElementById("numIntervals").addEventListener("change", generateIntervalInputs);
-        generateIntervalInputs();
-
         function simulate() {
-            const errorElement = document.getElementById("error");
-            errorElement.textContent = ""; // Reset error message
-            
-            const numDraws = parseInt(document.getElementById("numDraws").value);
-            const numIntervals = parseInt(document.getElementById("numIntervals").value);
-            const boundaries = Array.from(document.getElementById("intervalInputs").children).map(input => parseFloat(input.value));
-            
-            // Controlla che la somma degli intervalli sia pari a 1
-            const totalProbability = boundaries.reduce((sum, boundary) => sum + boundary, 0);
-            if (totalProbability !== 1) {
-                errorElement.textContent = "La somma delle probabilità dei confini degli intervalli deve essere esattamente 1.";
-                return;
-            }
-            
-            boundaries.push(1.0); // Aggiungi 1.0 come limite superiore per l'ultimo intervallo
-            boundaries.unshift(0.0); // Aggiungi 0.0 come limite inferiore per il primo intervallo
+            const n = parseInt(document.getElementById('draws').value);
+            const boundaries = Array.from(document.getElementById('interval-inputs').children).map(inputGroup =>
+                parseFloat(inputGroup.querySelector('input').value)
+            );
 
-            const counts = new Array(numIntervals).fill(0);
+            const randomNumbers = Array.from({
+                length: n
+            }, () => Math.random());
 
-            for (let i = 0; i < numDraws; i++) {
-                const randomValue = Math.random();
-                for (let j = 0; j < boundaries.length - 1; j++) {
-                    if (randomValue >= boundaries[j] && randomValue < boundaries[j + 1]) {
-                        counts[j]++;
+            const occurrences = Array(boundaries.length).fill(0);
+            randomNumbers.forEach(num => {
+                for (let i = 0; i < boundaries.length; i++) {
+                    if (num <= boundaries[i]) {
+                        occurrences[i]++;
                         break;
                     }
                 }
+            });
+
+            const mean = (randomNumbers.reduce((sum, val) => sum + val, 0) / n).toFixed(4);
+            const variance = (randomNumbers.reduce((sum, val) => sum + (val - mean) ** 2, 0) / n).toFixed(4);
+
+            drawChart(boundaries, occurrences);
+
+            document.getElementById('results').innerHTML = `
+                <p>Calculated Mean: ${mean}</p>
+                <p>Calculated Variance: ${variance}</p>
+                <p>Theoretical Mean: 0.5</p>
+                <p>Theoretical Variance: ${(1 / 12).toFixed(4)}</p>
+            `;
+        }
+
+        function drawChart(boundaries, occurrences) {
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
             }
 
-            displayHistogram(counts, boundaries);
-        }
-
-        function displayHistogram(counts, boundaries) {
-            const canvas = document.getElementById("chartCanvas");
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Disegna assi cartesiani
-            ctx.beginPath();
-            ctx.moveTo(50, 350);
-            ctx.lineTo(550, 350); // X-axis
-            ctx.moveTo(50, 350);
-            ctx.lineTo(50, 50); // Y-axis
-            ctx.strokeStyle = "#333";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Disegna etichette sugli assi
-            ctx.font = "14px Arial";
-            ctx.fillStyle = "#333";
-            ctx.fillText("Frequency", 10, 60); // Etichetta Y
-            ctx.fillText("Intervals", 520, 370); // Etichetta X
-
-            // Calcola larghezza barre e scala altezza
-            const barWidth = 40;
-            const maxCount = Math.max(...counts);
-            const xStart = 70;
-            const yBase = 350;
-
-            counts.forEach((count, index) => {
-                const barHeight = (count / maxCount) * 280; // Scala per adattarsi all'altezza del canvas
-                const x = xStart + index * (barWidth + 20);
-                const y = yBase - barHeight;
-
-                // Disegna barra
-                ctx.fillStyle = "#0000FF";
-                ctx.fillRect(x, y, barWidth, barHeight);
-
-                // Etichetta del conteggio sopra ogni barra
-                ctx.fillStyle = "#333";
-                ctx.fillText(count, x + barWidth / 4, y - 5);
-
-                // Etichetta dell'intervallo sotto ogni barra
-                ctx.fillText(`[${boundaries[index].toFixed(2)}, ${boundaries[index + 1].toFixed(2)})`, x, yBase + 20);
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: boundaries.map((boundary, i) => `[${i === 0 ? 0 : boundaries[i - 1]}, ${boundary}]`),
+                    datasets: [{
+                        label: 'Occurrences',
+                        data: occurrences,
+                        backgroundColor: 'blue',
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Probability'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Occurrences'
+                            }
+                        }
+                    }
+                }
             });
         }
+
+        generateIntervalInputs();
     </script>
+
 </body>
+
 </html>
