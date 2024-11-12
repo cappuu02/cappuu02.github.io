@@ -259,6 +259,39 @@
             </ul>
             <p>This relationship is fundamental in probability and is heavily used in statistical analysis and probability modeling, as it allows us to move between the cumulative distribution and density representations of a random variable’s distribution.</p>
         </div>
+
+        <div class="theory">
+            <h1>Relationship between empirical mean,variance and Theoretical mean and variance</h1>
+            <p>The empirical mean and empirical variance are estimates calculated from a sample of data and represent the “observational” versions of theoretical mean and variance. They are used to describe sample characteristics and to make inferences about the population from which the sample was drawn. Let's look at these differences in detail:</p>
+            <h2>1. Difference Between Calculated Mean and Theoretical Mean</h2>
+            <ul>
+                <li>
+                    <strong>Theoretical Mean:</strong> In the case of random numbers generated uniformly between 0 and 1, the theoretical mean is 0.5, since each value within this interval is equally likely.
+                </li>
+                <li>
+                    <strong>Calculated Mean:</strong> When calculating the empirical mean of generated random numbers, it only approaches the theoretical value of 0.5 if the sample size is large. For smaller samples, however, the calculated mean may differ significantly from the theoretical one. This happens due to <em>statistical fluctuation</em> or <em>noise</em>: random samples do not always perfectly represent the theoretical distribution.
+                </li>
+            </ul>
+
+            <h2>2. Difference Between Calculated Variance and Theoretical Variance</h2>
+            <ul>
+                <li>
+                    <strong>Theoretical Variance:</strong> The theoretical variance of a uniform distribution on [0,1] is 0.0833. This is because the uniform distribution has an even spread around the theoretical mean of 0.5.
+                </li>
+                <li>
+                    <strong>Calculated Variance:</strong> The empirically calculated variance tends to converge toward the theoretical value of 0.0833 as the sample size increases. However, with smaller samples, this variance can differ significantly from the theoretical value due to random fluctuations in the generated values, leading to different concentration ranges around the mean than in an ideal uniform distribution.
+                </li>
+            </ul>
+            <h2>Effect of Sample Size</h2>
+            <p>As the sample size increases (for instance, going from 100 to 1000 samples or more), both the calculated mean and variance tend to stabilize around their theoretical values (law of large numbers). In other words, the larger the sample, the closer the empirical mean and variance should get to the theoretical values:</p>
+            <ul>
+                <li><strong>Mean:</strong> It becomes closer to 0.5 as the average error decreases.</li>
+                <li><strong>Variance:</strong> Similarly, the calculated variance approaches 0.0833, minimizing the impact of random fluctuations.</li>
+            </ul>
+            
+            <h2>Why This Comparison is Useful</h2>
+            <p>Comparing the calculated mean and variance with their theoretical values helps in understanding how well a set of randomly generated numbers represents an ideal uniform distribution. It also quantifies the accuracy of a simulation with a given sample size.</p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
