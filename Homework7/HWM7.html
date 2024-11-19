@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <title>Statistical Subsets Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .input-group label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .interval-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .interval-boundary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #4c6ef5;
+            box-shadow: 0px 4px 8px rgba(76, 110, 245, 0.2);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4c6ef5, #339af0);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #339af0, #4c6ef5);
+            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            background: linear-gradient(135deg, #1c7ed6, #339af0);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(1px);
+        }
+        
+        canvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .results {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Simulazione Statistica Subsets</h2>
+
+        <div class="input-group">
+            <label for="m">Numero di Subset (m):</label>
+            <input type="number" id="m" min="1" value="5">
+        </div>
+        <div class="input-group">
+            <label for="intervals">Numero di Intervalli per Subset:</label>
+            <input type="number" id="intervals" min="1" max="10" value="7">
+        </div>
+        <div class="input-group">
+            <label for="n">Numero di Campioni per Subset (n):</label>
+            <input type="number" id="n" min="1" value="100">
+        </div>
+
+        <button class="btn_submit" onclick="simulate()">Simula</button>
+
+        <canvas id="chartCanvas" width="600" height="400"></canvas>
+
+        <div class="results">
+            <p>Media delle Medie: <span id="meanOfMeans"></span></p>
+            <p>Media delle Varianze: <span id="varianceOfMeans"></span></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function simulate() {
+            const m = parseInt(document.getElementById('m').value);  // numero di subset
+            const n = parseInt(document.getElementById('n').value);  // numero di campioni
+            const intervals = parseInt(document.getElementById('intervals').value);  // numero di intervalli per subset
+
+            const means = [];
+            const variances = [];
+            const allMeans = [];
+            const allVariances = [];
+
+            // Media teorica e varianza teorica per distribuzione uniforme [0, 1]
+            const theoreticalMean = 0.5;
+            const theoreticalVariance = 1 / 12;
+
+            // Calcolare i valori per ogni subset
+            for (let i = 0; i < m; i++) {
+                const randomNumbers = Array.from({ length: n }, () => Math.random());
+
+                // Calcolare la media empirica
+                const mean = randomNumbers.reduce((sum, val) => sum + val, 0) / n;
+
+                // Calcolare la varianza empirica
+                const variance = randomNumbers.reduce((sum, val) => sum + (val - mean) ** 2, 0) / n;  // Formula della varianza
+
+                means.push(mean);
+                variances.push(variance);
+
+                allMeans.push(parseFloat(mean));
+                allVariances.push(parseFloat(variance));
+            }
+
+            const meanOfMeans = (allMeans.reduce((sum, val) => sum + val, 0) / m).toFixed(4);
+            const varianceOfMeans = (allVariances.reduce((sum, val) => sum + val, 0) / m).toFixed(4);
+
+            document.getElementById('meanOfMeans').textContent = meanOfMeans;
+            document.getElementById('varianceOfMeans').textContent = varianceOfMeans;
+
+            drawChart(means, variances, theoreticalMean, theoreticalVariance);
+        }
+
+        function drawChart(means, variances, theoreticalMean, theoreticalVariance) {
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: means.map((_, i) => `Subset ${i + 1}`),
+                    datasets: [
+                        {
+                            label: 'Media',
+                            data: means.map((mean, i) => mean), // media calcolata
+                            backgroundColor: 'blue',
+                            borderColor: 'darkblue',
+                            borderWidth: 2,
+                            yAxisID: 'y',
+                            stack: 'stack1' // raggruppa le barre per il subset
+                        },
+                        {
+                            label: 'Varianza',
+                            data: variances.map((variance, i) => variance), // varianza calcolata
+                            backgroundColor: 'green',
+                            borderColor: 'darkgreen',
+                            borderWidth: 2,
+                            yAxisID: 'y1',
+                            stack: 'stack1' // raggruppa le barre per il subset
+                        },
+                        {
+                            label: 'Media Teorica',
+                            data: Array(means.length).fill(theoreticalMean),
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.1,
+                            borderDash: [5, 5],
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Varianza Teorica',
+                            data: Array(variances.length).fill(theoreticalVariance),
+                            borderColor: 'orange',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.1,
+                            borderDash: [5, 5],
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            position: 'left',
+                            ticks: {
+                                callback: function(value) {
+                                    return value; // Mostra solo il valore numerico per ogni tick
+                                }
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            ticks: {
+                                callback: function(value) {
+                                    return value; // Mostra solo il valore numerico per ogni tick
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
