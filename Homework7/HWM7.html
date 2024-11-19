@@ -102,6 +102,7 @@
             font-size: 1.2em;
             color: #333;
         }
+        
     </style>
 </head>
 <body>
@@ -130,7 +131,50 @@
             <p>Media delle Medie: <span id="meanOfMeans"></span></p>
             <p>Media delle Varianze: <span id="varianceOfMeans"></span></p>
         </div>
-    </div>
+
+        <div class="div_content">
+            <h1>Discussion on Theoretical and Observed Values</h1>
+            <h2>Theoretical Mean and Variance of the Uniform Distribution [0, 1]</h2>
+            <p>The theoretical mean of a uniform distribution \( U(a, b) \) is given by the formula:</p>
+            <p>\[
+            \mu = \frac{a + b}{2}
+            \]</p>
+            <p>For the uniform distribution on the interval [0, 1], we have \( a = 0 \) and \( b = 1 \), so the theoretical mean is:</p>
+            <p>\[
+            \mu = \frac{0 + 1}{2} = 0.5
+            \]</p>
+            <p>The theoretical variance of a uniform distribution \( U(a, b) \) is given by the formula:</p>
+            <p>\[
+            \sigma^2 = \frac{(b - a)^2}{12}
+            \]</p>
+            <p>For the interval [0, 1], the variance is:</p>
+            <p>\[
+            \sigma^2 = \frac{(1 - 0)^2}{12} = \frac{1}{12} \approx 0.0833
+            \]</p>
+
+            <h2>Observed Mean and Variance of the Subgroups (Empirical Values)</h2>
+            <p>In the simulation, \( m \) subgroups are generated, each with \( n \) random samples drawn from the uniform distribution [0, 1]. For each subgroup, the sample mean and sample variance are calculated:</p>
+            <p>Sample mean:</p>
+            <p>\[
+            \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+            \]</p>
+            <p>Sample variance:</p>
+            <p>\[
+            s^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \bar{x})^2
+            \]</p>
+
+            <h2>Relationship Between Theoretical and Empirical Values</h2>
+            <p>The sample mean tends to approach the theoretical mean (0.5) as the number of subgroups \( m \) and the number of samples per subgroup \( n \) increase. This is a direct effect of the <em>Law of Large Numbers</em> (LLN), which states that as the sample size grows, the sample mean will converge to the true population mean.</p>
+            <p>The sample variance is a good estimator of the theoretical variance. According to the <em>Central Limit Theorem</em> (CLT), as the number of samples per subgroup increases, the sample variance should approach the theoretical variance of the uniform distribution, which is \( \frac{1}{12} \approx 0.0833 \).</p>
+
+            <h2>Key Observations</h2>
+            <ul>
+                <li><strong>Convergence of the Mean</strong>: As \( m \) and \( n \) increase, the observed mean should converge to 0.5, with less variability in the means between subgroups.</li>
+                <li><strong>Convergence of the Variance</strong>: The observed variance should approach \( \frac{1}{12} \), with less fluctuation as the sample size increases.</li>
+                <li><strong>Sample Size and Number of Subgroups</strong>: With larger values of \( m \) and \( n \), the approximation of the theoretical values will be more accurate.</li>
+            </ul>
+            </div>
+        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
