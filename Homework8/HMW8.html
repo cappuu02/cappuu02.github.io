@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher & Frequency Analysis with Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px auto;
+            max-width: 2000px;
+            padding: 20px;
+            color: #333;
+            background: #f4f4f9;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        
+        textarea,
+        input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #fff;
+        }
+        
+        textarea {
+            height: 120px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            background: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .chart-container {
+            flex: 1;
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        .shift-display {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Caesar Cipher & Frequency Analysis</h1>
+    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+    <button onclick="encryptText()">Encrypt Text</button>
+    <div class="shift-display" id="shiftDisplay">Random Shift: Not Applied Yet</div>
+    <textarea id="decodedOutput" placeholder="Decoded text will appear here..." readonly></textarea>
+    <button onclick="decodeWithFrequencyAnalysis()">Decode with Frequency Analysis</button>
+    <div class="charts-container">
+        <div class="chart-container">
+            <h2>Original Text Frequency Distribution</h2>
+            <canvas id="originalChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Ciphered Text Frequency Distribution</h2>
+            <canvas id="cipheredChart"></canvas>
+        </div>
+    </div>
+
+    <h1>Caesar Cipher Explanation</h1>
+
+    <section>
+        <h2>Encryption Method</h2>
+        <p>The Caesar Cipher is a simple substitution cipher where each letter in the plaintext is shifted by a certain number of positions down or up the alphabet. The number of positions is called the <strong>shift</strong>.</p>
+
+        <div class="section-title">Caesar Cipher Encryption Process:</div>
+        <ul>
+            <li><strong>Shift Generation:</strong> A random shift is chosen between 0 and 25.</li>
+            <li><strong>Letter Substitution:</strong> For each letter in the original text, the shift is applied. For example, if the shift is 3, 'A' becomes 'D'.</li>
+            <li><strong>Non-Alphabetic Characters:</strong> Any non-alphabetic characters (spaces, punctuation, etc.) remain unchanged.</li>
+        </ul>
+        <p><strong>Example:</strong> If the plaintext is "HELLO" and the shift is 3, the ciphered text will be "KHOOR".</p>
+    </section>
+
+    <section>
+        <h2>Frequency Analysis</h2>
+        <p><strong>Frequency analysis</strong> is a technique used to break ciphers by analyzing the frequency of letters in the ciphertext. It is particularly effective against Caesar ciphers because the letter frequencies in the ciphertext tend to maintain
+            the same distribution as the plaintext (assuming a large enough sample).</p>
+
+        <div class="section-title">How Frequency Analysis Works:</div>
+        <ul>
+            <li><strong>Count Frequencies:</strong> Count the frequency of each letter in the ciphertext.</li>
+            <li><strong>Compare Frequencies:</strong> Compare these frequencies to typical letter frequencies in the English language, where 'E' is the most common letter.</li>
+            <li><strong>Determine Shift:</strong> By matching the most frequent letter in the ciphertext to 'E', the shift used in the cipher can be determined.</li>
+        </ul>
+        <p><strong>Example:</strong> If the most frequent letter in the ciphertext is 'V', and we know 'E' is the most frequent letter in English, we can calculate the shift based on the difference between 'V' and 'E'.</p>
+    </section>
+
+    <section>
+        <h2>Decryption</h2>
+        <p><strong>Decryption</strong> is the process of reversing the encryption to retrieve the original message.</p>
+
+        <div class="section-title">Decryption Process with Frequency Analysis:</div>
+        <ul>
+            <li><strong>Analyze Ciphertext:</strong> The ciphertext is analyzed to calculate the frequency of letters.</li>
+            <li><strong>Guess the Shift:</strong> Using frequency analysis, the shift used during encryption is estimated.</li>
+            <li><strong>Apply Reverse Shift:</strong> The reverse of the shift is applied to the letters in the ciphertext to recover the plaintext.</li>
+        </ul>
+        <p><strong>Example:</strong> If the ciphertext is "KHOOR" and the frequency analysis suggests a shift of 3, applying the reverse shift restores the plaintext: "HELLO".</p>
+    </section>
+
+
+
+
+
+
+    <script>
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const englishFrequencies = 'ETAOINSHRDLCUMWFGYPBVKJXQZ'; // Ordered by frequency in English
+        let shift = 0;
+        let originalText = '';
+        let cipheredText = '';
+        let originalChart, cipheredChart;
+
+        function countFrequencies(text) {
+            const frequencies = Array(26).fill(0); // Initialize A-Z with zero frequency
+            text.toUpperCase().split('').forEach(char => {
+                if (alphabet.includes(char)) {
+                    frequencies[alphabet.indexOf(char)]++;
+                }
+            });
+            return frequencies;
+        }
+
+        function encryptText() {
+            originalText = document.getElementById('inputText').value.toUpperCase();
+            if (!originalText) {
+                alert('Please enter some text!');
+                return;
+            }
+            shift = Math.floor(Math.random() * 26); // Random shift between 0-25
+            cipheredText = originalText.split('').map(char => {
+                if (alphabet.includes(char)) {
+                    const index = (alphabet.indexOf(char) + shift) % 26;
+                    return alphabet[index];
+                }
+                return char; // Non-alphabet characters remain unchanged
+            }).join('');
+
+            document.getElementById('shiftDisplay').innerText = `Random Shift: ${shift}`;
+            updateCharts();
+        }
+
+        function decodeWithFrequencyAnalysis() {
+            if (!cipheredText) {
+                alert('Please encrypt text first!');
+                return;
+            }
+
+            const cipheredFrequencies = countFrequencies(cipheredText);
+            const mostFrequentCipheredIndex = cipheredFrequencies.indexOf(Math.max(...cipheredFrequencies));
+            const mostFrequentCipheredLetter = alphabet[mostFrequentCipheredIndex];
+
+            // Align with 'E' as the most common English letter
+            const estimatedShift = (mostFrequentCipheredIndex - alphabet.indexOf('E') + 26) % 26;
+
+            const decodedText = cipheredText.split('').map(char => {
+                if (alphabet.includes(char)) {
+                    const index = (alphabet.indexOf(char) - estimatedShift + 26) % 26; // Handle negative shift
+                    return alphabet[index];
+                }
+                return char; // Non-alphabet characters remain unchanged
+            }).join('');
+
+            document.getElementById('decodedOutput').value = decodedText;
+            document.getElementById('shiftDisplay').innerText = `Estimated Shift (Frequency Analysis): ${estimatedShift}`;
+        }
+
+        function updateCharts() {
+            const originalFrequencies = countFrequencies(originalText);
+            const cipheredFrequencies = countFrequencies(cipheredText);
+
+            if (originalChart) originalChart.destroy();
+            if (cipheredChart) cipheredChart.destroy();
+
+            const originalCtx = document.getElementById('originalChart').getContext('2d');
+            originalChart = new Chart(originalCtx, {
+                type: 'bar',
+                data: {
+                    labels: alphabet.split(''),
+                    datasets: [{
+                        label: 'Frequency',
+                        data: originalFrequencies,
+                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Letters'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const cipheredCtx = document.getElementById('cipheredChart').getContext('2d');
+            cipheredChart = new Chart(cipheredCtx, {
+                type: 'bar',
+                data: {
+                    labels: alphabet.split(''),
+                    datasets: [{
+                        label: 'Frequency',
+                        data: cipheredFrequencies,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Letters'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
