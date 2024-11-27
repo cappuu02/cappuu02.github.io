@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <title>Caesar Cipher & RSA Encryption</title>
     <style>
         body {
@@ -122,6 +123,30 @@
         <div class="chart">
             <canvas id="cipheredChart"></canvas>
         </div>
+    </div>
+
+    <div>
+        <h1>Encryption and Decryption with the Caesar Cipher Method</h1>
+        <p>The Caesar cipher is an encryption algorithm that belongs to the substitution cipher family. It works by shifting each letter of the plaintext by a fixed number of positions in the alphabet. For example, with a shift key of 3, the letter 'A' becomes 'D', 'B' becomes 'E', and so on.</p>
+    
+        <h2>Encryption Process</h2>
+        <ol>
+            <li><strong>Choosing the Text and Key:</strong> The user inputs a text to encrypt. The encryption key is a number (called the "shift") that determines how many positions each letter should be shifted in the alphabet.</li>
+            <li><strong>Encryption with Random Shift:</strong> Once the text is entered, a random shift between 0 and 25 is generated (since the alphabet has 26 letters). Each letter of the plaintext is shifted forward in the alphabet by the shift value. For example, if the plaintext contains the letter 'A' and the shift is 3, the letter 'A' becomes 'D'.</li>
+            <li><strong>Encrypted Text:</strong> The encrypted text is then shown in the page's text area.</li>
+        </ol>
+    
+        <h2>Decryption Process (Brute Force)</h2>
+        <ol>
+            <li><strong>Brute Force Decryption:</strong> Since the Caesar cipher is a simple cipher, the encrypted text can be decrypted without knowing the key by trying all possible shifts (from 0 to 25). The code attempts all possible decryption keys and checks if the resulting text makes sense (for example, by matching the original text entered by the user). This process is known as brute force.</li>
+            <li><strong>Decrypted Text:</strong> Once the correct shift is found, the decrypted text is displayed.</li>
+        </ol>
+    
+        <h2>Decryption via Frequency Analysis</h2>
+        <ol>
+            <li><strong>Frequency Analysis:</strong> Alternatively, a technique called frequency analysis can be used to decrypt the text. This method is based on the fact that some letters are more common than others in a language. For example, in Italian, the most common letter is often 'E'. By comparing the most frequent letters in the encrypted text with the most common letters in the language, it is possible to guess the shift used and decrypt the text.</li>
+            <li><strong>Decryption Based on Frequent 'E':</strong> The code uses frequency analysis to find the most common letter in the encrypted text, which is assumed to correspond to the letter 'E'. Once this match is found, the code calculates the shift and automatically decrypts the text.</li>
+        </ol>
     </div>
 
     <footer>
