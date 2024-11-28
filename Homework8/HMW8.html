@@ -128,12 +128,19 @@
         <button onclick="decryptCaesarBruteforce()">Decrypt with Bruteforce</button>
         <button onclick="frequencyAnalysisDecipher()">Decrypt with Frequency Analysis</button>
 
+        <!-- Aggiunta RSA -->
+        <button onclick="encryptRSA()">Encrypt Using RSA</button>
+        <button onclick="decryptRSA()">Decrypt Using RSA</button>
+
         <div class="output">
             <label for="cipheredText">Testo Cifrato:</label><br>
             <textarea id="cipheredText" rows="6" readonly></textarea><br>
 
             <label for="decodedCaesarOutput">Testo Decodificato:</label><br>
             <textarea id="decodedCaesarOutput" rows="6" readonly></textarea><br>
+
+            <label for="rsaOutput">Output RSA:</label><br>
+            <textarea id="rsaOutput" rows="6" readonly></textarea><br>
 
             <label for="shiftDisplay">Valore del Shift Usato:</label><br>
             <input type="text" id="shiftDisplay" readonly>
@@ -273,6 +280,76 @@
 
             document.getElementById('decodedCaesarOutput').value = decryptedText;
             document.getElementById('shiftDisplay').value = shift;
+        }
+
+        // Funzioni RSA
+        let publicKey, privateKey, n;
+
+        function generateRSAKeys() {
+            const p = 61; // Primo numero primo
+            const q = 53; // Secondo numero primo
+            n = p * q; // Modulo
+            const phi = (p - 1) * (q - 1);
+
+            publicKey = 17; // Chiave pubblica (e)
+            privateKey = modInverse(publicKey, phi); // Chiave privata (d)
+        }
+
+        function encryptRSA() {
+            generateRSAKeys(); // Genera le chiavi solo se non esistono già
+            const plainText = document.getElementById('plainText').value;
+            const encrypted = plainText.split('').map(char => {
+                return modPow(char.charCodeAt(0), publicKey, n);
+            }).join(' ');
+            document.getElementById('rsaOutput').value = `Cifrato: ${encrypted}`;
+        }
+
+        function decryptRSA() {
+            const encryptedText = document.getElementById('rsaOutput').value.split('Cifrato: ')[1];
+            if (!encryptedText) {
+                alert('Nessun testo cifrato trovato.');
+                return;
+            }
+            const decrypted = encryptedText.split(' ').map(num => {
+                return String.fromCharCode(modPow(Number(num), privateKey, n));
+            }).join('');
+            document.getElementById('rsaOutput').value += `\nDecifrato: ${decrypted}`;
+        }
+
+        function modPow(base, exp, mod) {
+            let result = 1;
+            base = base % mod;
+            while (exp > 0) {
+                if (exp % 2 === 1) {
+                    result = (result * base) % mod;
+                }
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+
+        function modInverse(a, m) {
+            const m0 = m;
+            let y = 0, x = 1;
+
+            if (m === 1) return 0;
+
+            while (a > 1) {
+                const q = Math.floor(a / m);
+                let t = m;
+
+                m = a % m;
+                a = t;
+                t = y;
+
+                y = x - q * y;
+                x = t;
+            }
+
+            if (x < 0) x += m0;
+
+            return x;
         }
     </script>
 </body>
