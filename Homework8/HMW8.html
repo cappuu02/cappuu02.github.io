@@ -1,363 +1,279 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <title>Caesar Cipher & RSA Encryption</title>
+    <title>Caesar Cipher with Frequency Analysis</title>
     <style>
+        /* Body Styles */
+        
         body {
             font-family: 'Arial', sans-serif;
+            background-color: #f4f9fd;
             margin: 0;
             padding: 0;
-            background: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             color: #333;
         }
-        header {
-            background: #007bff;
-            color: white;
-            padding: 20px;
+        
+        h1 {
+            color: #007acc;
+            font-size: 2.2em;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-        header h1 {
-            font-size: 2.5rem;
+        /* Container */
+        
+        .container {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 1500px;
+            max-width: 2000px;
+            text-align: center;
         }
-        .content {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        
+        label {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            text-align: left;
         }
-        textarea, input, button {
+        
+        textarea,
+        input[type="text"] {
             width: 100%;
             padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
+            margin: 12px 0;
             border: 1px solid #ccc;
-            font-size: 16px;
-            background-color: #f9f9f9;
+            border-radius: 8px;
+            font-size: 1.1em;
+            resize: none;
+            transition: border-color 0.3s ease;
         }
-        textarea {
-            height: 120px;
+        
+        textarea:focus,
+        input[type="text"]:focus {
+            border-color: #007acc;
+            outline: none;
         }
+        /* Button Styles */
+        
         button {
-            background-color: #007bff;
+            background-color: #007acc;
             color: white;
+            font-size: 1.1em;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            margin: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
+        
         button:hover {
-            background-color: #0056b3;
+            background-color: #005f8b;
+            transform: scale(1.05);
         }
-        .shift-display {
-            font-size: 1.1rem;
-            color: #666;
-            text-align: center;
-            margin-top: 10px;
-        }
-        .button_enc {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
-        .button_enc button {
-            width: 48%;
-        }
-        footer {
-            background: #f1f1f1;
-            text-align: center;
-            padding: 15px;
-            color: #888;
-            font-size: 0.9rem;
-            margin-top: 40px;
-        }
-        .charts-container {
-            display: flex;
-            justify-content: space-between;
+        /* Output Area */
+        
+        .output {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: left;
             margin-top: 20px;
         }
-        .chart {
-            width: 48%;
+        
+        .output label {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .output textarea,
+        .output input[type="text"] {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .output input[type="text"] {
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        /* Chart Styles */
+        
+        .charts-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        
+        .chart-container {
+            width: 45%;
         }
     </style>
-    <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
+    <div class="container">
+        <h1>Caesar Cipher with Frequency Analysis</h1>
 
-<header>
-    <h1>Caesar Cipher & RSA Encryption</h1>
-</header>
+        <!-- Input Area -->
+        <label for="plainText">Inserisci il testo in chiaro:</label>
+        <textarea id="plainText" rows="6"></textarea><br>
 
-<div class="content">
-    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+        <button onclick="encryptCaesar()">Encrypt Using Caesar</button>
+        <button onclick="decryptCaesar()">Decrypt with bruteforce</button>
+        <button onclick="frequencyAnalysisDecipher()">Decrypt with Frequency Analysis</button>
 
-    <div class="button_enc">
-        <button onclick="encryptText('caesar')">Encrypt Text (Caesar Method)</button>
-        <button onclick="encryptText('rsa')">Encrypt Text (RSA)</button>
-    </div>
+        <!-- Output Area -->
+        <div class="output">
+            <label for="cipheredText">Testo Cifrato:</label><br>
+            <textarea id="cipheredText" rows="6" readonly></textarea><br>
 
-    <div class="shift-display" id="shiftDisplay">Random Shift: Not Applied Yet</div>
+            <label for="decodedCaesarOutput">Testo Decodificato:</label><br>
+            <textarea id="decodedCaesarOutput" rows="6" readonly></textarea><br>
 
-    <textarea id="decodedCaesarOutput" placeholder="Decoded text (Caesar Cipher) will appear here..." readonly></textarea>
-
-    <textarea id="decodedRsaOutput" placeholder="Ciphered and Deciphered text (RSA) will appear here..." readonly></textarea>
-
-    <div class="button_enc">
-        <button onclick="bruteForceDecipher()">Brute Force Decoding (Caesar Cipher)</button>
-        <button onclick="frequencyAnalysisDecipher()">Frequency Analysis Decoding (Caesar Cipher)</button>
-    </div>
-
-    <label for="dInput">Guess Private Key (d):</label>
-    <input type="number" id="dInput" placeholder="Enter value for d (private exponent)" />
-    <button onclick="decodeText()">Decode Text (RSA)</button>
-
-    <!-- Charts Container -->
-    <div class="charts-container">
-        <div class="chart">
-            <canvas id="originalChart"></canvas>
+            <label for="shiftDisplay">Valore del Shift Usato:</label><br>
+            <input type="text" id="shiftDisplay" readonly>
         </div>
-        <div class="chart">
-            <canvas id="cipheredChart"></canvas>
+
+        <!-- Charts Area -->
+        <div class="charts-container">
+            <div class="chart-container">
+                <canvas id="plainTextChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="cipheredTextChart"></canvas>
+            </div>
         </div>
     </div>
 
-    <div>
-        <h1>Encryption and Decryption with the Caesar Cipher Method</h1>
-        <p>The Caesar cipher is an encryption algorithm that belongs to the substitution cipher family. It works by shifting each letter of the plaintext by a fixed number of positions in the alphabet. For example, with a shift key of 3, the letter 'A' becomes 'D', 'B' becomes 'E', and so on.</p>
-    
-        <h2>Encryption Process</h2>
-        <ol>
-            <li><strong>Choosing the Text and Key:</strong> The user inputs a text to encrypt. The encryption key is a number (called the "shift") that determines how many positions each letter should be shifted in the alphabet.</li>
-            <li><strong>Encryption with Random Shift:</strong> Once the text is entered, a random shift between 0 and 25 is generated (since the alphabet has 26 letters). Each letter of the plaintext is shifted forward in the alphabet by the shift value. For example, if the plaintext contains the letter 'A' and the shift is 3, the letter 'A' becomes 'D'.</li>
-            <li><strong>Encrypted Text:</strong> The encrypted text is then shown in the page's text area.</li>
-        </ol>
-    
-        <h2>Decryption Process (Brute Force)</h2>
-        <ol>
-            <li><strong>Brute Force Decryption:</strong> Since the Caesar cipher is a simple cipher, the encrypted text can be decrypted without knowing the key by trying all possible shifts (from 0 to 25). The code attempts all possible decryption keys and checks if the resulting text makes sense (for example, by matching the original text entered by the user). This process is known as brute force.</li>
-            <li><strong>Decrypted Text:</strong> Once the correct shift is found, the decrypted text is displayed.</li>
-        </ol>
-    
-        <h2>Decryption via Frequency Analysis</h2>
-        <ol>
-            <li><strong>Frequency Analysis:</strong> Alternatively, a technique called frequency analysis can be used to decrypt the text. This method is based on the fact that some letters are more common than others in a language. For example, in Italian, the most common letter is often 'E'. By comparing the most frequent letters in the encrypted text with the most common letters in the language, it is possible to guess the shift used and decrypt the text.</li>
-            <li><strong>Decryption Based on Frequent 'E':</strong> The code uses frequency analysis to find the most common letter in the encrypted text, which is assumed to correspond to the letter 'E'. Once this match is found, the code calculates the shift and automatically decrypts the text.</li>
-        </ol>
-    </div>
+    <script>
+        // Definire l'alfabeto
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-    <footer>
-        <p>&copy; 2024 Caesar Cipher & RSA Encryption</p>
-    </footer>
-</div>
+        // Frequencies chart setup
+        const plainTextChartCtx = document.getElementById('plainTextChart').getContext('2d');
+        const cipheredTextChartCtx = document.getElementById('cipheredTextChart').getContext('2d');
 
-<script>
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let shift = 0;
-    let originalText = '';
-    let cipheredText = '';
-    let rsaCipheredText = [];
-
-    // RSA variables
-    let n = 3233;  // Modulus
-    let e = 17;    // Public exponent
-    let d = 2753;  // Private exponent (for testing)
-
-    // Chart.js - Data and Config
-    let originalChart, cipheredChart;
-
-    // Frequency distribution function
-    function getLetterFrequency(text) {
-        const letterCounts = {};
-        for (let char of text) {
-            if (alphabet.includes(char)) {
-                letterCounts[char] = (letterCounts[char] || 0) + 1;
-            }
-        }
-        return letterCounts;
-    }
-
-    // Function to update both charts
-    function updateCharts() {
-        // Original text frequency
-        const originalFreq = getLetterFrequency(originalText);
-        const originalLabels = alphabet.split('');
-        const originalData = originalLabels.map(letter => originalFreq[letter] || 0);
-
-        // Ciphered text frequency
-        const cipheredFreq = getLetterFrequency(cipheredText);
-        const cipheredData = originalLabels.map(letter => cipheredFreq[letter] || 0);
-
-        // Update Original Chart
-        if (originalChart) {
-            originalChart.data.labels = originalLabels;
-            originalChart.data.datasets[0].data = originalData;
-            originalChart.update();
-        }
-
-        // Update Ciphered Chart
-        if (cipheredChart) {
-            cipheredChart.data.labels = originalLabels;
-            cipheredChart.data.datasets[0].data = cipheredData;
-            cipheredChart.update();
-        }
-    }
-
-    // Initialize charts
-    window.onload = function () {
-        const ctx1 = document.getElementById('originalChart').getContext('2d');
-        const ctx2 = document.getElementById('cipheredChart').getContext('2d');
-
-        originalChart = new Chart(ctx1, {
+        const plainTextChart = new Chart(plainTextChartCtx, {
             type: 'bar',
             data: {
-                labels: alphabet.split(''),
+                labels: alphabet,
                 datasets: [{
-                    label: 'Original Text Frequency',
+                    label: 'Distribuzione lettere (Testo in Chiaro)',
                     data: Array(26).fill(0),
-                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
                 }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
             }
         });
 
-        cipheredChart = new Chart(ctx2, {
+        const cipheredTextChart = new Chart(cipheredTextChartCtx, {
             type: 'bar',
             data: {
-                labels: alphabet.split(''),
+                labels: alphabet,
                 datasets: [{
-                    label: 'Ciphered Text Frequency',
+                    label: 'Distribuzione lettere (Testo Cifrato)',
                     data: Array(26).fill(0),
-                    backgroundColor: 'rgba(40, 167, 69, 0.5)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
             }
         });
-    };
 
-    // Function to encrypt the text
-    function encryptText(method) {
-        originalText = document.getElementById('inputText').value.toUpperCase();
-        if (!originalText) {
-            alert('Please enter some text!');
-            return;
+        // Funzione per generare un valore di shift casuale tra 0 e 25
+        function getRandomShift() {
+            return Math.floor(Math.random() * 26);
         }
 
-        if (method === 'caesar') {
-            shift = Math.floor(Math.random() * 26); // Random shift between 0-25
-            cipheredText = originalText.split('').map(char => {
+        // Funzione per cifrare il testo con il cifrario di Cesare usando un shift casuale
+        function encryptCaesar() {
+            const plainText = document.getElementById('plainText').value.toUpperCase();
+            const shift = getRandomShift(); // Scegliere casualmente uno shift
+
+            // Pulire le aree di output prima di cifrare
+            document.getElementById('cipheredText').value = '';
+            document.getElementById('decodedCaesarOutput').value = '';
+            document.getElementById('shiftDisplay').value = '';
+
+            const cipheredText = plainText.split('').map(char => {
                 if (alphabet.includes(char)) {
                     const index = (alphabet.indexOf(char) + shift) % 26;
                     return alphabet[index];
+                } else {
+                    return char; // I caratteri non alfabetici rimangono invariati
                 }
-                return char;
-            }).join(''); // Cifrato con Cesare
-            document.getElementById('shiftDisplay').innerText = `Random Shift: ${shift}`;
-            document.getElementById('decodedCaesarOutput').value = cipheredText;
-            updateCharts();
-        }
-
-        if (method === 'rsa') {
-            rsaCipheredText = rsaEncrypt(originalText, e, n);
-            document.getElementById('decodedRsaOutput').value = `Encrypted RSA Text: ${rsaCipheredText.join(', ')}\n`;
-
-            // Decoding RSA (using private key 'd' for this demo)
-            const decryptedText = rsaDecrypt(rsaCipheredText, d, n);
-            document.getElementById('decodedRsaOutput').value += `Decrypted RSA Text: ${decryptedText}`;
-        }
-    }
-
-    // RSA Encryption and Decryption functions
-    function rsaEncrypt(text, e, n) {
-        return text.split('').map(char => {
-            const m = char.charCodeAt(0);
-            return Math.pow(m, e) % n;
-        });
-    }
-
-    function rsaDecrypt(ciphertext, d, n) {
-        return ciphertext.map(code => {
-            const m = Math.pow(code, d) % n;
-            return String.fromCharCode(m);
-        }).join('');
-    }
-
-    function bruteForceDecipher() {
-        let deciphered = '';
-        let shiftAttempts = [];
-        for (let i = 0; i < 26; i++) {
-            deciphered = originalText.split('').map(char => {
-                if (alphabet.includes(char)) {
-                    const index = (alphabet.indexOf(char) - i + 26) % 26;
-                    return alphabet[index];
-                }
-                return char;
             }).join('');
-            
-            // Check if the deciphered text matches the original input
-            if (deciphered === originalText) {
-                document.getElementById('decodedCaesarOutput').value = `Decrypted Text: ${deciphered}`;
-                break; // Stop once the correct decoding is found
-            }
-        }
-    }
 
-        // Function for Frequency Analysis Decoding (Caesar)
+            // Aggiornare l'output
+            document.getElementById('cipheredText').value = cipheredText;
+            document.getElementById('shiftDisplay').value = shift; // Mostra lo shift usato
+
+            updateFrequencyCharts(plainText, cipheredText); // Aggiorna i grafici
+        }
+
+        // Funzione per aggiornare i grafici
+        function updateFrequencyCharts(plainText, cipheredText) {
+            const plainTextFrequency = calculateFrequency(plainText);
+            const cipheredTextFrequency = calculateFrequency(cipheredText);
+
+            // Update plain text chart
+            plainTextChart.data.datasets[0].data = plainTextFrequency;
+            plainTextChart.update();
+
+            // Update ciphered text chart
+            cipheredTextChart.data.datasets[0].data = cipheredTextFrequency;
+            cipheredTextChart.update();
+        }
+
+        // Funzione per calcolare la frequenza delle lettere in un testo
+        function calculateFrequency(text) {
+            const frequency = Array(26).fill(0);
+            text.replace(/[A-Z]/g, char => {
+                const index = alphabet.indexOf(char);
+                frequency[index]++;
+            });
+            return frequency;
+        }
+
+        // Funzione per decifrare il testo con il cifrario di Cesare usando lo shift dato
+        function decryptCaesar() {
+            const cipheredText = document.getElementById('cipheredText').value.toUpperCase();
+            const shift = parseInt(document.getElementById('shiftDisplay').value);
+
+            if (isNaN(shift)) {
+                alert('Non è stato trovato un valore di shift valido.');
+                return;
+            }
+
+            const decryptedText = cipheredText.split('').map(char => {
+                if (alphabet.includes(char)) {
+                    const index = (alphabet.indexOf(char) - shift + 26) % 26;
+                    return alphabet[index];
+                } else {
+                    return char; // I caratteri non alfabetici rimangono invariati
+                }
+            }).join('');
+
+            document.getElementById('decodedCaesarOutput').value = decryptedText;
+        }
+
+        // Funzione per la decodifica basata sull'analisi delle frequenze
         function frequencyAnalysisDecipher() {
-        const frequencyOrder = ['E', 'A', 'O', 'I', 'T', 'N', 'S', 'R', 'L', 'C', 'U', 'D', 'M', 'P', 'B', 'V', 'G', 'Q', 'H', 'F', 'J', 'Z', 'K', 'W', 'X', 'Y'];
-        const letterCounts = {};
-
-        // Count letter frequencies in the ciphered text
-        for (let char of cipheredText) {
-            if (alphabet.includes(char)) {
-                letterCounts[char] = (letterCounts[char] || 0) + 1;
-            }
+            const cipheredText = document.getElementById('cipheredText').value.toUpperCase();
+            const shift = 4; // Shift teorico basato sull'analisi delle frequenze (esempio)
+            decryptCaesar(shift); // Chiama la funzione di decifrazione con lo shift teorizzato
         }
-
-        // Sort letters by frequency (highest to lowest)
-        const sortedLetters = Object.keys(letterCounts).sort((a, b) => letterCounts[b] - letterCounts[a]);
-
-        // Match the most frequent letter in the ciphertext to 'E'
-        const mostFrequentLetter = sortedLetters[0];
-        const shiftGuess = alphabet.indexOf(mostFrequentLetter) - alphabet.indexOf('E');
-
-        // Decipher the text based on the guessed shift
-        const decoded = cipheredText.split('').map(char => {
-            if (alphabet.includes(char)) {
-                const index = (alphabet.indexOf(char) - shiftGuess + 26) % 26;
-                return alphabet[index];
-            }
-            return char;
-        }).join('');
-
-        // Output only the decoded message
-        document.getElementById('decodedCaesarOutput').value = decoded;
-    }
-
-    // Function to decode RSA Text using private key (d)
-    function decodeText() {
-        const dValue = document.getElementById('dInput').value;
-        d = parseInt(dValue, 10);
-        const decryptedRsaText = rsaDecrypt(rsaCipheredText, d, n);
-        document.getElementById('decodedRsaOutput').value += `Decrypted RSA Text: ${decryptedRsaText}`;
-    }
-</script>
+    </script>
 </body>
+
 </html>
