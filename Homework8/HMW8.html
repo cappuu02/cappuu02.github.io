@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>Caesar Cipher with Frequency Analysis</title>
     <style>
         body {
@@ -113,6 +114,16 @@
         .chart-container {
             width: 45%;
         }
+        .theory {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -154,6 +165,145 @@
                 <canvas id="cipheredTextChart"></canvas>
             </div>
         </div>
+    </div>
+
+    <div class="theory">
+        <h1>Caesar Cipher Encryption and Decryption</h1>
+        <p>
+            The Caesar cipher is a monoalphabetic encryption method that shifts each letter of a plaintext by a fixed number of positions within the alphabet. The encryption process is as follows:
+        </p>
+
+        <h2>Encryption:</h2>
+        <ul>
+            <li>The plaintext is converted to uppercase for consistency.</li>
+            <li>A random shift between 0 and 25 is generated.</li>
+            <li>
+                Each character in the plaintext is processed. If it is a letter, its index is incremented by the shift value and then taken modulo 26 to stay within the alphabet limits. The resulting character replaces the original.
+            </li>
+            <li>Non-alphabetic characters (e.g., spaces or punctuation) remain unchanged.</li>
+        </ul>
+
+        <h2>Decryption by brute force:</h2>
+        <ul>
+            <li>Brute force decryption tries all 26 possible shift values.</li>
+            <li>For each attempt, the ciphertext is decoded by reversing the shift and checking if it matches the original plaintext. Once the correct plaintext is found, the process stops.</li>
+        </ul>
+
+        <h2>Decryption by frequency analysis:</h2>
+        <ul>
+            <li>The frequency of letters in the ciphertext is analyzed.</li>
+            <li>The most frequent letter is assumed to be "E," which is the most common letter in English and many other languages.</li>
+            <li>
+                The shift is calculated by comparing the position of the most frequent letter to that of "E."
+            </li>
+            <li>The ciphertext is decoded using the calculated shift.</li>
+        </ul>
+
+        <h1>RSA Encryption and Decryption</h1>
+    
+        <h2>1. Key Generation</h2>
+        <p>RSA uses a pair of keys: a public key (used for encrypting messages) and a private key (used for decrypting messages). The security of RSA relies on the difficulty of factoring large numbers, specifically numbers that are the product of two very large prime numbers.</p>
+        
+        <h3>Steps to generate the keys:</h3>
+        
+        <ol>
+            <li><b>Choose two prime numbers, <i>p</i> and <i>q</i></b>: Start by choosing two prime numbers, <i>p</i> and <i>q</i>, which must be kept secret.</li>
+            
+            <li><b>Calculate <i>n</i></b>: <i>n</i> is the product of <i>p</i> and <i>q</i>:
+                <div>
+                    <p>\( n = p \times q \)</p>
+                </div>
+                <p><i>n</i> is used in both the public and private keys and is the modulus for the encryption and decryption operations.</p>
+            </li>
+            
+            <li><b>Calculate <i>\(\varphi(n)\)</i> (Euler's Totient function of <i>n</i>)</b>: Euler's Totient function \(\varphi(n)\) is calculated as:
+                <div>
+                    <p>\( \varphi(n) = (p - 1)(q - 1) \)</p>
+                </div>
+                <p>\(\varphi(n)\) is important for determining the private key exponent.</p>
+            </li>
+            
+            <li><b>Choose a public exponent <i>e</i></b>: <i>e</i> must be an integer that satisfies the following conditions:
+                <div>
+                    <p>1 < i>e</i> < \(\varphi(n)\)</p>
+                    <p>e must be coprime with \(\varphi(n)\), meaning \( \text{gcd}(e, \varphi(n)) = 1 \) (i.e., <i>e</i> and \(\varphi(n)\) do not share any common factors other than 1). The most common value of <i>e</i> is 65537, which is chosen for efficiency reasons.</p>
+                </div>
+            </li>
+            
+            <li><b>Calculate the private exponent <i>d</i></b>: The private exponent <i>d</i> is the modular inverse of <i>e</i> modulo \(\varphi(n)\), i.e.,
+                <div>
+                    <p>\( d \equiv e^{-1} \pmod{\varphi(n)} \)</p>
+                </div>
+                <p>This means:</p>
+                <div>
+                    <p>\( e \times d \equiv 1 \pmod{\varphi(n)} \)</p>
+                </div>
+                <p><i>d</i> is the private key and must be kept secret.</p>
+            </li>
+        </ol>
+        
+        <h3>The Public and Private Keys:</h3>
+        <ul>
+            <li><b>Public Key:</b> \((e, n)\)</li>
+            <li><b>Private Key:</b> \((d, n)\)</li>
+        </ul>
+    
+        <h2>2. Encrypting a Message</h2>
+        <p>To encrypt a message, the sender uses the recipient's public key \((e, n)\). The message must be represented as a number <i>m</i>, where \( 0 \leq m < n \). For example, if the message is text, it can be converted to a number using a character encoding (e.g., ASCII).</p>
+        <p>The encrypted message <i>c</i> is calculated as:</p>
+        <div>
+            <p>\( c = m^e \pmod{n} \)</p>
+        </div>
+        <p>Where:</p>
+        <ul>
+            <li><i>m</i> is the message in numerical form.</li>
+            <li><i>e</i> is the public exponent.</li>
+            <li><i>n</i> is the modulus.</li>
+        </ul>
+        <p>The result <i>c</i> is the encrypted message, which can be sent to the recipient.</p>
+    
+        <h2>3. Decrypting a Message</h2>
+        <p>The recipient, who has the private key \((d, n)\), can decrypt the encrypted message <i>c</i> using their private key. The decryption formula is:</p>
+        <div>
+            <p>\( m = c^d \pmod{n} \)</p>
+        </div>
+        <p>Where:</p>
+        <ul>
+            <li><i>c</i> is the encrypted message.</li>
+            <li><i>d</i> is the private exponent.</li>
+            <li><i>n</i> is the modulus.</li>
+        </ul>
+        <p>Since <i>d</i> is chosen so that \( e \times d \equiv 1 \pmod{\varphi(n)} \), it can be shown that applying this decryption operation will recover the original message <i>m</i>.</p>
+
+
+        <h1>Frequency Analysis in Caesar Cipher vs. Infeasibility of Breaking RSA without Critical Information</h1>
+    
+        <p>The frequency analysis in the Caesar cipher is extremely simple due to the predictability of the system: each letter in the ciphertext retains the original frequency of the letters in the plaintext. Since certain letters (e.g., "E" in English) appear more frequently, it is possible to deduce the shift by comparing the frequency of letters in the ciphertext with the expected frequency.</p>
+        
+        <p>In contrast, breaking RSA is mathematically complex without access to critical information, such as the prime numbers <span id="p">𝑝</span> and <span id="q">𝑞</span> used to generate the key. The RSA algorithm relies on the computational difficulty of factoring large numbers, a problem that cannot be efficiently solved with current methods. This makes RSA significantly more secure than the Caesar cipher.</p>
+        
+
+        <h2>Visualizing Distributions and Calculating Shannon Entropy</h2>
+        <h3>Distributions in Caesar Cipher:</h3>
+        <p>The distribution of letters in the ciphertext is simply a translation of the distribution in the plaintext. No significant changes are observed in the relative frequency of letters, which makes the cipher vulnerable to frequency analysis.</p>
+    
+        <h3>Distributions in RSA:</h3>
+        <p>The values in the RSA ciphertext are distributed in an apparently random manner. This randomness increases the entropy, making any analysis based on obvious patterns difficult.</p>
+    
+        <h3>Calculating Shannon Entropy:</h3>
+        <p>Shannon entropy measures the degree of uncertainty or randomness in a distribution. For a Caesar cipher text, the entropy remains low because the distribution of letters is predictable. In contrast, in RSA, the high randomness of the ciphertext values results in much higher entropy, reflecting superior security.</p>
+    
+        <h2>Summary of Findings and Discussion on the Importance of Statistical Analysis in Cryptography</h2>
+        <h3>Summary of Findings:</h3>
+        <p>The Caesar cipher is simple but insecure; frequency analysis makes it easily decipherable. RSA offers significantly greater security due to the mathematical complexity and randomness of its outputs. The high entropy observed confirms its resistance to attacks based on statistical analysis.</p>
+    
+        <h3>Importance of Statistical Analysis in Cryptography:</h3>
+        <p>Statistical analysis allows us to assess the robustness of a cryptographic algorithm. Understanding distributions and calculating entropy helps identify vulnerabilities, such as repetitive patterns or lack of randomness. These skills are essential in cybersecurity for designing secure algorithms, analyzing potential threats, and evaluating the effectiveness of cryptographic countermeasures.</p>
+    
+        <p>In summary, statistical analysis not only enhances our understanding of cryptographic algorithms, but it also serves as a crucial tool for ensuring data security.</p>
+    
+
+
     </div>
 
     <script>
