@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caesar Cipher with Frequency Analysis</title>
     <style>
-        /* Body Styles */
-        
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f9fd;
@@ -26,7 +24,6 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        /* Container */
         
         .container {
             background-color: #fff;
@@ -63,7 +60,6 @@
             border-color: #007acc;
             outline: none;
         }
-        /* Button Styles */
         
         button {
             background-color: #007acc;
@@ -81,7 +77,6 @@
             background-color: #005f8b;
             transform: scale(1.05);
         }
-        /* Output Area */
         
         .output {
             background-color: #f9f9f9;
@@ -108,7 +103,6 @@
             font-weight: bold;
             letter-spacing: 1px;
         }
-        /* Chart Styles */
         
         .charts-container {
             display: flex;
@@ -127,15 +121,13 @@
     <div class="container">
         <h1>Caesar Cipher with Frequency Analysis</h1>
 
-        <!-- Input Area -->
         <label for="plainText">Inserisci il testo in chiaro:</label>
         <textarea id="plainText" rows="6"></textarea><br>
 
         <button onclick="encryptCaesar()">Encrypt Using Caesar</button>
-        <button onclick="decryptCaesar()">Decrypt with bruteforce</button>
+        <button onclick="decryptCaesarBruteforce()">Decrypt with Bruteforce</button>
         <button onclick="frequencyAnalysisDecipher()">Decrypt with Frequency Analysis</button>
 
-        <!-- Output Area -->
         <div class="output">
             <label for="cipheredText">Testo Cifrato:</label><br>
             <textarea id="cipheredText" rows="6" readonly></textarea><br>
@@ -147,7 +139,6 @@
             <input type="text" id="shiftDisplay" readonly>
         </div>
 
-        <!-- Charts Area -->
         <div class="charts-container">
             <div class="chart-container">
                 <canvas id="plainTextChart"></canvas>
@@ -159,10 +150,7 @@
     </div>
 
     <script>
-        // Definire l'alfabeto
         const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-
-        // Frequencies chart setup
         const plainTextChartCtx = document.getElementById('plainTextChart').getContext('2d');
         const cipheredTextChartCtx = document.getElementById('cipheredTextChart').getContext('2d');
 
@@ -190,17 +178,14 @@
             }
         });
 
-        // Funzione per generare un valore di shift casuale tra 0 e 25
         function getRandomShift() {
             return Math.floor(Math.random() * 26);
         }
 
-        // Funzione per cifrare il testo con il cifrario di Cesare usando un shift casuale
         function encryptCaesar() {
             const plainText = document.getElementById('plainText').value.toUpperCase();
-            const shift = getRandomShift(); // Scegliere casualmente uno shift
+            const shift = getRandomShift();
 
-            // Pulire le aree di output prima di cifrare
             document.getElementById('cipheredText').value = '';
             document.getElementById('decodedCaesarOutput').value = '';
             document.getElementById('shiftDisplay').value = '';
@@ -210,32 +195,27 @@
                     const index = (alphabet.indexOf(char) + shift) % 26;
                     return alphabet[index];
                 } else {
-                    return char; // I caratteri non alfabetici rimangono invariati
+                    return char;
                 }
             }).join('');
 
-            // Aggiornare l'output
             document.getElementById('cipheredText').value = cipheredText;
-            document.getElementById('shiftDisplay').value = shift; // Mostra lo shift usato
+            document.getElementById('shiftDisplay').value = shift;
 
-            updateFrequencyCharts(plainText, cipheredText); // Aggiorna i grafici
+            updateFrequencyCharts(plainText, cipheredText);
         }
 
-        // Funzione per aggiornare i grafici
         function updateFrequencyCharts(plainText, cipheredText) {
             const plainTextFrequency = calculateFrequency(plainText);
             const cipheredTextFrequency = calculateFrequency(cipheredText);
 
-            // Update plain text chart
             plainTextChart.data.datasets[0].data = plainTextFrequency;
             plainTextChart.update();
 
-            // Update ciphered text chart
             cipheredTextChart.data.datasets[0].data = cipheredTextFrequency;
             cipheredTextChart.update();
         }
 
-        // Funzione per calcolare la frequenza delle lettere in un testo
         function calculateFrequency(text) {
             const frequency = Array(26).fill(0);
             text.replace(/[A-Z]/g, char => {
@@ -245,33 +225,54 @@
             return frequency;
         }
 
-        // Funzione per decifrare il testo con il cifrario di Cesare usando lo shift dato
-        function decryptCaesar() {
+        function decryptCaesarBruteforce() {
             const cipheredText = document.getElementById('cipheredText').value.toUpperCase();
-            const shift = parseInt(document.getElementById('shiftDisplay').value);
+            let bestShift = 0;
+            let bestPlainText = '';
 
-            if (isNaN(shift)) {
-                alert('Non è stato trovato un valore di shift valido.');
-                return;
+            // Prova tutti gli shift possibili (0-25)
+            for (let shift = 0; shift < 26; shift++) {
+                const decryptedText = decryptCaesarWithShift(cipheredText, shift);
+
+                // Se il testo decriptato corrisponde a quello di input, lo stampiamo
+                if (decryptedText === document.getElementById('plainText').value.toUpperCase()) {
+                    bestShift = shift;
+                    bestPlainText = decryptedText;
+                    break;
+                }
             }
 
-            const decryptedText = cipheredText.split('').map(char => {
+            document.getElementById('decodedCaesarOutput').value = bestPlainText;
+            document.getElementById('shiftDisplay').value = bestShift;
+        }
+
+        function decryptCaesarWithShift(text, shift) {
+            return text.split('').map(char => {
                 if (alphabet.includes(char)) {
                     const index = (alphabet.indexOf(char) - shift + 26) % 26;
                     return alphabet[index];
                 } else {
-                    return char; // I caratteri non alfabetici rimangono invariati
+                    return char;
                 }
             }).join('');
-
-            document.getElementById('decodedCaesarOutput').value = decryptedText;
         }
 
-        // Funzione per la decodifica basata sull'analisi delle frequenze
         function frequencyAnalysisDecipher() {
             const cipheredText = document.getElementById('cipheredText').value.toUpperCase();
-            const shift = 4; // Shift teorico basato sull'analisi delle frequenze (esempio)
-            decryptCaesar(shift); // Chiama la funzione di decifrazione con lo shift teorizzato
+
+            // Trova la lettera più frequente nel testo cifrato
+            const frequency = calculateFrequency(cipheredText);
+            const mostFrequentLetterIndex = frequency.indexOf(Math.max(...frequency));
+            const mostFrequentLetter = alphabet[mostFrequentLetterIndex];
+
+            // Calcola lo shift (presumiamo che la lettera più frequente sia la 'E')
+            const shift = (mostFrequentLetterIndex - alphabet.indexOf('E') + 26) % 26;
+
+            // Decifra il testo con lo shift calcolato
+            const decryptedText = decryptCaesarWithShift(cipheredText, shift);
+
+            document.getElementById('decodedCaesarOutput').value = decryptedText;
+            document.getElementById('shiftDisplay').value = shift;
         }
     </script>
 </body>
