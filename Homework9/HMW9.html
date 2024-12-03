@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <title>Simulazione Statistica Subsets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .input-group label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .interval-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .interval-boundary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #4c6ef5;
+            box-shadow: 0px 4px 8px rgba(76, 110, 245, 0.2);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4c6ef5, #339af0);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #339af0, #4c6ef5);
+            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            background: linear-gradient(135deg, #1c7ed6, #339af0);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(1px);
+        }
+        
+        canvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .results {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Simulazione Statistica Subsets</h2>
+
+        <div class="input-group">
+            <label for="m">Numero di Subset (m):</label>
+            <input type="number" id="m" min="1" value="5">
+        </div>
+        <div class="input-group">
+            <label for="intervals">Numero di Intervalli per Subset:</label>
+            <input type="number" id="intervals" min="1" max="10" value="7">
+        </div>
+        <div class="input-group">
+            <label for="n">Numero di Campioni per Subset (n):</label>
+            <input type="number" id="n" min="1" value="100">
+        </div>
+
+        <button class="btn_submit" onclick="simulate()">Simula</button>
+
+        <canvas id="chartCanvas" width="600" height="400"></canvas>
+
+        <div class="results">
+            <p>Varianza delle Medie: <span id="meanVariance"></span></p>
+            <p>Varianza delle Varianze: <span id="varianceVariance"></span></p>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function simulate() {
+            const m = parseInt(document.getElementById('m').value);  // numero di subset
+            const n = parseInt(document.getElementById('n').value);  // numero di campioni
+            const intervals = parseInt(document.getElementById('intervals').value);  // numero di intervalli per subset
+
+            const means = [];
+            const variances = [];
+            const meansCalculated = [];  // per memorizzare le medie calcolate
+            const variancesCalculated = [];  // per memorizzare le varianze calcolate
+            const allMeans = [];
+            const allVariances = [];
+
+            // Calcolare i valori per ogni subset
+            for (let i = 0; i < m; i++) {
+                const randomNumbers = Array.from({ length: n }, () => Math.random());
+
+                // Calcolare la media empirica
+                const mean = randomNumbers.reduce((sum, val) => sum + val, 0) / n;
+
+                // Calcolare la varianza empirica
+                const variance = randomNumbers.reduce((sum, val) => sum + (val - mean) ** 2, 0) / n;  // Formula della varianza
+
+                // Aggiungi la media e la varianza empirica direttamente
+                means.push(mean);
+                variances.push(variance);
+
+                // Memorizza le medie e varianze calcolate (es. media=0.5, varianza=1/12 per la distribuzione uniforme [0,1])
+                const meanCalculated = 0.5;  // media teorica della distribuzione uniforme [0, 1]
+                const varianceCalculated = 1 / 12;  // varianza teorica della distribuzione uniforme [0, 1]
+
+                meansCalculated.push(meanCalculated);
+                variancesCalculated.push(varianceCalculated);
+
+                allMeans.push(parseFloat(mean));
+                allVariances.push(parseFloat(variance));
+            }
+
+            // Calcolare la varianza delle medie e delle varianze
+            const meanVariance = calculateVariance(allMeans);
+            const varianceVariance = calculateVariance(allVariances);
+
+            document.getElementById('meanVariance').textContent = meanVariance.toFixed(4);
+            document.getElementById('varianceVariance').textContent = varianceVariance.toFixed(4);
+
+            drawChart(means, variances, meansCalculated, variancesCalculated);
+        }
+
+        function calculateVariance(arr) {
+            const mean = arr.reduce((sum, val) => sum + val, 0) / arr.length;
+            const variance = arr.reduce((sum, val) => sum + (val - mean) ** 2, 0) / arr.length;
+            return variance;
+        }
+
+        function drawChart(means, variances, meansCalculated, variancesCalculated) {
+    const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+    if (window.myChart) {
+        window.myChart.destroy();
+    }
+
+    window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: means.map((_, i) => `Subset ${i + 1}`),
+            datasets: [
+                {
+                    label: 'Media calcolata',  
+                    data: means.map((mean) => mean), // Media empirica
+                    backgroundColor: 'lightblue',
+                    borderColor: 'blue',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Varianza calcolata',  
+                    data: variances.map((variance) => variance), // Varianza empirica
+                    backgroundColor: 'lightgreen',
+                    borderColor: 'green',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Media empirica',  
+                    data: meansCalculated.map((mean) => mean), // Media calcolata (teorica)
+                    backgroundColor: 'blue',
+                    borderColor: 'darkblue',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Varianza empirica',  
+                    data: variancesCalculated.map((variance) => variance), // Varianza calcolata (teorica)
+                    backgroundColor: 'green',
+                    borderColor: 'darkgreen',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+    </script>
+</body>
+</html>

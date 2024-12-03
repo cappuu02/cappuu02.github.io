@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Step-by-Step: S-box, ShiftRows, MixColumns, RoundKey</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; background: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        textarea, button { width: 100%; padding: 10px; margin: 10px 0; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AES Step-by-Step: S-box, ShiftRows, MixColumns, RoundKey</h1>
+        <textarea id="message" placeholder="Enter your message here"></textarea>
+        <button onclick="runAESStepByStep()">Run AES Operations</button>
+        <button onclick="decryptMessage()">Decrypt Message</button>
+
+        <h2>Original Message</h2>
+        <pre id="originalMessage"></pre>
+
+        <h2>SubBytes (S-box)</h2>
+        <pre id="subBytes"></pre>
+
+        <h2>ShiftRows</h2>
+        <pre id="shiftRows"></pre>
+
+        <h2>MixColumns</h2>
+        <pre id="mixColumns"></pre>
+
+        <h2>RoundKey Derivation</h2>
+        <pre id="roundKey"></pre>
+
+        <h2>Encrypted Message</h2>
+        <pre id="encryptedMessage"></pre>
+
+        <h2>Decrypted Message</h2>
+        <pre id="decryptedMessage"></pre>
+
+    </div>
+
+    <script>
+        // S-box for SubBytes operation
+        const sBox = [
+            [0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76],
+            [0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA8, 0x51, 0xA3],
+            [0x40, 0x8F, 0x92, 0x9D, 0x38, 0xF5, 0xBC, 0xB6, 0xDA, 0x21, 0x10, 0xFF, 0xF3, 0xD2, 0xCD, 0x0C],
+            [0x13, 0xEC, 0x5F, 0x97, 0x44, 0x17, 0xC4, 0xA7, 0x7E, 0x3D, 0x64, 0x5D, 0x19, 0x73, 0x60, 0x81],
+            [0x4F, 0xDC, 0x22, 0x2A, 0x90, 0x88, 0x46, 0xEE, 0xB8, 0x14, 0xDE, 0x5E, 0x0B, 0xDB, 0xE0, 0x32],
+            [0x3A, 0x0A, 0x49, 0x06, 0x24, 0x5C, 0xC2, 0xD3, 0xAC, 0x62, 0x91, 0x95, 0xE4, 0x79, 0xE7, 0xC8],
+            [0x37, 0x6D, 0x8D, 0x8C, 0xA1, 0x43, 0x56, 0xA2, 0x4C, 0x5B, 0x79, 0xB7, 0xE5, 0xD6, 0x62, 0xD5],
+            [0x6A, 0x1F, 0x70, 0xC3, 0x59, 0x27, 0x81, 0xD9, 0xB6, 0x71, 0xBD, 0x44, 0x85, 0x69, 0x7A, 0xC5],
+        ];
+
+        let roundKey = '';
+        let encryptedMessage = '';
+
+        function runAESStepByStep() {
+            const message = document.getElementById('message').value;
+            if (!message) {
+                alert('Please enter a message.');
+                return;
+            }
+
+            // Step 1: Display the original message
+            document.getElementById('originalMessage').textContent = message;
+
+            // Step 2: Convert message into bytes (ASCII encoding)
+            let messageBytes = Array.from(message).map(ch => ch.charCodeAt(0));
+
+            // === SubBytes (S-box operation) ===
+            const subBytes = messageBytes.map(byte => {
+                const row = (byte >> 4) & 0x0F; // High nibble
+                const col = byte & 0x0F; // Low nibble
+                return sBox[row][col]; // Get the byte from the S-box
+            });
+            document.getElementById('subBytes').textContent = `SubBytes: ${subBytes.map(b => b.toString(16)).join(' ')}`;
+            console.log("SubBytes:", subBytes);
+
+            // === ShiftRows ===
+            const shiftRows = [
+                subBytes.slice(0, 4),         // Row 1: No change
+                subBytes.slice(4, 8).reverse(), // Row 2: Shift by 1
+                subBytes.slice(8, 12).reverse(), // Row 3: Shift by 2
+                subBytes.slice(12, 16).reverse() // Row 4: Shift by 3
+            ];
+            document.getElementById('shiftRows').textContent = `ShiftRows: ${shiftRows.map(row => row.map(b => b.toString(16)).join(' ')).join(' | ')}`;
+            console.log("ShiftRows:", shiftRows);
+
+            // === MixColumns ===
+            const mixColumns = shiftRows.map(row => row.map(byte => byte ^ 0x03)); // Simple approximation (real MixColumns is more complex)
+            document.getElementById('mixColumns').textContent = `MixColumns: ${mixColumns.map(row => row.map(b => b.toString(16)).join(' ')).join(' | ')}`;
+            console.log("MixColumns:", mixColumns);
+
+            // === RoundKey Derivation ===
+            // For simplicity, we use a fixed key here
+            roundKey = CryptoJS.lib.WordArray.random(16).toString();
+            document.getElementById('roundKey').textContent = `RoundKey: ${roundKey}`;
+            console.log("RoundKey:", roundKey);
+
+            // === Final Encrypted Message ===
+            encryptedMessage = CryptoJS.AES.encrypt(message, roundKey).toString();
+            document.getElementById('encryptedMessage').textContent = `Encrypted Message: ${encryptedMessage}`;
+
+            console.log("Encrypted Message:", encryptedMessage);
+        }
+
+        function decryptMessage() {
+            if (!encryptedMessage || !roundKey) {
+                alert('Please run the AES operations first.');
+                return;
+            }
+
+            // Decrypt the message
+            const decryptedBytes = CryptoJS.AES.decrypt(encryptedMessage, roundKey);
+            const decryptedMessage = decryptedBytes.toString(CryptoJS.enc.Utf8);
+            document.getElementById('decryptedMessage').textContent = `Decrypted Message: ${decryptedMessage}`;
+            console.log("Decrypted Message:", decryptedMessage);
+        }
+    </script>
+</body>
+</html>

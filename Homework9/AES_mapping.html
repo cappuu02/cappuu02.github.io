@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cifrario di Sostituzione con XOR</title>
+  <style>
+       * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f9; /* Colore di sfondo più neutro */
+      color: #333; /* Colore testo scuro per leggibilità */
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50; /* Colore titolo elegante */
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: #fff; /* Sfondo bianco per i contenuti */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Ombra leggera per un effetto pulito */
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: #fafafa;
+      color: #333;
+    }
+
+    button {
+      background-color: #3498db; /* Blu professionale */
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9; /* Blu più scuro al passaggio del mouse */
+    }
+
+    .output {
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .output p {
+      margin-bottom: 10px;
+    }
+
+    .output span {
+      font-weight: bold;
+      color: #2980b9; /* Colore blu per evidenziare i risultati */
+    }
+
+    .key-box {
+      background-color: #eaf2f8; /* Colore più chiaro per la sezione della chiave */
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .key-box pre {
+      font-family: 'Courier New', Courier, monospace;
+      color: #333;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .col {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cifrario di Sostituzione con XOR</h1>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2>Genera una Chiave di Sostituzione</h2>
+        <button onclick="generaChiave()">Genera Chiave</button>
+        <div class="key-box">
+          <pre id="key"></pre>
+        </div>
+      </div>
+
+      <div class="col">
+        <h2>Cifra il Messaggio</h2>
+        <textarea id="inputMessaggio" placeholder="Inserisci il messaggio da cifrare...">CIAO MONDO</textarea>
+        <button onclick="cifraMessaggio()">Cifra il Messaggio</button>
+        <div class="output">
+          <p><strong>Messaggio Cifrato:</strong> <span id="messaggioCifrato"></span></p>
+          <p><strong>Messaggio Cifrato Invertito:</strong> <span id="messaggioCifratoInvertito"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h2>Decifra il Messaggio</h2>
+        <textarea id="inputMessaggioDecifra" placeholder="Inserisci il messaggio cifrato da decifrare..."></textarea>
+        <button onclick="decifraMessaggio()">Decifra il Messaggio</button>
+        <div class="output">
+          <p><strong>Messaggio Decifrato:</strong> <span id="messaggioDecifrato"></span></p>
+        </div>
+      </div>
+
+      <div class="col">
+        <h2>Calcola l'Entropia</h2>
+        <button onclick="calcolaEntropia()">Calcola Entropia</button>
+        <div class="output">
+          <p id="entropiaOriginale"></p>
+          <p id="entropiaCifrato"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let chiaveSostituzione = {};
+    let chiaveInversa = {};
+    let chiaveXOR = ""; // Chiave XOR generata dinamicamente
+
+    const lettere = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+
+    // Funzione per generare una chiave di sostituzione casuale
+    function generaChiave() {
+      let lettereMappate = [...lettere];
+      lettereMappate = lettereMappate.sort(() => Math.random() - 0.5); // Mischia le lettere
+      chiaveSostituzione = {};
+      chiaveInversa = {};
+
+      for (let i = 0; i < lettere.length; i++) {
+        chiaveSostituzione[lettere[i]] = lettereMappate[i];
+        chiaveInversa[lettereMappate[i]] = lettere[i];
+      }
+
+      // Genera la chiave XOR casuale (ad esempio una sequenza di lettere casuali)
+      chiaveXOR = generaChiaveCasuale(16); // 16 caratteri per la chiave XOR
+
+      document.getElementById('key').innerText = `Chiave di sostituzione: ${JSON.stringify(chiaveSostituzione, null, 2)}\nChiave XOR: ${chiaveXOR}`;
+    }
+
+    // Funzione per generare una chiave XOR casuale
+    function generaChiaveCasuale(lunghezza) {
+      const caratteri = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let chiave = "";
+      for (let i = 0; i < lunghezza; i++) {
+        chiave += caratteri.charAt(Math.floor(Math.random() * caratteri.length));
+      }
+      return chiave;
+    }
+
+    // Funzione XOR
+    function xorWithKey(text, key) {
+      let result = "";
+      for (let i = 0; i < text.length; i++) {
+        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return result;
+    }
+
+    // Funzione per cifrare il messaggio
+    function cifraMessaggio() {
+      const messaggio = document.getElementById('inputMessaggio').value.toUpperCase().replace(/[^A-Z ]/g, '');
+
+      let messaggioCifrato = "";
+
+      // Cifra il testo con la chiave di sostituzione
+      for (let i = 0; i < messaggio.length; i++) {
+        const lettera = messaggio[i];
+        if (lettera === " ") {
+          messaggioCifrato += " ";
+        } else {
+          messaggioCifrato += chiaveSostituzione[lettera];
+        }
+      }
+
+      // Applica XOR al messaggio cifrato con la chiave XOR generata
+      messaggioCifrato = xorWithKey(messaggioCifrato, chiaveXOR);
+
+      // Inverti l'ordine delle lettere cifrate
+      let messaggioCifratoInvertito = messaggioCifrato.split('').reverse().join('');
+
+      document.getElementById('messaggioCifrato').innerText = messaggioCifrato;
+      document.getElementById('messaggioCifratoInvertito').innerText = messaggioCifratoInvertito;
+    }
+
+    // Funzione per decifrare il messaggio
+    function decifraMessaggio() {
+      const messaggioDecifratoInvertito = document.getElementById('inputMessaggioDecifra').value;
+
+      // Inverti il messaggio cifrato
+      let messaggioDecifrato = messaggioDecifratoInvertito.split('').reverse().join('');
+
+      // Applica XOR al messaggio decifrato con la stessa chiave XOR
+      messaggioDecifrato = xorWithKey(messaggioDecifrato, chiaveXOR);
+
+      let messaggioOriginale = "";
+
+      for (let i = 0; i < messaggioDecifrato.length; i++) {
+        const lettera = messaggioDecifrato[i];
+        if (lettera === " ") {
+          messaggioOriginale += " ";
+        } else {
+          messaggioOriginale += chiaveInversa[lettera];
+        }
+      }
+
+      document.getElementById('messaggioDecifrato').innerText = messaggioOriginale;
+    }
+
+    // Funzione per calcolare l'entropia
+    function calcolaEntropia() {
+      const messaggioOriginale = document.getElementById('inputMessaggio').value.toUpperCase().replace(/[^A-Z ]/g, '');
+      const messaggioCifrato = document.getElementById('messaggioCifrato').innerText;
+
+      const entropiaOriginale = entropia(messaggioOriginale);
+      const entropiaCifrato = entropia(messaggioCifrato);
+
+      document.getElementById('entropiaOriginale').innerText = `Entropia Messaggio Originale: ${entropiaOriginale}`;
+      document.getElementById('entropiaCifrato').innerText = `Entropia Messaggio Cifrato: ${entropiaCifrato}`;
+    }
+
+    // Funzione per calcolare l'entropia di un testo
+    function entropia(messaggio) {
+      const frequenze = {};
+      for (let char of messaggio) {
+        if (char !== " ") {
+          frequenze[char] = (frequenze[char] || 0) + 1;
+        }
+      }
+
+      let entropia = 0;
+      const lunghezza = messaggio.length;
+
+      for (let lettera in frequenze) {
+        const prob = frequenze[lettera] / lunghezza;
+        entropia -= prob * Math.log2(prob);
+      }
+
+      return entropia;
+    }
+  </script>
+
+</body>
+</html>
