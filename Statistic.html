@@ -119,17 +119,37 @@
         .card a:hover {
             background-color: #0056b3;
         }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #6cb6f3; /* Light blue on hover */
+            transform: scale(1.1);
+        }
+        
     </style>
 </head>
 
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's Blog</div>
-        <div class="nav-links">
-            <a href="./index.html">Home</a>
-            <a href="./Statistic.html">Homework</a>
-        </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="">CVs</a></li>
+            <li><a href="">Project</a></li>
+            <li><a href="Statistic.html">Statistics</a></li>
+        </ul>
     </nav>
 
     <!-- Cards Container -->
@@ -196,10 +216,14 @@
             <a href="./Homework_Optional/Optional.html">HMW about cryptographic</a>
         </div>
         <div class="card">
-            <h2>Homework 9</h2>
+            <h2>Homework 9 - Distribution of the sampling variance</h2>
             <h3></h3>
-            <p> Distribution of the sampling variance</p>
+            <p>Calculate many sample and save for each of these the avg and variance.
+                Calculate the varianza of average and variance of the variance and show the distribution
+            </p>
             <a href="./Homework9/HMW9.html">Distribution sampling variance</a>
+            <a href="./Homework9/AES.html">AES Alghoritm</a>
+            <a href="./Homework9/AES_mapping.html">AES  Mapping Alghoritm</a>
         </div>
     </div>
 

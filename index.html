@@ -1,157 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luca Capuccini Blog</title>
-
-    <style>
-        /* General Page Styling */
-        
-        body,
-        html {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        /* Navbar Styling */
-        
-        .navbar {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 1rem 2rem;
-            color: #fff;
-        }
-        
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-left: 2%;
-        }
-        
-        .nav-links a {
-            color: white;
-            padding: 0 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-        
-        .nav-links a:hover {
-            background-color: #555;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
-        /* Main Content Section */
-        
-        .content-wrapper {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin-top: 100px;
-        }
-        /* Profile Picture Section */
-        
-        .profile-picture {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border: 5px solid #333;
-            margin-right: 2rem;
-        }
-        /* Text Content Section */
-        
-        .text-content {
-            flex: 1;
-            text-align: left;
-        }
-        
-        .text-content h1 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-        
-        .text-content p {
-            font-size: 1.2rem;
-            color: #666;
-            line-height: 1.6;
-        }
-        /* Biography Section */
-        
-        .biography {
-            margin-top: 2rem;
-            font-size: 1.1rem;
-            color: #444;
-            text-align: left;
-            max-width: 800px;
-        }
-        
-        .biography h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        /* Footer Styling */
-        
-        footer {
-            width: 100%;
-            text-align: center;
-            padding: 1rem;
-            background-color: #333;
-            color: white;
-            font-size: 0.9rem;
-            position: absolute;
-            bottom: 0;
-        }
-    </style>
+    <title>Luca - CV</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's Blog</div>
-        <div class="nav-links">
-            <a href="./index.html">Home</a>
-            <a href="./Statistic.html">Homework</a>
-        </div>
-    </nav>
-
-    <!-- Main Content Wrapper -->
-    <div class="content-wrapper">
-        <img src="./images/profile.jpeg" alt="Profile Picture" class="profile-picture">
-        <div class="text-content">
-            <h1>Welcome to my blog!</h1>
-            <p>Hello, my name is Luca Capuccini and this is my personal blog. This site will be used as a bulletin board to present various university projects in the computer science course related to cybersecurity.</p>
-        </div>
-    </div>
-
-    <!-- Biography Section -->
-    <div class="biography">
-        <h2>Biography</h2>
-        <p>I am a university student passionate about computer science and cybersecurity. Over the years, I have worked on various projects related to these fields, focusing on cutting-edge technologies and innovative solutions. This blog showcases my journey,
-            knowledge, and skills acquired throughout my studies.</p>
-    </div>
-
-    <!-- Footer -->
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
+    <main>
+        <section class="profile">
+            <div class="image-container">
+                <img src="./images/WhatsApp Image 2024-11-18 at 21.48.36.jpeg" alt="Profile Image">
+            </div>
+            <div class="text-container">
+                <h2>Benvenuto!</h2>
+                <p>I'm Luca, a student at the University of Rome La Sapienza, currently attending the cybersecurity specialist course. I am about to graduate in the L-31 computer science course from the University of Perugia.</p>
+                <ul>
+                    <li>🔭 Currently working on some Web Development projects</li>
+                    <li>🌱 Learning JavaScript, React, and Node.js</li>
+                    <li>💬 Ask me about web development, open source, and more!</li>
+                </ul>
+            </div>
+        </section>
+        <section class="social-media-container">
+            <div class="social-icons">
+                <a href="https://instagram.com" target="_blank" class="social-box instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" class="social-box twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="social-box linkedin">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com" target="_blank" class="social-box github">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </section>
+    </main>
     <footer>
-        <p>© 2024 Luca Capuccini. All Rights Reserved.</p>
+        <p>&copy; 2024 Luca Capuccini. Tutti i diritti riservati.</p>
     </footer>
-</body>
 
+    <script src="script.js"></script>
+</body>
 </html>

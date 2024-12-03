@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <title>Simulazione Statistica Subsets</title>
     <style>
-        body {
+                body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
@@ -102,6 +102,88 @@
             font-size: 1.2em;
             color: #333;
         }
+        .testo {
+            width: 80%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            color: #444;
+        }
+
+        /* Titoli principali */
+        .testo h2 {
+            font-size: 24px;
+            color: #0066cc;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Titoli secondari */
+        .testo h3 {
+            font-size: 20px;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Paragrafi */
+        .testo p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        /* List Style */
+        .testo ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .testo li {
+            margin-bottom: 10px;
+        }
+
+        /* Stile per i codici preformattati */
+        .testo pre {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #d14b4b;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 20px;
+        }
+
+        /* Design per la sezione */
+        .testo h2, .testo h3, .testo p, .testo ul, .testo pre {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 900px;
+        }
+
+        /* Effetto hover per gli h2 */
+        .testo h2:hover {
+            color: #005bb5;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Aggiungere margini generali alla sezione */
+        .testo ul li {
+            font-size: 18px;
+        }
+
+        /* Sezione con padding generoso */
+        .testo {
+            padding: 30px 40px;
+        }
+        
         
     </style>
 </head>
@@ -128,123 +210,161 @@
         <canvas id="chartCanvas" width="600" height="400"></canvas>
 
         <div class="results">
-            <p>Varianza delle Medie: <span id="meanVariance"></span></p>
-            <p>Varianza delle Varianze: <span id="varianceVariance"></span></p>
+            <p>Media delle Medie: <span id="meanOfMeans"></span></p>
+            <p>Varianza delle Medie: <span id="varianceOfMeans"></span></p>
+            <div id="empiricalStats"></div>
         </div>
-
     </div>
+
+    
+    <section class="testo">
+        <h2>1. User Input</h2>
+        <ul>
+            <li><strong>Number of Subsets (m):</strong> Number of subsets to simulate.</li>
+            <li><strong>Number of Intervals per Subset:</strong> Not actually used in the calculation, but may be intended for visualization.</li>
+            <li><strong>Number of Samples per Subset (n):</strong> Number of samples per subset. Each sample is a random number generated uniformly between 0 and 1.</li>
+        </ul>
+    
+        <h2>2. Data Generation</h2>
+        <p>For each subset (totally m subsets), n random samples are generated, uniformly distributed between 0 and 1 (e.g., using Math.random()). These samples are then used to calculate two main statistics for each subset: the mean and the variance.</p>
+    
+        <h2>3. Calculation of Statistics</h2>
+        <h3>Mean of a Subset:</h3>
+        <p>The mean of each subset is calculated as the sum of all values in the subset divided by the number of samples n:</p>
+        <p>
+            \[
+            \text{mean}_i = \frac{1}{n} \sum_{j=1}^{n} x_{ij}
+            \]
+        </p>
+    
+        <h3>Variance of a Subset:</h3>
+        <p>The variance of a subset is calculated as the sum of the squares of the differences between each sample and its mean, divided by n-1 (sample variance formula):</p>
+        <p>
+            \[
+            \text{variance}_i = \frac{1}{n-1} \sum_{j=1}^{n} (x_{ij} - \text{mean}_i)^2
+            \]
+        </p>
+    
+        <h2>4. Empirical Statistics</h2>
+        <h3>Mean of Means:</h3>
+        <p>The mean of the means of the subsets is calculated as the sum of the means of all subsets divided by m (the number of subsets):</p>
+        <p>
+            \[
+            \text{mean of means} = \frac{1}{m} \sum_{i=1}^{m} \text{mean}_i
+            \]
+        </p>
+    
+        <h3>Variance of Means:</h3>
+        <p>The variance of the means is calculated as the sum of the squares of the differences between each mean and the mean of means, divided by m:</p>
+        <p>
+            \[
+            \text{variance of means} = \frac{1}{m} \sum_{i=1}^{m} (\text{mean}_i - \text{mean of means})^2
+            \]
+        </p>
+    
+        <h2>5. Results Visualization</h2>
+        <p>Empirical Statistics for each Subset: A list is displayed showing the mean and variance of each subset, calculated previously.</p>
+        <p>Result Graph: A bar chart is created using the Chart.js library that shows:</p>
+        <ul>
+            <li>The variances of all subsets.</li>
+            <li>The means of all subsets.</li>
+        </ul>
+    
+        <h2>6. Calculation and Visualization of the Sampling Variance Distribution</h2>
+        <p>The distribution of the sampling variance is visualized through the bars representing the variances in the charts. Each bar represents the variance of a particular subset, and the overall distribution of these variances shows how they vary across the different sampled subsets.</p>
+        <p>The chart helps to visually understand the variability between the various subsets and the distribution of the variance of the sampled data.</p>
+    </section>
+    
+    
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        let chart; // Variabile per il grafico
+
         function simulate() {
             const m = parseInt(document.getElementById('m').value);  // numero di subset
             const n = parseInt(document.getElementById('n').value);  // numero di campioni
-            const intervals = parseInt(document.getElementById('intervals').value);  // numero di intervalli per subset
+            const intervals = parseInt(document.getElementById('intervals').value);  // numero di intervalli per ogni subset
+            const subsetMeans = [];
+            const subsetVariances = [];
+            let empiricalMeans = [];
+            let empiricalVariances = [];
 
-            const means = [];
-            const variances = [];
-            const meansCalculated = [];  // per memorizzare le medie calcolate
-            const variancesCalculated = [];  // per memorizzare le varianze calcolate
-            const allMeans = [];
-            const allVariances = [];
-
-            // Calcolare i valori per ogni subset
+            // Genera i dati
             for (let i = 0; i < m; i++) {
-                const randomNumbers = Array.from({ length: n }, () => Math.random());
+                const subset = [];
+                for (let j = 0; j < n; j++) {
+                    subset.push(Math.random());  // campioni uniformemente distribuiti tra [0, 1]
+                }
 
-                // Calcolare la media empirica
-                const mean = randomNumbers.reduce((sum, val) => sum + val, 0) / n;
+                // Calcola la media e la varianza del subset
+                const mean = subset.reduce((sum, x) => sum + x, 0) / n;
+                const variance = subset.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / (n - 1);
+                
+                // Salviamo media e varianza per ogni subset
+                subsetMeans.push(mean);
+                subsetVariances.push(variance);
 
-                // Calcolare la varianza empirica
-                const variance = randomNumbers.reduce((sum, val) => sum + (val - mean) ** 2, 0) / n;  // Formula della varianza
-
-                // Aggiungi la media e la varianza empirica direttamente
-                means.push(mean);
-                variances.push(variance);
-
-                // Memorizza le medie e varianze calcolate (es. media=0.5, varianza=1/12 per la distribuzione uniforme [0,1])
-                const meanCalculated = 0.5;  // media teorica della distribuzione uniforme [0, 1]
-                const varianceCalculated = 1 / 12;  // varianza teorica della distribuzione uniforme [0, 1]
-
-                meansCalculated.push(meanCalculated);
-                variancesCalculated.push(varianceCalculated);
-
-                allMeans.push(parseFloat(mean));
-                allVariances.push(parseFloat(variance));
+                // Calcoliamo la media e la varianza empiriche per ogni subset
+                empiricalMeans.push(mean);
+                empiricalVariances.push(variance);
             }
 
-            // Calcolare la varianza delle medie e delle varianze
-            const meanVariance = calculateVariance(allMeans);
-            const varianceVariance = calculateVariance(allVariances);
+            // Calcola la media delle medie dei subset
+            const meanOfMeans = subsetMeans.reduce((sum, mean) => sum + mean, 0) / m;
 
-            document.getElementById('meanVariance').textContent = meanVariance.toFixed(4);
-            document.getElementById('varianceVariance').textContent = varianceVariance.toFixed(4);
+            // Calcola la varianza delle medie
+            const varianceOfMeans = subsetMeans.reduce((sum, mean) => sum + Math.pow(mean - meanOfMeans, 2), 0) / m;
 
-            drawChart(means, variances, meansCalculated, variancesCalculated);
-        }
+            document.getElementById('meanOfMeans').textContent = meanOfMeans.toFixed(4);
+            document.getElementById('varianceOfMeans').textContent = varianceOfMeans.toFixed(4);
 
-        function calculateVariance(arr) {
-            const mean = arr.reduce((sum, val) => sum + val, 0) / arr.length;
-            const variance = arr.reduce((sum, val) => sum + (val - mean) ** 2, 0) / arr.length;
-            return variance;
-        }
-
-        function drawChart(means, variances, meansCalculated, variancesCalculated) {
-    const ctx = document.getElementById('chartCanvas').getContext('2d');
-
-    if (window.myChart) {
-        window.myChart.destroy();
-    }
-
-    window.myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: means.map((_, i) => `Subset ${i + 1}`),
-            datasets: [
-                {
-                    label: 'Media calcolata',  
-                    data: means.map((mean) => mean), // Media empirica
-                    backgroundColor: 'lightblue',
-                    borderColor: 'blue',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Varianza calcolata',  
-                    data: variances.map((variance) => variance), // Varianza empirica
-                    backgroundColor: 'lightgreen',
-                    borderColor: 'green',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Media empirica',  
-                    data: meansCalculated.map((mean) => mean), // Media calcolata (teorica)
-                    backgroundColor: 'blue',
-                    borderColor: 'darkblue',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Varianza empirica',  
-                    data: variancesCalculated.map((variance) => variance), // Varianza calcolata (teorica)
-                    backgroundColor: 'green',
-                    borderColor: 'darkgreen',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true
-                },
-                y: {
-                    beginAtZero: true
-                }
+            // Mostra la media e la varianza empiriche per ogni subset
+            let empiricalStatsText = '<h3>Statistiche Empiriche</h3><ul>';
+            for (let i = 0; i < m; i++) {
+                empiricalStatsText += `
+                    <li>Subset ${i + 1} - Media: ${empiricalMeans[i].toFixed(4)}, Varianza: ${empiricalVariances[i].toFixed(4)}</li>
+                `;
             }
-        }
-    });
-}
+            empiricalStatsText += '</ul>';
+            document.getElementById('empiricalStats').innerHTML = empiricalStatsText;
 
+            // Distruggi il grafico esistente se già esiste
+            if (chart) {
+                chart.destroy();
+            }
+
+            // Visualizza il grafico della varianza e media dei subset
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({ length: m }, (_, i) => `Subset ${i + 1}`),
+                    datasets: [{
+                        label: 'Varianza dei Subset',
+                        data: subsetVariances,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Media dei Subset',
+                        data: subsetMeans,
+                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

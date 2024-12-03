@@ -1,34 +1,23 @@
-// Dark mode toggle
-document.getElementById("toggleDarkMode").addEventListener("click", function() {
-    document.body.classList.toggle("dark-mode");
-});
+const themeToggleBtn = document.getElementById('theme-toggle');
+const body = document.body;
+const header = document.querySelector('header');
+const textContainers = document.querySelectorAll('.text-container');
+const footer = document.querySelector('footer');
 
-// Scroll to top button logic
-const scrollTopBtn = document.getElementById("scrollTopBtn");
+// Function to toggle dark mode
+function toggleDarkMode() {
+    body.classList.toggle('dark-mode');
+    header.classList.toggle('dark-mode');
+    textContainers.forEach(container => container.classList.toggle('dark-mode'));
+    footer.classList.toggle('dark-mode');
 
-window.onscroll = function() {
-    if (document.documentElement.scrollTop > 100) {
-        scrollTopBtn.style.display = "block";
+    // Change the button text to reflect the current mode
+    if (body.classList.contains('dark-mode')) {
+        themeToggleBtn.textContent = '🌞'; // Switch to light mode symbol
     } else {
-        scrollTopBtn.style.display = "none";
+        themeToggleBtn.textContent = '🌙'; // Switch to dark mode symbol
     }
-};
+}
 
-// Scroll to top functionality
-scrollTopBtn.addEventListener("click", function() {
-    document.documentElement.scrollTop = 0;
-});
-
-// Dynamic greeting based on the time of day
-window.onload = function() {
-    const greeting = document.getElementById("greeting");
-    const hours = new Date().getHours();
-
-    if (hours < 12) {
-        greeting.innerHTML = "Good Morning!";
-    } else if (hours < 18) {
-        greeting.innerHTML = "Good Afternoon!";
-    } else {
-        greeting.innerHTML = "Good Evening!";
-    }
-};
+// Add event listener to toggle dark mode on button click
+themeToggleBtn.addEventListener('click', toggleDarkMode);
