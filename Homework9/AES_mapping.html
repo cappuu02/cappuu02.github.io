@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cifrario di Sostituzione con XOR</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Cifrario di Sostituzione</title>
   <style>
-       * {
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -13,24 +14,24 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #f4f4f9; /* Colore di sfondo più neutro */
-      color: #333; /* Colore testo scuro per leggibilità */
+      background-color: #f4f4f9;
+      color: #333;
       padding: 20px;
     }
 
     h1, h2 {
       text-align: center;
-      color: #2c3e50; /* Colore titolo elegante */
+      color: #2c3e50;
       margin-bottom: 20px;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      background-color: #fff; /* Sfondo bianco per i contenuti */
+      background-color: #fff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Ombra leggera per un effetto pulito */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     textarea {
@@ -46,7 +47,7 @@
     }
 
     button {
-      background-color: #3498db; /* Blu professionale */
+      background-color: #3498db;
       color: #fff;
       padding: 12px 20px;
       font-size: 16px;
@@ -58,7 +59,7 @@
     }
 
     button:hover {
-      background-color: #2980b9; /* Blu più scuro al passaggio del mouse */
+      background-color: #2980b9;
     }
 
     .output {
@@ -74,11 +75,11 @@
 
     .output span {
       font-weight: bold;
-      color: #2980b9; /* Colore blu per evidenziare i risultati */
+      color: #2980b9;
     }
 
     .key-box {
-      background-color: #eaf2f8; /* Colore più chiaro per la sezione della chiave */
+      background-color: #eaf2f8;
       padding: 15px;
       border-radius: 8px;
       margin-top: 20px;
@@ -98,11 +99,24 @@
     .col {
       flex: 1;
     }
+    canvas {
+      height: auto;
+    }
+    .theory {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
   </style>
 </head>
 <body>
 
-  <h1>Cifrario di Sostituzione con XOR</h1>
+  <h1>Cifrario di Sostituzione</h1>
 
   <div class="container">
     <div class="row">
@@ -121,6 +135,8 @@
         <div class="output">
           <p><strong>Messaggio Cifrato:</strong> <span id="messaggioCifrato"></span></p>
           <p><strong>Messaggio Cifrato Invertito:</strong> <span id="messaggioCifratoInvertito"></span></p>
+          <!-- Nuovo paragrafo per il messaggio cifrato con XOR -->
+          <p><strong>Messaggio Cifrato con XOR:</strong> <span id="messaggioCifratoXOR"></span></p>
         </div>
       </div>
     </div>
@@ -136,27 +152,280 @@
       </div>
 
       <div class="col">
-        <h2>Calcola l'Entropia</h2>
-        <button onclick="calcolaEntropia()">Calcola Entropia</button>
+        <h2>Entropia messaggi di input</h2>
         <div class="output">
           <p id="entropiaOriginale"></p>
           <p id="entropiaCifrato"></p>
+          <p id="entropiaPermutato"></p>
+          <p id="entropiaXOR"></p>
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h2>Frequenza Lettere (Testo Originale)</h2>
+        <canvas id="graficoOriginale"></canvas>
+      </div>
+      <div class="col">
+        <h2>Frequenza Lettere (Testo Cifrato)</h2>
+        <canvas id="graficoCifrato"></canvas>
       </div>
     </div>
   </div>
 
-  <script>
+
+  <div class="theory">
+
+    <h1>Encrypted Message Analysis</h1>
+    <h1><strong>Question:</strong> </h1>
+    <p>Analyze the final encrypted message. Compare the frequency of letters in the original message and the encrypted message. Discuss how the substitution cipher affects the letter distribution.</p>
+    <h1><strong>Answer:</strong></h1>
+    <ol>
+        <li><strong>Original Message</strong><br>
+            In a message written in a natural language, such as Italian, letters are not evenly distributed. Some letters appear much more frequently than others. For example, the letters <strong>"E"</strong>, <strong>"A"</strong>, and <strong>"I"</strong> are among the most common, while letters like <strong>"X"</strong>, <strong>"Q"</strong>, or <strong>"Z"</strong> appear much less frequently. The <strong>letter frequency distribution</strong> in the original message reflects the statistical characteristics of the language. This distribution is useful in cryptography for analyzing and decrypting messages, as attackers can use techniques such as <strong>frequency analysis</strong> to identify the most common letters and then make guesses about the original text.
+        </li>
+
+        <li><strong>Encrypted Message</strong><br>
+            In the case of a <strong>substitution cipher</strong>, each letter of the original message is replaced by another letter according to a cipher key. If the substitution key is <strong>random</strong> and does not follow a fixed pattern (e.g., it is not a Caesar cipher), the <strong>letter frequency in the encrypted message</strong> changes drastically.<br>
+            Since each letter of the original message is replaced with a random letter, the frequency distribution in the <strong>encrypted message</strong> will be essentially uniform. In other words:
+            <ul>
+                <li>The most frequent letters in the original message (like <strong>"E"</strong>, <strong>"A"</strong>, <strong>"I"</strong>) will be mapped to random letters, so in the encrypted message, no letter will stand out as the most common.</li>
+                <li>The less frequent letters (like <strong>"Q"</strong>, <strong>"X"</strong>, <strong>"Z"</strong>) will also be mapped to other letters, but since the substitution key is random, they will no longer have fewer occurrences.</li>
+            </ul>
+            In summary, the <strong>encrypted message</strong> has a <strong>more uniform</strong> distribution of letters compared to the original message.
+        </li>
+
+        <li><strong>Frequency Analysis and Impacts</strong><br>
+            When comparing the <strong>letter frequencies</strong> in the original message with those in the encrypted message, we observe the following main changes:
+            <ul>
+                <li><strong>Uniformity</strong>: In the encrypted message, all the letters tend to appear with <strong>more similar frequencies</strong> because each letter is replaced by a random letter. The distribution observed in the encrypted message no longer reflects the original linguistic characteristics, where some letters (like "E") are much more frequent than others (like "X").</li>
+                <li><strong>Disappearance of Linguistic Distribution</strong>: In the encrypted message, the <strong>statistical characteristics</strong> of the language (such as the most frequent letters like "E", "A", "I") are effectively <strong>nullified</strong> by the substitution. As a result, it is no longer possible to easily identify the language or make inferences about the message's content based on the letter distribution.</li>
+                <li><strong>Resistance to Cryptanalysis</strong>: Since the substitution cipher alters the letter frequency distribution, it reduces an attacker's ability to perform frequency analysis. However, if the <strong>substitution key</strong> is known or easily deciphered, an attacker could still be able to reconstruct the original message.</li>
+            </ul>
+        </li>
+
+        <li><strong>Security Impacts</strong><br>
+      
+
+
+          <h1>Question</h1>
+    <p>Discuss how substitution affects the amount of uncertainty or randomness in the message.</p>
+
+    <h1>Answer</h1>
+    
+    <strong>1. Message Original Entropy (3.1844)</strong>
+    <p>An entropy of 3.1844 in the <strong>original message</strong> suggests that the message has a <strong>fairly uniform distribution of letters</strong>. In other words, the letters in the message are fairly random or distributed in such a way that they do not follow an easily predictable pattern. This value could stem from a text that does not strictly follow the typical frequency of a natural language, or it could be a text that has already been encrypted or altered in such a way that it seems random.</p>
+        
+    <br/>
+
+    <strong>2. Encrypted Message Entropy (3.1844)</strong>
+    <p>The entropy value of the <strong>encrypted message</strong> remaining the same (3.1844) compared to the original message indicates that the <strong>substitution cipher</strong> or encryption method used did not significantly alter the distribution of letters in the message. This could occur in two main cases:</p>
+    <ul>
+        <li><strong>Monotonic Substitution</strong>: If the substitution cipher does not actually change the distribution of the letters or uses an approach where the letters are simply replaced in a regular way without introducing sufficient randomness, the entropy will remain unchanged.</li>
+        <li><strong>Already "Randomized" Distribution</strong>: If the original message already has a uniform or random letter distribution, a substitution cipher may not change the entropy much because the text already lacks much predictability. In this case, the entropy remains unchanged.</li>
+    </ul>
+
+    <br/>
+    <strong>3. Permuted Message Entropy (3.1844)</strong>
+    <p>If the message has been <strong>permuted</strong>, the entropy should <strong>remain unchanged</strong> since permutation does not alter the <strong>distribution of letters</strong>, only their order. Permutation changes the positions of the letters in the message, but their frequency and distribution remain exactly the same. Therefore, the entropy of the permuted version of the message stays the same as the original.</p>
+    <br/>
+    <strong>4. XOR Message Entropy (3.5297)</strong>
+    <p>The <strong>XOR</strong> (Exclusive OR) operation is a bitwise operation commonly used for data encryption. The XOR key is applied bit by bit to the original message, and if the key is random enough, the XOR operation <strong>increases</strong> the uncertainty in the encrypted message, leading to an increase in entropy.</p>
+    <p>In this case, the <strong>XOR message</strong> has an entropy of <strong>3.5297</strong>, which is higher than that of the other messages. This increase in entropy indicates that the XOR operation has introduced <strong>more randomness</strong> into the message. If the XOR key used is truly random and independent of the message, the XOR operation makes the encrypted message harder to predict, thus increasing entropy.</p>
+    <br/>
+    <strong>5. Influence of Substitution on Uncertainty</strong>
+    <p>The <strong>substitution cipher</strong> and <strong>permutation</strong> did not introduce much randomness, as demonstrated by the unchanged entropy. This suggests that, despite applying substitution (or permutation), the encrypted text is still fairly predictable, or the letter distribution remained similar to that of the original message.</p>
+    <p>On the other hand, the <strong>XOR</strong> operation significantly increased entropy, indicating that the operation introduced <strong>uncertainty</strong> and <strong>randomness</strong> into the encrypted message. This is typical of XOR operations, which mix the data in such a way that it becomes less predictable unless the key used is very simple or repetitive.</p>
+
+    
+
+    <h2>Question</h2>
+    <p>Discuss how the inversion of letter order affects frequency distribution and entropy. Does it reveal or hide patterns?</p>
+    <h2><strong>Answer:</strong></h2>
+    <p>The <strong>frequency distribution</strong> refers to the number of occurrences of each letter in the message. In the text analysis:</p>
+    <ul>
+        <li><strong>Original Message:</strong> The clear text message will have a frequency distribution that reflects the natural use of letters in the language (for example, letters like "E" and "A" are very common, while others like "X" are less frequent). If we calculate the frequency of each letter before encryption, we will get a distribution typical of the original language.</li>
+        <li><strong>Encrypted Message:</strong> When the message is encrypted using a substitution cipher, the frequency distribution changes, but the pattern of frequencies remains relatively similar. Each letter in the original message is replaced by another letter, so the relative frequencies of the letters change, but the overall distribution of letters remains similar to the original message.</li>
+        <li><strong>Inverted Encrypted Message:</strong> When the encrypted message is inverted, the frequency distribution does not change, but the order of the letters is altered. Since inversion does not change the number of occurrences of letters (only the order in which they appear), the frequency distribution remains unchanged. However, the order of the letters in relation to their position in the message is completely altered.</li>
+    </ul>
+    <p><strong>Effect on Patterns:</strong> Inversion of the letter order can <strong>hide patterns</strong> that might have been visible in the original or encrypted text. For example:</p>
+    <ul>
+        <li>In the <strong>original message</strong>, if there were recurring words or letter sequences, these patterns were evident. The inversion of letter order could break these patterns, making the message less recognizable.</li>
+        <li>In the <strong>encrypted message</strong>, inversion makes it harder to recognize cipher patterns, as it completely changes the position of the letters, which could make it more difficult to analyze the encrypted text.</li>
+    </ul>
+    <p>As for entropy, inversion of letter order does not change entropy. Although the order of letters changes, the distribution of letters does not, so entropy remains the same.</p>
+
+    <h2>Question</h2>
+    <p>How has the frequency distribution of letters changed after applying the permutation step?</p>
+    <h2><strong>Answer:</strong></h2>
+    <p>After applying the permutation, the <strong>letter frequency does not change</strong> directly, but the order in which they appear does. As a result:</p>
+    <ul>
+        <li><strong>The most frequent letters will remain so</strong>, but they will no longer be in the same positions they occupied before.</li>
+        <li><strong>The order of the letters</strong> will change completely, but this does not change the overall amount of each letter.</li>
+    </ul>
+    <p>So, what changes concretely? We have a removal of positional patterns. If in the original message there were predictable letter sequences (such as common words or recurring combinations of letters), the permutation breaks these patterns. The permutation hides the original order of the letters but does not alter their statistical distribution.</p>
+    <p>Additionally, the overall distribution remains unchanged: if we calculate the relative frequency of each letter in the permuted message, it will be identical to the distribution in the original message. Letters with a higher frequency in the original message will still have a higher frequency in the permuted message.</p>
+
+
+
+
+    <h2>Question</h2>
+    <p>Considerations on Entropy - Discuss how the overall entropy of the original and final messages compares. What does this indicate about the security and unpredictability of the encrypted message compared to the original?</p>
+    <h2><strong>Answer:</strong></h2>
+    <p><strong>Entropy of Original, Encrypted, and Permuted Message (3.1844):</strong> The entropy is the same for the original, encrypted, and permuted messages, which indicates that neither encryption (substitution cipher) nor permutation has increased the uncertainty or randomness of the message. These methods are not very effective in masking frequency patterns, so the message might be vulnerable to frequency analysis attacks.</p>
+    <p><strong>Entropy of XOR Message (3.5297):</strong> The entropy of the XOR message is higher, indicating that the operation has introduced more randomness and uncertainty. This makes the message more difficult to analyze and more secure than the other methods, as it destroys frequency patterns and makes the message more unpredictable.</p>
+    <p>Thus, higher entropy (as in the case of XOR) corresponds to greater security, while lower entropy suggests that the message could be more easily deciphered or analyzed.</p>
+
+    <h2>Question</h2>
+    <p>Discuss how RSA tends to maintain the frequency distribution structure, complicating decryption through its key management.</p>
+    <h2><strong>Answer:</strong></h2>
+    <p>RSA is a public key cipher that, unlike substitution or transposition ciphers, tends to maintain the frequency distribution structure of the encrypted message but with key management that significantly complicates decryption. Here's how it works:</p>
+    <p>RSA, being a mathematical cipher based on modular exponentiation, does not directly modify the frequency of letters in the encrypted message as a substitution cipher (e.g., Caesar cipher) would, where each letter is replaced by another letter according to a predetermined rule. RSA encryption does not change the frequency pattern in the message because each letter or symbol is treated as a number and is transformed through a mathematical function that maintains the structure. For example, a plaintext message with a characteristic frequency distribution (such as the high frequency of letters like "e" in English) will see the same frequency distribution in the ciphertext.</p>
+    <p>The strength of RSA in ensuring security lies in the difficulty of reversing the encryption operation without the private key. Even though the frequency distribution remains unchanged in the encrypted message, RSA uses a public key to encrypt and a private key to decrypt, with a complex mathematical relationship between the two.</p>
+    <p>The RSA encryption process works as follows:</p>
+    <ul>
+        <li>A message (m) is raised to a public exponent and then reduced modulo a large number n, which is the product of two secret prime numbers.</li>
+        <li>The private key, which is linked to the public exponent, is required to correctly decrypt the message. Without the private key, obtaining the original message would be computationally infeasible due to the difficulty of factoring the number n (the product of the two secret primes).</li>
+    </ul>
+    <p>This key management makes RSA very secure, even though it does not hide frequency patterns. Security does not depend on hiding these patterns, but rather on the difficulty of calculating the private key (necessary for decryption) from the public key.</p>
+    <p>Since RSA does not change the frequency distribution of the encrypted message, an attacker might be tempted to use frequency analysis to try to deduce the plaintext message. However, due to the complexity of the mathematics behind RSA (particularly the difficulty of calculating the modular inverse without the private key), an attack attempting to analyze the frequency in the ciphertext would be ineffective.</p>
+
+        <h1>Question: Comparison with AES</h1>
+    <p>
+        In your discussions, compare the way in which AES significantly alters the frequency distribution and entropy of plaintext through complex transformations, including multiple levels of substitution and permutation, as well as an integral XOR operation with a key.
+    </p>
+
+    <h1>Answer:</h1>
+    <p>
+        AES (Advanced Encryption Standard) is one of the most commonly used ciphers for symmetric encryption. It is a block cipher that works with a shared secret key to encrypt and decrypt data. AES is designed to be secure and efficient, and it is widely used in modern security applications, such as VPNs, HTTPS, file encryption, and more.
+    </p>
+
+    <h2>How it works:</h2>
+    <ol>
+        <li><strong>Block Cipher:</strong> AES is a block cipher, meaning it encrypts data in fixed-size blocks. AES uses a 128-bit (16-byte) block at a time, regardless of the message length. If the message is longer than 128 bits, it is split into 128-bit blocks, and each block is encrypted separately.</li>
+        <li><strong>Encryption Keys:</strong> AES supports different key lengths: 128, 192, and 256 bits. The security of AES increases with the length of the key, but all versions of AES are considered secure against current attacks.</li>
+        <li><strong>Encryption Rounds:</strong> AES uses a series of transformations to encrypt data. The number of "rounds" depends on the key length:
+            <ul>
+                <li>AES-128 uses 10 rounds.</li>
+                <li>AES-192 uses 12 rounds.</li>
+                <li>AES-256 uses 14 rounds.</li>
+            </ul>
+            Each round consists of a series of substitution, permutation, combination, and mixing operations:
+            <ul>
+                <li><strong>SubBytes:</strong> Each byte in the data block is replaced using a substitution table (S-Box).</li>
+                <li><strong>ShiftRows:</strong> The rows of the block are cyclically shifted.</li>
+                <li><strong>MixColumns:</strong> The columns of the block are mixed to spread the bits throughout the block.</li>
+                <li><strong>AddRoundKey:</strong> A key derived from the main key is combined with the block through an XOR operation.</li>
+            </ul>
+            After the final round, the encrypted block is output and becomes the ciphertext.
+        </li>
+        <li><strong>Decryption:</strong> The AES decryption process is similar to encryption, but the operations are performed in reverse order. The decryption key is applied to each encrypted block to retrieve the original message.</li>
+    </ol>
+
+    <h2>AES Security:</h2>
+    <ul>
+        <li><strong>Resistant to Attacks:</strong> AES is considered secure against various cryptographic attacks, including brute-force attacks, linear cryptanalysis, and differential cryptanalysis. Since AES has a complex structure of substitution and permutation, it is difficult for an attacker to decrypt the message without the key.</li>
+        <li><strong>Performance:</strong> AES is also very fast and efficient, making it ideal for applications that require high speed, such as real-time encryption of large volumes of data.</li>
+    </ul>
+
+    <h2>Differences Compared to My Implementation</h2>
+    <p>
+        In my code, I am using simpler encryption methods, such as substitution ciphers or operations like XOR. AES stands out for its more advanced key management and significantly more complex encryption structure. The main difference lies in key management: while simpler methods like XOR apply the key directly to each bit or byte of the message, in AES the key undergoes an expansion process that generates different intermediate keys for each encryption round. This approach significantly increases overall security.
+    </p>
+    <p>
+        Furthermore, the complexity of encryption in AES is much greater compared to simpler methods. AES is a block cipher that uses a series of complex operations like <strong>SubBytes</strong>, <strong>ShiftRows</strong>, <strong>MixColumns</strong>, and <strong>AddRoundKey</strong>, all designed to create a high level of confusion and diffusion in the encrypted data. These operations make it much more difficult to spot patterns in the ciphertext, unlike ciphers like XOR or substitution, which may leave traces or patterns that could be exploited in an attack.
+    </p>
+    <p>
+        Regarding resistance to attacks, AES is designed to be resistant to various attack methods, including frequency analysis and brute-force attacks. Its complexity and use of longer keys (up to 256 bits) make it extremely difficult to break. In contrast, methods like XOR and substitution are vulnerable to simpler attacks, such as frequency analysis, where an attacker can search for patterns in the ciphertext to recover the key.
+    </p>
+    <p>
+        Another crucial aspect is the distribution of frequencies in the encrypted data. AES is designed to eliminate any obvious patterns in the ciphertext, making each block appear random, with no evident correlation to the original message. Simpler methods like XOR or substitution, on the other hand, may leave identifiable traces or patterns in the ciphertext, which an attacker could exploit to decrypt the message.
+    </p>
+
+
+
+
+
+
+
+
+
+    <h2>Question: Comparison with AES</h2>
+    <p>
+        In your discussions, compare the way in which AES significantly alters the frequency distribution and entropy of plaintext through complex transformations, including multiple levels of substitution and permutation, as well as an integral XOR operation with a key.
+    </p>
+
+    <h2>Answer:</h2>
+    <p>
+        AES (Advanced Encryption Standard) is one of the most commonly used ciphers for symmetric encryption. It is a block cipher that works with a shared secret key to encrypt and decrypt data. AES is designed to be secure and efficient, and it is widely used in modern security applications, such as VPNs, HTTPS, file encryption, and more.
+    </p>
+
+    <strong>How it works</strong>
+  </br>
+
+    <ol>
+        <li><strong>Block Cipher:</strong> AES is a block cipher, meaning it encrypts data in fixed-size blocks. AES uses a 128-bit (16-byte) block at a time, regardless of the message length. If the message is longer than 128 bits, it is split into 128-bit blocks, and each block is encrypted separately.</li>
+        <li><strong>Encryption Keys:</strong> AES supports different key lengths: 128, 192, and 256 bits. The security of AES increases with the length of the key, but all versions of AES are considered secure against current attacks.</li>
+        <li><strong>Encryption Rounds:</strong> AES uses a series of transformations to encrypt data. The number of "rounds" depends on the key length:
+            <ul>
+                <li>AES-128 uses 10 rounds.</li>
+                <li>AES-192 uses 12 rounds.</li>
+                <li>AES-256 uses 14 rounds.</li>
+            </ul>
+            Each round consists of a series of substitution, permutation, combination, and mixing operations:
+            <ul>
+                <li><strong>SubBytes:</strong> Each byte in the data block is replaced using a substitution table (S-Box).</li>
+                <li><strong>ShiftRows:</strong> The rows of the block are cyclically shifted.</li>
+                <li><strong>MixColumns:</strong> The columns of the block are mixed to spread the bits throughout the block.</li>
+                <li><strong>AddRoundKey:</strong> A key derived from the main key is combined with the block through an XOR operation.</li>
+            </ul>
+            After the final round, the encrypted block is output and becomes the ciphertext.
+        </li>
+        <li><strong>Decryption:</strong> The AES decryption process is similar to encryption, but the operations are performed in reverse order. The decryption key is applied to each encrypted block to retrieve the original message.</li>
+    </ol>
+
+    <strong>AES Security:</strong>
+    <ul>
+        <li><strong>Resistant to Attacks:</strong> AES is considered secure against various cryptographic attacks, including brute-force attacks, linear cryptanalysis, and differential cryptanalysis. Since AES has a complex structure of substitution and permutation, it is difficult for an attacker to decrypt the message without the key.</li>
+        <li><strong>Performance:</strong> AES is also very fast and efficient, making it ideal for applications that require high speed, such as real-time encryption of large volumes of data.</li>
+    </ul>
+
+    <br/>
+
+    <strong>Differences Compared to My Implementation</strong>
+    <p>
+        In my code, I am using simpler encryption methods, such as substitution ciphers or operations like XOR. AES stands out for its more advanced key management and significantly more complex encryption structure. The main difference lies in key management: while simpler methods like XOR apply the key directly to each bit or byte of the message, in AES the key undergoes an expansion process that generates different intermediate keys for each encryption round. This approach significantly increases overall security.
+    </p>
+    <p>
+        Furthermore, the complexity of encryption in AES is much greater compared to simpler methods. AES is a block cipher that uses a series of complex operations like <strong>SubBytes</strong>, <strong>ShiftRows</strong>, <strong>MixColumns</strong>, and <strong>AddRoundKey</strong>, all designed to create a high level of confusion and diffusion in the encrypted data. These operations make it much more difficult to spot patterns in the ciphertext, unlike ciphers like XOR or substitution, which may leave traces or patterns that could be exploited in an attack.
+    </p>
+    <p>
+        Regarding resistance to attacks, AES is designed to be resistant to various attack methods, including frequency analysis and brute-force attacks. Its complexity and use of longer keys (up to 256 bits) make it extremely difficult to break. In contrast, methods like XOR and substitution are vulnerable to simpler attacks, such as frequency analysis, where an attacker can search for patterns in the ciphertext to recover the key.
+    </p>
+    <p>
+        Another crucial aspect is the distribution of frequencies in the encrypted data. AES is designed to eliminate any obvious patterns in the ciphertext, making each block appear random, with no evident correlation to the original message. Simpler methods like XOR or substitution, on the other hand, may leave identifiable traces or patterns in the ciphertext, which an attacker could exploit to decrypt the message.
+    </p>
+
+  </div>
+
+
+
+<script>
     let chiaveSostituzione = {};
     let chiaveInversa = {};
-    let chiaveXOR = ""; // Chiave XOR generata dinamicamente
-
     const lettere = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 
-    // Funzione per generare una chiave di sostituzione casuale
+    let graficoOriginale = null;
+    let graficoCifrato = null;
+
+
     function generaChiave() {
       let lettereMappate = [...lettere];
-      lettereMappate = lettereMappate.sort(() => Math.random() - 0.5); // Mischia le lettere
+      for (let i = lettereMappate.length - 1; i > 0; i--) {
+        const j = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * (i + 1));
+        [lettereMappate[i], lettereMappate[j]] = [lettereMappate[j], lettereMappate[i]];
+      }
       chiaveSostituzione = {};
       chiaveInversa = {};
 
@@ -165,112 +434,122 @@
         chiaveInversa[lettereMappate[i]] = lettere[i];
       }
 
-      // Genera la chiave XOR casuale (ad esempio una sequenza di lettere casuali)
-      chiaveXOR = generaChiaveCasuale(16); // 16 caratteri per la chiave XOR
-
-      document.getElementById('key').innerText = `Chiave di sostituzione: ${JSON.stringify(chiaveSostituzione, null, 2)}\nChiave XOR: ${chiaveXOR}`;
+      document.getElementById('key').innerText = `Chiave di sostituzione: ${JSON.stringify(chiaveSostituzione, null, 2)}`;
     }
 
-    // Funzione per generare una chiave XOR casuale
-    function generaChiaveCasuale(lunghezza) {
-      const caratteri = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let chiave = "";
-      for (let i = 0; i < lunghezza; i++) {
-        chiave += caratteri.charAt(Math.floor(Math.random() * caratteri.length));
-      }
-      return chiave;
-    }
-
-    // Funzione XOR
-    function xorWithKey(text, key) {
-      let result = "";
-      for (let i = 0; i < text.length; i++) {
-        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-      }
-      return result;
-    }
-
-    // Funzione per cifrare il messaggio
     function cifraMessaggio() {
       const messaggio = document.getElementById('inputMessaggio').value.toUpperCase().replace(/[^A-Z ]/g, '');
-
       let messaggioCifrato = "";
 
-      // Cifra il testo con la chiave di sostituzione
-      for (let i = 0; i < messaggio.length; i++) {
-        const lettera = messaggio[i];
-        if (lettera === " ") {
-          messaggioCifrato += " ";
-        } else {
-          messaggioCifrato += chiaveSostituzione[lettera];
-        }
+      for (let lettera of messaggio) {
+        messaggioCifrato += lettera === " " ? " " : chiaveSostituzione[lettera];
       }
 
-      // Applica XOR al messaggio cifrato con la chiave XOR generata
-      messaggioCifrato = xorWithKey(messaggioCifrato, chiaveXOR);
-
-      // Inverti l'ordine delle lettere cifrate
+      // Permutazione (inverti la stringa)
       let messaggioCifratoInvertito = messaggioCifrato.split('').reverse().join('');
+      
+      // Operazione XOR (cifra)
+      let chiaveXOR = 0xAA;  // Chiave XOR esempio (puoi cambiarla)
+      let messaggioXOR = cifraConXOR(messaggioCifrato, chiaveXOR);
 
       document.getElementById('messaggioCifrato').innerText = messaggioCifrato;
       document.getElementById('messaggioCifratoInvertito').innerText = messaggioCifratoInvertito;
+      document.getElementById('messaggioCifratoXOR').innerText = messaggioXOR;  // Aggiungi il messaggio cifrato con XOR
+
+      aggiornaGrafici(messaggio, messaggioCifrato);
+      calcolaEntropia(messaggio, messaggioCifrato, messaggioCifratoInvertito, messaggioXOR);
     }
 
-    // Funzione per decifrare il messaggio
     function decifraMessaggio() {
-      const messaggioDecifratoInvertito = document.getElementById('inputMessaggioDecifra').value;
+      const messaggioCifratoInvertito = document.getElementById('inputMessaggioDecifra').value;
+      let messaggioCifrato = messaggioCifratoInvertito.split('').reverse().join(''); 
+      let messaggioDecifrato = "";
 
-      // Inverti il messaggio cifrato
-      let messaggioDecifrato = messaggioDecifratoInvertito.split('').reverse().join('');
+      for (let lettera of messaggioCifrato) {
+        messaggioDecifrato += lettera === " " ? " " : chiaveInversa[lettera];
+      }
 
-      // Applica XOR al messaggio decifrato con la stessa chiave XOR
-      messaggioDecifrato = xorWithKey(messaggioDecifrato, chiaveXOR);
+      document.getElementById('messaggioDecifrato').innerText = messaggioDecifrato;
+    }
 
-      let messaggioOriginale = "";
+    function cifraConXOR(messaggio, chiave) {
+      let risultato = '';
+      for (let i = 0; i < messaggio.length; i++) {
+        risultato += String.fromCharCode(messaggio.charCodeAt(i) ^ chiave);
+      }
+      return risultato;
+    }
 
-      for (let i = 0; i < messaggioDecifrato.length; i++) {
-        const lettera = messaggioDecifrato[i];
-        if (lettera === " ") {
-          messaggioOriginale += " ";
-        } else {
-          messaggioOriginale += chiaveInversa[lettera];
+    function aggiornaGrafici(messaggio, messaggioCifrato) {
+      const datiFrequenzaOriginale = calcolaFrequenza(messaggio);
+      const datiFrequenzaCifrato = calcolaFrequenza(messaggioCifrato);
+
+      // Aggiorna grafico originale
+      if (graficoOriginale) {
+        graficoOriginale.destroy();
+      }
+      graficoOriginale = new Chart(document.getElementById('graficoOriginale').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: lettere,
+          datasets: [{
+            label: 'Frequenza Lettere',
+            data: lettere.map(lettera => datiFrequenzaOriginale[lettera] || 0),
+            backgroundColor: '#3498db',
+          }]
+        }
+      });
+
+      // Aggiorna grafico cifrato
+      if (graficoCifrato) {
+        graficoCifrato.destroy();
+      }
+      graficoCifrato = new Chart(document.getElementById('graficoCifrato').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: lettere,
+          datasets: [{
+            label: 'Frequenza Lettere',
+            data: lettere.map(lettera => datiFrequenzaCifrato[lettera] || 0),
+            backgroundColor: '#e74c3c',
+          }]
+        }
+      });
+    }
+
+    function calcolaFrequenza(messaggio) {
+      let frequenze = {};
+      for (let lettera of messaggio) {
+        if (lettera !== " ") {
+          frequenze[lettera] = (frequenze[lettera] || 0) + 1;
         }
       }
-
-      document.getElementById('messaggioDecifrato').innerText = messaggioOriginale;
+      return frequenze;
     }
 
-    // Funzione per calcolare l'entropia
-    function calcolaEntropia() {
-      const messaggioOriginale = document.getElementById('inputMessaggio').value.toUpperCase().replace(/[^A-Z ]/g, '');
-      const messaggioCifrato = document.getElementById('messaggioCifrato').innerText;
-
-      const entropiaOriginale = entropia(messaggioOriginale);
-      const entropiaCifrato = entropia(messaggioCifrato);
-
-      document.getElementById('entropiaOriginale').innerText = `Entropia Messaggio Originale: ${entropiaOriginale}`;
-      document.getElementById('entropiaCifrato').innerText = `Entropia Messaggio Cifrato: ${entropiaCifrato}`;
-    }
-
-    // Funzione per calcolare l'entropia di un testo
-    function entropia(messaggio) {
-      const frequenze = {};
-      for (let char of messaggio) {
-        if (char !== " ") {
-          frequenze[char] = (frequenze[char] || 0) + 1;
+    function calcolaEntropia(messaggioOriginale, messaggioCifrato, messaggioCifratoInvertito, messaggioXOR) {
+      function calcolaEntropiaDati(messaggio) {
+        const frequenza = calcolaFrequenza(messaggio);
+        const totale = messaggio.length;
+        let entropia = 0;
+        for (let lettera in frequenza) {
+          let prob = frequenza[lettera] / totale;
+          entropia -= prob * Math.log2(prob);
         }
+        return entropia;
       }
 
-      let entropia = 0;
-      const lunghezza = messaggio.length;
+      const entropiaOriginale = calcolaEntropiaDati(messaggioOriginale);
+      const entropiaCifrato = calcolaEntropiaDati(messaggioCifrato);
+      const entropiaPermutato = calcolaEntropiaDati(messaggioCifratoInvertito);
+      const entropiaXOR = calcolaEntropiaDati(messaggioXOR);
 
-      for (let lettera in frequenze) {
-        const prob = frequenze[lettera] / lunghezza;
-        entropia -= prob * Math.log2(prob);
-      }
-
-      return entropia;
+      document.getElementById('entropiaOriginale').innerText = `Entropia Messaggio Originale: ${entropiaOriginale.toFixed(4)}`;
+      document.getElementById('entropiaCifrato').innerText = `Entropia Messaggio Cifrato: ${entropiaCifrato.toFixed(4)}`;
+      document.getElementById('entropiaPermutato').innerText = `Entropia Messaggio Permutato: ${entropiaPermutato.toFixed(4)}`;
+      document.getElementById('entropiaXOR').innerText = `Entropia Messaggio XOR: ${entropiaXOR.toFixed(4)}`;
     }
+
   </script>
 
 </body>

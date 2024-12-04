@@ -273,6 +273,56 @@
         <h2>6. Calculation and Visualization of the Sampling Variance Distribution</h2>
         <p>The distribution of the sampling variance is visualized through the bars representing the variances in the charts. Each bar represents the variance of a particular subset, and the overall distribution of these variances shows how they vary across the different sampled subsets.</p>
         <p>The chart helps to visually understand the variability between the various subsets and the distribution of the variance of the sampled data.</p>
+
+
+
+        <h1>Simulation of Random Samples from a Uniform Distribution</h1>
+    <p>
+        In the current simulation, we work with subsets of random samples generated from a uniform distribution between 0 and 1. For a uniform distribution between 0 and 1, the theoretical mean is:
+    </p>
+    <p>
+        \[
+        \mu_{\text{theoretical}} = \frac{a + b}{2} = \frac{0 + 1}{2} = 0.5
+        \]
+    </p>
+    <p>
+        The theoretical variance for a uniform distribution between 0 and 1 is:
+    </p>
+    <p>
+        \[
+        \sigma_{\text{theoretical}}^2 = \frac{(b - a)^2}{12} = \frac{(1 - 0)^2}{12} = \frac{1}{12} \approx 0.0833
+        \]
+    </p>
+    <p>
+        In this simulation, I am generating \(m\) subsets, each consisting of \(n\) random samples drawn from this theoretical uniform distribution. For each subset, the mean and variance are calculated. The sample mean for each subset is calculated as the mean of the \(n\) random samples, while the variance is calculated based on how the individual samples deviate from the mean of that subset.
+    </p>
+    <p>
+        According to the law of large numbers, as \(n\) (the number of samples per subset) increases, the sample mean should approach the theoretical mean (0.5). This is an example of the law of large numbers, which states that as the number of samples increases, the sample mean tends to approach the true population mean. In your case, if \(n\) is sufficiently large, the mean of the means from all \(m\) subsets (i.e., the average of the means) should approximate the theoretical mean of 0.5.
+    </p>
+    <p>
+        Regarding the relationship between the sample variance and the theoretical variance, the variance for each subset depends on the distribution of the samples within that subset. It is expected that this variance will be close to the theoretical variance as the number of samples in each subset (\(n\)) increases. The variance of the sample means, which represents the variance of the means across all \(m\) subsets, is often called the sampling variance. According to the central limit theorem, if \(m\) is large and the sample size \(n\) is sufficiently large, the sampling distribution of the sample mean will be approximately normal with a mean equal to the theoretical mean (0.5) and a variance given by:
+    </p>
+    <p>
+        \[
+        \text{Variance of Means} = \frac{\sigma_{\text{theoretical}}^2}{n} = \frac{1}{12n}
+        \]
+    </p>
+    <p>
+        Therefore, as \(n\) increases, the variance of the means should decrease, and the sample means will become more concentrated around the theoretical mean.
+    </p>
+    <p>
+        From an empirical perspective, the mean of the means that you calculate in the simulation should be close to 0.5 if the number of subsets (\(m\)) is sufficiently large and the sample size (\(n\)) is sufficiently high. Similarly, the variance of the means that you calculate should decrease as the sample size (\(n\)) increases and should be approximately equal to the theoretical variance divided by \(n\).
+    </p>
+    <p>
+        From a practical perspective, the observed sample mean will fluctuate around the theoretical mean, especially if the sample size \(n\) is small. However, as \(n\) increases, the observed mean should stabilize around the theoretical mean (0.5). The variance of the means will be greater if \(n\) is small, because the sample means will be more spread out. But as \(n\) increases, this variance will decrease and converge to the theoretical value of \(\frac{1}{12n}\). If \(m\) is large, you will see that the distribution of the sample means will tend to resemble a normal distribution centered around 0.5, with less dispersion as \(n\) increases.
+    </p>
+
+
+
+
+
+
+
     </section>
     
     
