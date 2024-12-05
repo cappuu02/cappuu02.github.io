@@ -63,57 +63,28 @@
             width: 100%;
         }
 
-        .control {
-            margin: 20px;
-            flex: 1;
-            min-width: 250px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        input,
+        button {
+            padding: 10px;
+            margin: 10px 5px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .control label {
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #34495e; /* Slightly lighter text for labels */
-        }
-
-        .control input[type="number"], .control input[type="button"] {
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-            border: 1px solid #bdc3c7;
-        }
-
-        .control input[type="number"] {
-            background-color: #ffffff;
-        }
-
-        .control input[type="button"] {
-            background-color: #3498db; /* Bright blue */
-            color: white;
-            border: none;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .control input[type="button"]:hover {
-            background-color: #2980b9; /* Slightly darker blue on hover */
+        input,
+        button {
+            padding: 10px;
+            margin: 10px 5px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         /* Canvas */
         canvas {
-            display: block;
-            margin: 40px auto;
-            background-color: #ffffff;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #007bff;
+            background-color: white;
         }
 
         /* Results Section */
@@ -162,6 +133,9 @@
         nav a:hover {
             color: #3498db;
         }
+        .titolo{
+            color: #007bff;
+        }
 
     </style>
     
@@ -169,7 +143,7 @@
 </head>
 <body>
 
-    <h1>Hacker Attack Simulation</h1>
+    <h1 class="titolo">Hacker Attack Simulation</h1>
     <h2>Luca Capuccini</h2>
     <b><p>Matr. 2200930</p></b>
 
@@ -200,7 +174,7 @@
     <canvas id="lineChart" width="1200" height="400"></canvas>
     <div id="averageResults"></div>
 
-    <h1>Document</h1>
+    <h1 class="titolo">Document</h1>
     <b><p>Observation about the relationship between (mu, sigma^2) and time,<br> by considering the last time and one generic interval time.</p></b>
 
     <embed src="/Homework2/PDF/Research Homework 2.pdf" type="application/pdf" width="100%" height="1000px">
@@ -261,7 +235,7 @@
             ctx.moveTo(padding, 0);
             ctx.lineTo(padding, ctx.canvas.height - padding);
 
-            ctx.strokeStyle = "#000000";
+            ctx.strokeStyle = "#007bff";
             ctx.lineWidth = 2;
             ctx.stroke();
 
