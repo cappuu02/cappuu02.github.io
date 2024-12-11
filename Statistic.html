@@ -9,6 +9,7 @@
     <!-- Inline CSS for styling -->
     <style>
         /* General Page Styling */
+        
         body,
         html {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,8 +18,8 @@
             background-color: #f4f4f9;
             height: 100%;
         }
-
         /* Navbar Styling */
+        
         .navbar {
             position: absolute;
             top: 0;
@@ -32,78 +33,84 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
-
+        
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
         }
-
+        
         .nav-links a {
             color: white;
             padding: 0 1rem;
             text-decoration: none;
             font-size: 1rem;
         }
-
+        
         .nav-links a:hover {
             background-color: #555;
             padding: 0.5rem;
             border-radius: 5px;
         }
-
         /* Container for cards */
+        
         .container {
             display: flex;
             justify-content: center;
             align-items: flex-start;
             gap: 20px;
             padding: 2rem;
-            padding-top: 100px; /* Space to avoid overlap with the navbar */
+            padding-top: 100px;
+            /* Space to avoid overlap with the navbar */
             background-color: #eaeaea;
-            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            flex-wrap: wrap;
+            /* Allow wrapping for smaller screens */
             height: auto;
         }
-
         /* Card Styling */
+        
         .card {
             background-color: white;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 2rem;
             width: 300px;
-            height: 500px; /* Fixed height for all cards */
+            height: 500px;
+            /* Fixed height for all cards */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             transition: transform 0.3s ease-in-out;
         }
-
+        
         .card:hover {
             transform: translateY(-10px);
         }
-
+        
         .card h2 {
             font-size: 1.8rem;
             color: #333;
             margin-bottom: 0.5rem;
-            text-align: center; /* Center align title */
+            text-align: center;
+            /* Center align title */
         }
-
+        
         .card h3 {
             font-size: 1.2rem;
             color: #555;
             margin-bottom: 1rem;
-            text-align: center; /* Center align subtitle */
+            text-align: center;
+            /* Center align subtitle */
         }
-
+        
         .card p {
             font-size: 1rem;
             color: #666;
             line-height: 1.6;
             flex-grow: 1;
-            text-align: center; /* Center align text */
+            text-align: center;
+            /* Center align text */
         }
-
+        
         .card a {
             display: inline-block;
             margin-top: 1rem;
@@ -112,19 +119,21 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            text-align: center; /* Center align button text */
+            text-align: center;
+            /* Center align button text */
             transition: background-color 0.3s;
         }
-
+        
         .card a:hover {
             background-color: #0056b3;
         }
+        
         nav ul {
             list-style: none;
             display: flex;
             gap: 30px;
         }
-
+        
         nav ul li a {
             text-decoration: none;
             color: #fff;
@@ -132,12 +141,12 @@
             font-size: 18px;
             transition: color 0.3s ease, transform 0.3s ease;
         }
-
+        
         nav ul li a:hover {
-            color: #6cb6f3; /* Light blue on hover */
+            color: #6cb6f3;
+            /* Light blue on hover */
             transform: scale(1.1);
         }
-        
     </style>
 </head>
 
@@ -181,7 +190,8 @@
         <div class="card">
             <h2>Homework 4</h2>
             <h3>Hackers and attacks on computer systems</h3>
-            <p>Brownian Distribution: In this context, each jump is represented by the hacker gaining or losing control of a system. Additionally, this assignment includes research on the relationship between statistical independence and the Brownian distribution, particularly in relation to Donsker's theorem.</p>
+            <p>Brownian Distribution: In this context, each jump is represented by the hacker gaining or losing control of a system. Additionally, this assignment includes research on the relationship between statistical independence and the Brownian distribution,
+                particularly in relation to Donsker's theorem.</p>
             <a href="./Homework4/HMW4.html">Brownian</a>
         </div>
         <div class="card">
@@ -199,8 +209,7 @@
         <div class="card">
             <h2>Homework 7</h2>
             <h3>Distribution of the sampling average</h3>
-            <p>Determine the average of the distribution of the averages of the samples, and the variance, 
-                discussing the observed relationship with the mean and variance of the parent (theoretical) distribution.</p>
+            <p>Determine the average of the distribution of the averages of the samples, and the variance, discussing the observed relationship with the mean and variance of the parent (theoretical) distribution.</p>
             <a href="./Homework7/HWM7.html">Distribution sampling average</a>
         </div>
         <div class="card">
@@ -212,18 +221,24 @@
         <div class="card">
             <h2>Homework about Cryptography</h2>
             <h3></h3>
-            <p> The exercise investigates the behavior of modular exponentiation for different values of the generator  g and modulus n. The goal is to visualize and compare the distribution of residues generated by varying these parameters, and to assess their statistical properties, particularly in the context of cryptographic security</p>
+            <p> The exercise investigates the behavior of modular exponentiation for different values of the generator g and modulus n. The goal is to visualize and compare the distribution of residues generated by varying these parameters, and to assess
+                their statistical properties, particularly in the context of cryptographic security</p>
             <a href="./Homework_Optional/Optional.html">HMW about cryptographic</a>
         </div>
         <div class="card">
             <h2>Homework 9 - Distribution of the sampling variance</h2>
             <h3></h3>
-            <p>Calculate many sample and save for each of these the avg and variance.
-                Calculate the varianza of average and variance of the variance and show the distribution
+            <p>Calculate many sample and save for each of these the avg and variance. Calculate the varianza of average and variance of the variance and show the distribution
             </p>
             <a href="./Homework9/HMW9.html">Distribution sampling variance</a>
             <a href="./Homework9/AES.html">AES Alghoritm</a>
             <a href="./Homework9/AES_mapping.html">AES  Mapping Alghoritm</a>
+        </div>
+        <div class="card">
+            <h2>Homework 10 - Integral Homework</h2>
+            <h3></h3>
+            <p> Generate a function (continuous or discontinuous) and calculate two different types of integral (Reimann and lesbegue)</p>
+            <a href="./Homework10/HMW10.html">Lesbegue VS Riemann</a>
         </div>
     </div>
 
