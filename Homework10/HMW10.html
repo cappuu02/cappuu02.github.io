@@ -4,300 +4,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLS Homework</title>
+    <title>Homework 10</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            background-color: #f4f4f4;
+         :root {
+            --primary-blue: #3498db;
+            --secondary-blue: #2980b9;
+            --light-blue: #87ceeb;
+            --background-color: #f4f7f6;
+            --text-color: #333;
         }
         
-        .container {
-            width: 80%;
-            max-width: 1200px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-blue);
+            padding: 15px 50px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .navbar-item {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar-item:hover {
+            color: var(--light-blue);
         }
         
         h1 {
-            margin-top: 0;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 5px;
             text-align: center;
+            color: var(--secondary-blue);
+            padding: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
-        .section {
-            margin-bottom: 40px;
+        h2 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin: 20px 0;
         }
         
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        input {
-            margin-bottom: 10px;
-            padding: 8px;
-            width: calc(100% - 16px);
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
         }
         
         button {
-            padding: 10px 20px;
-            background-color: #36A2EB;
+            background-color: var(--primary-blue);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 1rem;
+            padding: 12px 25px;
+            border-radius: 5px;
             cursor: pointer;
-            display: block;
-            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         
         button:hover {
-            background-color: #2980b9;
+            background-color: var(--secondary-blue);
+            transform: scale(1.05);
+        }
+        
+        .canvas-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 900px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .integration-container {
+            display: none;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .integration-graph {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .integration-result {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--secondary-blue);
         }
         
         canvas {
-            display: block;
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        .large-canvas {
-            width: 100% !important;
-            height: 400px !important;
-        }
-        
-        .chart-container {
-            margin-top: 20px;
-            padding: 20px;
             background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            border-radius: 5px;
+            border: 1px solid var(--light-blue);
         }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="section">
-            <h1>Certificate Analysis</h1>
-            <p>Insert a specific certificate</p>
-            <label for="website">Website Address</label>
-            <input id="website" placeholder="www.example.com" />
-            <button onclick="fetchCertificateData()">Analyze</button>
+
+
+    <h1>Homework 10 - Luca Capuccini</h1>
+    <h2>Practical Application</h2>
+
+    <div class="button-container">
+        <button id="plot-continuous">Plot Continuous Function</button>
+        <button id="plot-discontinuous">Plot Discontinuous Function</button>
+    </div>
+
+    <div class="canvas-container" id="canvas-container" style="display: none; text-align: center;">
+        <h3 id="function-display"></h3>
+        <canvas id="function-canvas" width="800" height="400"></canvas>
+    </div>
+
+    <div class="integration-container" style="display: none; margin-top: 20px;">
+        <div class="integration-graph">
+            <h3>Integrazione alla Riemann</h3>
+            <canvas id="riemann-canvas" width="500" height="300"></canvas>
+            <p id="riemann-value" class="integration-result"></p>
         </div>
-
-        <div class="section chart-container">
-            <h2>Certificate Insights</h2>
-            <p>Certificate Issuer Distribution</p>
-            <canvas id="issuerDistribution" width="400" height="200"></canvas>
-
-            <p>Certificate Validity Periods</p>
-            <canvas id="validityPeriods" class="large-canvas"></canvas>
-
-            <p>Geographic Distribution of Certificates</p>
-            <canvas id="geoDistribution" width="400" height="200"></canvas>
-
-            <p>Types of Encryption Used</p>
-            <canvas id="encryptionTypes" class="large-canvas"></canvas>
-        </div>
-
-        <div class="section">
-            <h1>Statistical Analysis</h1>
-            <p>
-                <label>Mean and Median Certificate Validity Duration</label>
-                <input id="meanValidity" placeholder="Mean" disabled />
-                <input id="medianValidity" placeholder="Median" disabled />
-            </p>
-            <p>
-                <label>Most Common Certificate Authorities</label>
-                <input id="commonAuthorities" placeholder="Most Common" disabled />
-            </p>
-            <p>
-                <label>Distribution of Key Length</label>
-                <canvas id="keyLengthDistribution" width="400" height="200"></canvas>
-            </p>
-            <p>
-                <label>Proportion of Short vs. Long-Lived Certificates</label>
-                <canvas id="certificateLifespan" width="400" height="200"></canvas>
-            </p>
+        <div class="integration-graph">
+            <h3>Integrazione di Lebesgue-Stieltjes</h3>
+            <canvas id="lebesgue-canvas" width="500" height="300"></canvas>
+            <p id="lebesgue-value" class="integration-result"></p>
         </div>
     </div>
 
     <script>
-        async function fetchCertificateData() {
-            const website = document.getElementById('website').value;
-            if (!website) {
-                alert('Please enter a website address.');
-                return;
+        // The entire existing JavaScript remains unchanged
+        // (Copying the entire script from the original document)
+        const continuousFunctions = [{
+            exec: "Math.sin(x)",
+            latex: "\\sin(x)"
+        }, {
+            exec: "Math.cos(x)",
+            latex: "\\cos(x)"
+        }, {
+            exec: "x**2",
+            latex: "x^2"
+        }, {
+            exec: "Math.exp(x / 5)",
+            latex: "e^{x / 5}"
+        }, {
+            exec: "Math.sqrt(Math.abs(x))",
+            latex: "\\sqrt{|x|}"
+        }, {
+            exec: "Math.log(Math.abs(x) + 1)",
+            latex: "\\ln(|x| + 1)"
+        }, {
+            exec: "Math.tan(x / 10)",
+            latex: "\\tan(x / 10)"
+        }, {
+            exec: "Math.pow(x, 3) - 2*x",
+            latex: "x^3 - 2x"
+        }, {
+            exec: "1 / (x**2 + 1)",
+            latex: "\\frac{1}{x^2 + 1}"
+        }];
+
+        const discontinuousFunctions = [{
+            exec: "(x < 0 ? Math.sin(x) : Math.random() * 10 - 5)",
+            latex: "(x < 0 ? \\sin(x) : \\text{random}\\cdot10 - 5)"
+        }, {
+            exec: "(Math.abs(Math.floor(x) % 5) < 1 ? 10 : -10)",
+            latex: "(|\\lfloor x \\rfloor \\mod 5| < 1 ? 10 : -10)"
+        }, {
+            exec: "(x < -5 ? Math.random() * 5 : (x > 5 ? Math.sin(x)*5 : 0))",
+            latex: "(x < -5 ? \\text{random}\\cdot5 : (x > 5 ? \\sin(x)\\cdot5 : 0))"
+        }, {
+            exec: "(x < 0 ? Math.cos(x)*5 : Math.sin(x)*5)",
+            latex: "(x < 0 ? \\cos(x)\\cdot5 : \\sin(x)\\cdot5)"
+        }];
+
+        const xMin = -10,
+            xMax = 10,
+            yMin = -10,
+            yMax = 10;
+
+        function mapXtoCanvas(x, xMin, xMax, width) {
+            return (x - xMin) / (xMax - xMin) * width;
+        }
+
+        function mapYtoCanvas(y, yMin, yMax, height) {
+            return height - (y - yMin) / (yMax - yMin) * height;
+        }
+
+        function drawAxes(ctx, xMin, xMax, yMin, yMax) {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            const width = ctx.canvas.width;
+            const height = ctx.canvas.height;
+
+            const xAxisY = mapYtoCanvas(0, yMin, yMax, height);
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, xAxisY);
+            ctx.lineTo(width, xAxisY);
+            // Frecce asse X
+            ctx.lineTo(width - 10, xAxisY - 5);
+            ctx.moveTo(width, xAxisY);
+            ctx.lineTo(width - 10, xAxisY + 5);
+
+            const yAxisX = mapXtoCanvas(0, xMin, xMax, width);
+            ctx.moveTo(yAxisX, height);
+            ctx.lineTo(yAxisX, 0);
+            // Frecce asse Y
+            ctx.lineTo(yAxisX - 5, 10);
+            ctx.moveTo(yAxisX, 0);
+            ctx.lineTo(yAxisX + 5, 10);
+            ctx.stroke();
+
+            // Etichette
+            ctx.font = "12px Arial";
+            ctx.fillStyle = "#000";
+            ctx.fillText("X", width - 15, xAxisY - 10);
+            ctx.fillText("Y", yAxisX + 10, 15);
+        }
+
+        function drawGraph(ctx, func, xMin, xMax, yMin, yMax) {
+            drawAxes(ctx, xMin, xMax, yMin, yMax);
+
+            const width = ctx.canvas.width;
+            const height = ctx.canvas.height;
+
+            ctx.strokeStyle = "#309191";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            const steps = 1000;
+            const dx = (xMax - xMin) / steps;
+            let firstPoint = true;
+
+            for (let i = 0; i <= steps; i++) {
+                const x = xMin + i * dx;
+                const y = func(x);
+                const cx = mapXtoCanvas(x, xMin, xMax, width);
+                const cy = mapYtoCanvas(y, yMin, yMax, height);
+                if (firstPoint) {
+                    ctx.moveTo(cx, cy);
+                    firstPoint = false;
+                } else {
+                    ctx.lineTo(cx, cy);
+                }
+            }
+            ctx.stroke();
+        }
+
+        function calculateRiemannIntegral(func, xMin, xMax, n = 20000) {
+            const dx = (xMax - xMin) / n;
+            let integral = 0;
+            for (let i = 0; i < n; i++) {
+                const x_mid = xMin + (i + 0.5) * dx;
+                integral += func(x_mid) * dx;
+            }
+            return integral;
+        }
+
+        function calculateLebesgueIntegral(func, xMin, xMax, yMin, yMax, nX = 20000, nY = 2000) {
+            const dx = (xMax - xMin) / nX;
+            const xValues = [];
+            for (let i = 0; i < nX; i++) {
+                const x = xMin + i * dx;
+                xValues.push(func(x));
             }
 
-            try {
-                // Placeholder for fetching certificate data (e.g., via an API)
-                const data = await simulateFetchCertificateData(website);
+            let fMax = -Infinity;
+            let fMin = Infinity;
+            for (let val of xValues) {
+                if (val > fMax) fMax = val;
+                if (val < fMin) fMin = val;
+            }
 
-                // Process and display the data
-                displayIssuerDistribution(data.issuerDistribution);
-                displayValidityPeriods(data.validityPeriods);
-                displayGeoDistribution(data.geoDistribution);
-                displayEncryptionTypes(data.encryptionTypes);
-                calculateStatistics(data);
-            } catch (error) {
-                console.error('Error fetching certificate data:', error);
-                alert('Could not fetch certificate data.');
+            const positiveMax = Math.max(fMax, 0);
+            const negativeMin = Math.min(fMin, 0);
+
+            const dyPos = positiveMax > 0 ? positiveMax / nY : 0;
+            const dyNeg = negativeMin < 0 ? Math.abs(negativeMin) / nY : 0;
+
+            let integralPos = 0;
+            if (positiveMax > 0) {
+                for (let j = 0; j < nY; j++) {
+                    const t = j * dyPos;
+                    let count = 0;
+                    for (let val of xValues) {
+                        if (val > t) count++;
+                    }
+                    const measure = count * dx;
+                    integralPos += measure * dyPos;
+                }
+            }
+
+            let integralNeg = 0;
+            if (negativeMin < 0) {
+                for (let j = 0; j < nY; j++) {
+                    const u = j * dyNeg;
+                    let count = 0;
+                    for (let val of xValues) {
+                        if (val < -u) count++;
+                    }
+                    const measure = count * dx;
+                    integralNeg += measure * dyNeg;
+                }
+            }
+
+            const integral = integralPos - integralNeg;
+            return integral;
+        }
+
+        function drawRiemannIntegration(ctx, func, xMin, xMax, yMin, yMax, numBars) {
+            drawAxes(ctx, xMin, xMax, yMin, yMax);
+            const width = ctx.canvas.width;
+            const height = ctx.canvas.height;
+
+            const barWidth = (xMax - xMin) / numBars;
+            ctx.strokeStyle = "rgba(50, 150, 250, 1)";
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < numBars; i++) {
+                const xStart = xMin + i * barWidth;
+                const xMid = xStart + barWidth / 2;
+                const yValue = func(xMid);
+
+                const cX = mapXtoCanvas(xStart, xMin, xMax, width);
+                const cW = mapXtoCanvas(xStart + barWidth, xMin, xMax, width) - cX;
+                const cY = mapYtoCanvas(yValue, yMin, yMax, height);
+                const baseY = mapYtoCanvas(0, yMin, yMax, height);
+
+                ctx.strokeRect(cX, Math.min(cY, baseY), cW, Math.abs(baseY - cY));
             }
         }
 
-        function simulateFetchCertificateData(website) {
-            // Simulate fetching data for demonstration purposes
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve({
-                        issuerDistribution: {
-                            "Issuer A": 40,
-                            "Issuer B": 30,
-                            "Issuer C": 30
-                        },
-                        validityPeriods: [365, 730, 1095, 365],
-                        geoDistribution: {
-                            "US": 50,
-                            "EU": 30,
-                            "APAC": 20
-                        },
-                        encryptionTypes: {
-                            "RSA": 60,
-                            "ECDSA": 40
-                        },
-                        keyLengths: [2048, 2048, 4096, 2048],
-                    });
-                }, 1000);
-            });
+        // Funzione modificata per mostrare rettangoli più stretti senza cambiare il calcolo dell'integrale
+        function drawLebesgueIntegration(ctx, func, xMin, xMax, yMin, yMax, nY = 50, nX = 1000) {
+            drawAxes(ctx, xMin, xMax, yMin, yMax);
+            const width = ctx.canvas.width;
+            const height = ctx.canvas.height;
+
+            const dx = (xMax - xMin) / nX;
+            const dy = (yMax - yMin) / nY;
+
+            const xSamples = [];
+            for (let i = 0; i <= nX; i++) {
+                xSamples[i] = func(xMin + i * dx);
+            }
+
+            ctx.strokeStyle = "rgba(150, 50, 250, 1)";
+            ctx.lineWidth = 1;
+
+            for (let j = 0; j < nY; j++) {
+                const yStart = yMin + j * dy;
+                const yEnd = yStart + dy;
+
+                let startIndex = null;
+                for (let i = 0; i <= nX; i++) {
+                    const val = xSamples[i];
+                    const inRange = (val >= yStart && val < yEnd);
+                    if (inRange && startIndex === null) {
+                        startIndex = i;
+                    } else if (!inRange && startIndex !== null) {
+                        const xCount = i - startIndex;
+                        const xLen = xCount * dx;
+                        const cX = mapXtoCanvas(xMin + startIndex * dx, xMin, xMax, width);
+                        const cW = (xLen / (xMax - xMin)) * width;
+                        const cY = mapYtoCanvas(yEnd, yMin, yMax, height);
+                        const cH = mapYtoCanvas(yStart, yMin, yMax, height) - cY;
+                        ctx.strokeRect(cX, cY, cW, cH);
+                        startIndex = null;
+                    }
+                }
+
+                // Chiusura del segmento se necessario
+                if (startIndex !== null) {
+                    const xCount = (nX + 1 - startIndex);
+                    const xLen = xCount * dx;
+                    const cX = mapXtoCanvas(xMin + startIndex * dx, xMin, xMax, width);
+                    const cW = (xLen / (xMax - xMin)) * width;
+                    const cY = mapYtoCanvas(yEnd, yMin, yMax, height);
+                    const cH = mapYtoCanvas(yStart, yMin, yMax, height) - cY;
+                    ctx.strokeRect(cX, cY, cW, cH);
+                }
+            }
         }
 
-        function displayIssuerDistribution(data) {
-            const ctx = document.getElementById('issuerDistribution').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        data: Object.values(data),
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    }],
-                },
-            });
+        function drawFunctionAndIntegrations(func, latexFunction, isContinuous) {
+            const functionCanvas = document.getElementById("function-canvas");
+            const ctxFunction = functionCanvas.getContext("2d");
+            drawGraph(ctxFunction, func, xMin, xMax, yMin, yMax);
+
+            const functionDisplay = document.getElementById("function-display");
+            functionDisplay.textContent = `\\(f(x) = ${latexFunction}\\)`;
+            MathJax.typeset();
+
+            const riemannCanvas = document.getElementById("riemann-canvas");
+            const ctxRiemann = riemannCanvas.getContext("2d");
+
+            const lebesgueCanvas = document.getElementById("lebesgue-canvas");
+            const ctxLebesgue = lebesgueCanvas.getContext("2d");
+
+            let riemannValueElem = document.getElementById("riemann-value");
+            let lebesgueValueElem = document.getElementById("lebesgue-value");
+
+            if (isContinuous) {
+                // Funzione continua: calcolo Riemann e Lebesgue
+                drawRiemannIntegration(ctxRiemann, func, xMin, xMax, yMin, yMax, 50);
+                const riemannResult = calculateRiemannIntegral(func, xMin, xMax, 20000).toFixed(4);
+                riemannValueElem.innerHTML = `Valore Integrazione (Riemann): ${riemannResult}`;
+
+                drawLebesgueIntegration(ctxLebesgue, func, xMin, xMax, yMin, yMax);
+                const lebesgueResult = calculateLebesgueIntegral(func, xMin, xMax, yMin, yMax, 20000, 2000).toFixed(4);
+                lebesgueValueElem.innerHTML = `Valore Integrazione (Lebesgue): ${lebesgueResult}`;
+            } else {
+                // Funzione discontinua: mostra i rettangoli Riemann ma indica impossibilità
+                drawRiemannIntegration(ctxRiemann, func, xMin, xMax, yMin, yMax, 50);
+                riemannValueElem.innerHTML = "Impossibile calcolare il valore di integrazione (Riemann)";
+
+                drawLebesgueIntegration(ctxLebesgue, func, xMin, xMax, yMin, yMax);
+                const lebesgueResult = calculateLebesgueIntegral(func, xMin, xMax, yMin, yMax, 20000, 2000).toFixed(4);
+                lebesgueValueElem.innerHTML = `Valore Integrazione (Lebesgue): ${lebesgueResult}`;
+            }
+
+            document.querySelector(".canvas-container").style.display = "block";
+            document.querySelector(".integration-container").style.display = "flex";
         }
 
-        function displayValidityPeriods(data) {
-            const ctx = document.getElementById('validityPeriods').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.map((_, i) => `Certificate ${i + 1}`),
-                    datasets: [{
-                        data,
-                        backgroundColor: '#36A2EB',
-                    }],
-                },
-            });
-        }
+        document.getElementById("plot-continuous").addEventListener("click", () => {
+            const randomIndex = Math.floor(Math.random() * continuousFunctions.length);
+            const {
+                exec,
+                latex
+            } = continuousFunctions[randomIndex];
+            drawFunctionAndIntegrations(new Function("x", `return ${exec}`), latex, true);
+        });
 
-        function displayGeoDistribution(data) {
-            const ctx = document.getElementById('geoDistribution').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        data: Object.values(data),
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    }],
-                },
-            });
-        }
-
-        function displayEncryptionTypes(data) {
-            const ctx = document.getElementById('encryptionTypes').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        data: Object.values(data),
-                        backgroundColor: '#FF6384',
-                    }],
-                },
-            });
-        }
-
-        function calculateStatistics(data) {
-            // Mean and median validity periods
-            const mean = data.validityPeriods.reduce((a, b) => a + b, 0) / data.validityPeriods.length;
-            const sorted = [...data.validityPeriods].sort((a, b) => a - b);
-            const median = sorted.length % 2 === 0 ?
-                (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2 :
-                sorted[Math.floor(sorted.length / 2)];
-
-            document.getElementById('meanValidity').value = `${mean.toFixed(2)} days`;
-            document.getElementById('medianValidity').value = `${median} days`;
-
-            // Most common certificate authorities
-            const commonIssuer = Object.keys(data.issuerDistribution).reduce((a, b) =>
-                data.issuerDistribution[a] > data.issuerDistribution[b] ? a : b
-            );
-            document.getElementById('commonAuthorities').value = commonIssuer;
-
-            // Key length distribution
-            const keyLengthCounts = data.keyLengths.reduce((acc, length) => {
-                acc[length] = (acc[length] || 0) + 1;
-                return acc;
-            }, {});
-
-            const ctx = document.getElementById('keyLengthDistribution').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(keyLengthCounts),
-                    datasets: [{
-                        data: Object.values(keyLengthCounts),
-                        backgroundColor: '#FFCE56',
-                    }],
-                },
-            });
-
-            // Proportion of short vs. long-lived certificateQs
-            const shortLived = data.validityPeriods.filter(period => period <= 365).length;
-            const longLived = data.validityPeriods.length - shortLived;
-
-            const ctxLifespan = document.getElementById('certificateLifespan').getContext('2d');
-            new Chart(ctxLifespan, {
-                type: 'pie',
-                data: {
-                    labels: ['Short-lived (<= 1 year)', 'Long-lived (> 1 year)'],
-                    datasets: [{
-                        data: [shortLived, longLived],
-                        backgroundColor: ['#FF6384', '#36A2EB'],
-                    }],
-                },
-            });
-        }
+        document.getElementById("plot-discontinuous").addEventListener("click", () => {
+            const randomIndex = Math.floor(Math.random() * discontinuousFunctions.length);
+            const {
+                exec,
+                latex
+            } = discontinuousFunctions[randomIndex];
+            drawFunctionAndIntegrations(new Function("x", `return ${exec}`), latex, false);
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>
