@@ -1,147 +1,202 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Homework2</title>
 
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8; /* Soft off-white background */
-            margin: 0;
-            padding: 0;
-            color: #2c3e50; /* Dark text for contrast */
-            text-align: center;
-        }
 
-        header {
-            background-color: #2c3e50; /* Dark blue */
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-bottom: 4px solid #3498db; /* Light blue accent */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Homework2</title>
 
-        h1 {
-            font-size: 3.2em;
-            margin: 10px 0;
-            font-weight: 700;
-            color: #ecf0f1;
-        }
-
-        h2 {
-            font-size: 1.8em;
-            color: #bdc3c7;
-        }
-
-        b p {
-            font-size: 1.2em;
-            margin: 10px 0;
-            color: #7f8c8d;
-        }
-
-        /* Controls Section */
-        #control-container {
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        #controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        input,
-        button {
-            padding: 10px;
-            margin: 10px 5px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        input,
-        button {
-            padding: 10px;
-            margin: 10px 5px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Canvas */
-        canvas {
-            border: 1px solid #007bff;
-            background-color: white;
-        }
-
-        /* Results Section */
-        #averageResults {
-            font-size: 20px;
-            margin-top: 20px;
-            color: #2c3e50;
-        }
-
-        #theory {
-            margin-top: 40px;
-            color: #2c3e50;
-        }
-
-        .pdf {
-            width: 100%;
-            height: 600px;
-            border: none;
-        }
-
-        /* Home Button */
-        #home-btn {
-            color: #ecf0f1;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #3498db;
-            transition: background-color 0.3s ease;
-            margin-top: 30px;
-        }
-
-        #home-btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* Navigation Menu */
-        nav a {
-            color: #ecf0f1;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: #3498db;
-        }
-        .titolo{
-            color: #007bff;
-        }
-
-    </style>
+<style>
+    /* General Styles */
     
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f4f8;
+        /* Soft off-white background */
+        margin: 0;
+        padding: 0;
+        color: #2c3e50;
+        /* Dark text for contrast */
+        text-align: center;
+    }
+    
+    h1 {
+        font-size: 3.2em;
+        margin: 10px 0;
+        font-weight: 700;
+        color: #ecf0f1;
+    }
+    
+    h2 {
+        font-size: 1.8em;
+        color: #bdc3c7;
+    }
+    
+    b p {
+        font-size: 1.2em;
+        margin: 10px 0;
+        color: #7f8c8d;
+    }
+    /* Controls Section */
+    
+    #control-container {
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    
+    #controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        max-width: 900px;
+        width: 100%;
+    }
+    
+    input,
+    button {
+        padding: 10px;
+        margin: 10px 5px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    input,
+    button {
+        padding: 10px;
+        margin: 10px 5px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    /* Canvas */
+    
+    canvas {
+        border: 1px solid #007bff;
+        background-color: white;
+    }
+    /* Results Section */
+    
+    #averageResults {
+        font-size: 20px;
+        margin-top: 20px;
+        color: #2c3e50;
+    }
+    
+    #theory {
+        margin-top: 40px;
+        color: #2c3e50;
+    }
+    
+    .pdf {
+        width: 100%;
+        height: 600px;
+        border: none;
+    }
+    /* Home Button */
+    
+    #home-btn {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #3498db;
+        transition: background-color 0.3s ease;
+        margin-top: 30px;
+    }
+    
+    #home-btn:hover {
+        background-color: #2980b9;
+    }
+    /* Navigation Menu */
+    
+    nav a {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
+    
+    .titolo {
+        color: #007bff;
+    }
+    
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background-color: #1e3a5f;
+        /* Dark blue */
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+    
+    header .logo {
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+    }
+    
+    nav ul li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 18px;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    
+    nav ul li a:hover {
+        color: #6cb6f3;
+        /* Light blue on hover */
+        transform: scale(1.1);
+    }
+    
+    .theme-toggle-btn {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .theme-toggle-btn:hover {
+        color: #6cb6f3;
+        /* Light blue on hover */
+    }
+</style>
 
-</head>
+
+
+
 <body>
+
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="/Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
 
     <h1 class="titolo">Hacker Attack Simulation</h1>
     <h2>Luca Capuccini</h2>
@@ -185,7 +240,9 @@
         }
 
         function simulateAttack(n, m, probability) {
-            const penetrationScores = Array.from({ length: m }, () => new Array(n).fill(0));
+            const penetrationScores = Array.from({
+                length: m
+            }, () => new Array(n).fill(0));
 
             for (let attacker = 0; attacker < m; attacker++) {
                 for (let server = 0; server < n; server++) {
@@ -205,7 +262,10 @@
             const numScores = scores.length;
             const mean = scores.reduce((sum, value) => sum + value, 0) / numScores;
             const variance = scores.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / numScores;
-            return { mean, variance };
+            return {
+                mean,
+                variance
+            };
         }
 
         function calculateCumulativeScores(penetrationScores) {
@@ -324,18 +384,24 @@
             const numAttackers = parseInt(document.getElementById('Attackers').value);
             const probability = parseFloat(document.getElementById('Probability').value);
             const verticalX = parseInt(document.getElementById('verticalLineX').value);
-            
+
             const penetrationScores = simulateAttack(numServers, numAttackers, probability);
             const cumulativeScores = calculateCumulativeScores(penetrationScores);
-            
+
             const ctx = document.getElementById('lineChart').getContext('2d');
             drawLineChart(ctx, cumulativeScores, numServers, verticalX);
 
             const finalScores = cumulativeScores.map(scores => scores[scores.length - 1]);
-            const { mean, variance } = calculateMeanAndVariance(finalScores);
+            const {
+                mean,
+                variance
+            } = calculateMeanAndVariance(finalScores);
 
             const scoresAtX = cumulativeScores.map(scores => scores[verticalX]);
-            const { mean: meanAtX, variance: varianceAtX } = calculateMeanAndVariance(scoresAtX);
+            const {
+                mean: meanAtX,
+                variance: varianceAtX
+            } = calculateMeanAndVariance(scoresAtX);
 
             const averageResultsDiv = document.getElementById('averageResults');
             averageResultsDiv.textContent = `Media finale: ${mean.toFixed(2)}, Varianza finale: ${variance.toFixed(2)} | Media al tempo X: ${meanAtX.toFixed(2)}, Varianza al tempo X: ${varianceAtX.toFixed(2)}`;
@@ -396,10 +462,16 @@
             ctx.setLineDash([]);
 
             const finalRelativeFrequencies = relativeFrequencies.map(scores => scores[scores.length - 1]);
-            const { mean: relativeMean, variance: relativeVariance } = calculateMeanAndVariance(finalRelativeFrequencies);
+            const {
+                mean: relativeMean,
+                variance: relativeVariance
+            } = calculateMeanAndVariance(finalRelativeFrequencies);
 
             const relativeFrequenciesAtX = relativeFrequencies.map(scores => scores[verticalX]);
-            const { mean: relativeMeanAtX, variance: relativeVarianceAtX } = calculateMeanAndVariance(relativeFrequenciesAtX);
+            const {
+                mean: relativeMeanAtX,
+                variance: relativeVarianceAtX
+            } = calculateMeanAndVariance(relativeFrequenciesAtX);
 
             const averageResultsDiv = document.getElementById('averageResults');
             averageResultsDiv.textContent = `Media relativa finale: ${relativeMean.toFixed(2)}, Varianza relativa finale: ${relativeVariance.toFixed(2)} | Media relativa al tempo X: ${relativeMeanAtX.toFixed(2)}, Varianza relativa al tempo X: ${relativeVarianceAtX.toFixed(2)}`;
@@ -464,4 +536,5 @@
     </script>
 
 </body>
+
 </html>

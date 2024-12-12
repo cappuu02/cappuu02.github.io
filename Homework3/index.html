@@ -11,6 +11,7 @@
     <title>Hacker Attack Simulation</title>
     <style>
         /* General Page Styling */
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -18,15 +19,15 @@
             margin: 0;
             text-align: center;
         }
-
+        
         h1 {
             color: #007bff;
         }
-
+        
         h2 {
             color: #555;
         }
-
+        
         input,
         button {
             padding: 10px;
@@ -35,7 +36,7 @@
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
-
+        
         button {
             background-color: #007bff;
             color: white;
@@ -43,80 +44,52 @@
             font-size: 16px;
             transition: background-color 0.3s;
         }
-
+        
         button:hover {
             background-color: #0056b3;
         }
-
+        
         #chartBlock {
             display: flex;
             justify-content: center;
             align-items: flex-end;
             margin-top: 20px;
         }
-
+        
         #lineChartContainer,
         #histogramChartContainer {
             margin: 0 10px;
         }
-
+        
         canvas {
             border: 1px solid #007bff;
             background-color: white;
         }
-
+        
         footer {
             margin-top: 20px;
             font-size: 12px;
             color: #666;
         }
-
+        
         #checkboxContainer {
             display: flex;
             justify-content: center;
             margin-top: 20px;
             flex-wrap: wrap;
         }
-
+        
         #checkboxContainer label {
             margin-right: 10px;
             display: flex;
             align-items: center;
         }
-
+        
         #checkboxContainer input[type="checkbox"] {
             margin-right: 5px;
         }
-
-        /* Navbar Styling */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 1rem 2rem;
-            color: #fff;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links a {
-            color: white;
-            padding: 0 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-
-        .nav-links a:hover {
-            background-color: #555;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
-
         /* New section styling */
+        
         #markdownContent {
             margin-top: 20px;
             text-align: left;
@@ -128,7 +101,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+        
         pre {
             padding: 10px;
             border: 1px solid #ddd;
@@ -136,31 +109,95 @@
             overflow-x: auto;
             background-color: #f5f5f5;
         }
+        
         .centered-div {
-            width: 80%; /* Adjust width as needed */
-            max-width: 600px; /* Optional: limits the maximum width */
-            margin: 0 auto; /* Centers the div horizontally */
-            padding: 20px; /* Optional: adds padding around the content */
-            border: 1px solid #ddd; /* Optional: adds a border for visibility */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+            width: 80%;
+            /* Adjust width as needed */
+            max-width: 600px;
+            /* Optional: limits the maximum width */
+            margin: 0 auto;
+            /* Centers the div horizontally */
+            padding: 20px;
+            /* Optional: adds padding around the content */
+            border: 1px solid #ddd;
+            /* Optional: adds a border for visibility */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Optional: adds shadow for depth */
         }
+        
         .paragrafo_poisson {
-            text-align: left; /* Ensures text is aligned to the left */
+            text-align: left;
+            /* Ensures text is aligned to the left */
         }
-
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1e3a5f;
+            /* Dark blue */
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        
+        header .logo {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's Blog</div>
-        <div class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="../Statistic.html">Homework</a>
-        </div>
-    </nav>
+
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="/Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
 
     <h1>Hacker Attack Simulation</h1>
     <h2>Luca Capuccini</h2>
@@ -169,10 +206,9 @@
     <div class="centered-div">
         <h2>Poisson Distribution</h2>
         <p class="paragrafo_poisson">
-            The Poisson distribution is a discrete probability distribution used in statistics to model the number of times an event occurs within a fixed interval of time or space. 
-            It is applicable in scenarios where events happen independently and at a constant average rate. 
-            The distribution is characterized by a single parameter, λ (lambda), which represents the average number of occurrences in the given interval.
-            The Poisson distribution is particularly useful for analyzing rare events and provides insights into the likelihood of a specific number of events happening within that interval.
+            The Poisson distribution is a discrete probability distribution used in statistics to model the number of times an event occurs within a fixed interval of time or space. It is applicable in scenarios where events happen independently and at a constant
+            average rate. The distribution is characterized by a single parameter, λ (lambda), which represents the average number of occurrences in the given interval. The Poisson distribution is particularly useful for analyzing rare events and provides
+            insights into the likelihood of a specific number of events happening within that interval.
         </p>
     </div>
     <div>
@@ -187,7 +223,7 @@
             <input type="range" step="0.1" id="LambdaRange" value="500" min="0" max="1000" />
             <input type="number" step="0.1" id="Lambda" value="500" min="0" max="1000" />
         </div>
-        
+
 
         <button id="submitButton">Run Simulation</button>
     </div>
@@ -234,7 +270,7 @@
         });
     </script>
 
-<iframe src="/Homework3/PDF/Teoria Homework 3.pdf" width="1800" height="1200">
+    <iframe src="/Homework3/PDF/Teoria Homework 3.pdf" width="1800" height="1200">
     <a href="/Homework3/PDF/Teoria Homework 3.pdf">Downaload The PDF</a>.
 </iframe>
 

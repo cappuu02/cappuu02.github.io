@@ -128,6 +128,23 @@
             background-color: #0056b3;
         }
         
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1e3a5f;
+            /* Dark blue */
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        
+        header .logo {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
         nav ul {
             list-style: none;
             display: flex;
@@ -147,19 +164,36 @@
             /* Light blue on hover */
             transform: scale(1.1);
         }
+        
+        .theme-toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+        }
     </style>
 </head>
 
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="">CVs</a></li>
-            <li><a href="">Project</a></li>
-            <li><a href="Statistic.html">Statistics</a></li>
-        </ul>
-    </nav>
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
 
     <!-- Cards Container -->
     <div class="container">
