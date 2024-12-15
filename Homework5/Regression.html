@@ -12,7 +12,6 @@
             background-color: #f0f2f5;
             color: #333;
             margin: 0; /* Removed margin */
-            padding: 20px;
             text-align: center;
         }
         h1 {
@@ -50,36 +49,7 @@
             font-size: 0.8rem;
             color: #666;
         }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 1rem 2rem;
-            color: #fff;
-            position: fixed; /* Make navbar fixed */
-            top: 0; /* Attach it to the top */
-            width: 100%; /* Full width */
-            z-index: 1000; /* Ensure it's on top of other elements */
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links a {
-            color: white;
-            padding: 0 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-
-        .nav-links a:hover {
-            background-color: #555;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
+        
 
         /* Add some top margin to main content */
         .content {
@@ -99,17 +69,107 @@
             border: none; /* Rimuovi il bordo dell'iframe */
         }
 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1e3a5f;
+            /* Dark blue */
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        
+        header .logo {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+        }
+        .theory {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        
+        .theory h1,
+        .theory h2,
+        .theory h3 {
+            color: #007bff;
+        }
+        
+        .theory p,
+        .theory ul,
+        .theory ol,
+        .theory .formula {
+            margin: 15px 0;
+            line-height: 1.7;
+        }
+        
+        .formula {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            background-color: #e1e1e1;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's Blog</div>
-        <div class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="../Statistic.html">Homework</a>
-        </div>
-    </nav>
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="/Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
 
     <div class="content"> <!-- Wrapped content to provide top margin -->
         <h1>Linear Regression Graph</h1>
@@ -121,7 +181,7 @@
         
         <canvas id="graphCanvas" width="700" height="500"></canvas>
         
-        <div>
+        <div class="theory">
                 <h1>Cauchy-Schwarz Inequality</h1>
                 <p>The Cauchy-Schwarz inequality states that for any vectors \( \mathbf{u} \) and \( \mathbf{v} \) in an inner product space, the following holds:</p>
                 <p>

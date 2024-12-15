@@ -88,33 +88,7 @@
             margin-right: 5px;
         }
 
-        /* Navbar Styling */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 1rem 2rem;
-            color: #fff;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links a {
-            color: white;
-            padding: 0 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-
-        .nav-links a:hover {
-            background-color: #555;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
+        
 
         /* New section styling */
         #markdownContent {
@@ -137,19 +111,75 @@
             background-color: #f5f5f5; /* Sfondo grigio chiaro per il codice */
         }
 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1e3a5f;
+            /* Dark blue */
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        
+        header .logo {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            color: #6cb6f3;
+            /* Light blue on hover */
+        }
+
+
     </style>
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Luca Capuccini's Blog</div>
-        <div class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="../Statistic.html">Homework</a>
-        </div>
-    </nav>
+    <header>
+        <div class="logo">Luca</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">CVs</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="/Statistic.html">Statistics</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+    </header>
 
     <h1>Hacker Attack Simulation</h1>
     <h2><b>Brownian Distribution</b></h2>
