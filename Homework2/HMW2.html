@@ -404,7 +404,7 @@
             } = calculateMeanAndVariance(scoresAtX);
 
             const averageResultsDiv = document.getElementById('averageResults');
-            averageResultsDiv.textContent = `Media finale: ${mean.toFixed(2)}, Varianza finale: ${variance.toFixed(2)} | Media al tempo X: ${meanAtX.toFixed(2)}, Varianza al tempo X: ${varianceAtX.toFixed(2)}`;
+            averageResultsDiv.textContent = `Media finale: ${mean.toFixed(2)}, Varianza finale: ${variance.toFixed(2)} <---> Media al tempo X: ${meanAtX.toFixed(2)}, Varianza al tempo X: ${varianceAtX.toFixed(2)}`;
         }
 
         function showRelativeFrequency() {
