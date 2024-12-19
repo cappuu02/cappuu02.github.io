@@ -108,40 +108,53 @@ function drawChart(attackers, systems, probability) {
     ctx.stroke();
     ctx.closePath();
 
-    // Funzione per disegnare l'istogramma basato solo sui livelli continui raggiunti dagli attaccanti
+    // Calcolo di media e varianza
+    function calculateMean(data) {
+        return data.reduce((sum, value) => sum + value, 0) / data.length;
+    }
+
+    function calculateVariance(data, mean) {
+        return data.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / data.length;
+    }
+
+    const meanMid = calculateMean(midPenetrationData);
+    const varianceMid = calculateVariance(midPenetrationData, meanMid);
+
+    const meanFinal = calculateMean(finalPenetrationData);
+    const varianceFinal = calculateVariance(finalPenetrationData, meanFinal);
+
+    // Aggiorna gli input HTML con i risultati
+    document.getElementById('meanMid').value = meanMid.toFixed(2);
+    document.getElementById('varianceMid').value = varianceMid.toFixed(2);
+    document.getElementById('meanFinal').value = meanFinal.toFixed(2);
+    document.getElementById('varianceFinal').value = varianceFinal.toFixed(2);
+
+    // Funzione per disegnare l'istogramma basato sui livelli continui raggiunti dagli attaccanti
     function drawHistogram(data, startX) {
         const frequencyMap = {};
 
-        // Calcola le frequenze senza alcun arrotondamento, considerando i valori continui
         for (let i = 0; i < data.length; i++) {
             const level = data[i];
             frequencyMap[level] = (frequencyMap[level] || 0) + 1;
         }
 
-        const maxFrequency = Math.max(...Object.values(frequencyMap)); // Frequenza massima per calcolare la lunghezza relativa delle barre
+        const maxFrequency = Math.max(...Object.values(frequencyMap));
 
-        // Disegna le linee orizzontali dell'istogramma basandosi sui livelli continui degli attaccanti
         for (let level in frequencyMap) {
             const freq = frequencyMap[level];
-            const y = yCenter - (parseFloat(level) * yStep); // Usa il valore continuo di 'level' per il calcolo di y
-
-            // Calcola la lunghezza della barra in base alla frequenza relativa
-            const barLength = (freq / maxFrequency) * 100; // Lunghezza relativa massima di 100 pixel
+            const y = yCenter - (parseFloat(level) * yStep);
+            const barLength = (freq / maxFrequency) * 100;
 
             ctx.beginPath();
             ctx.moveTo(startX, y);
             ctx.lineTo(startX + barLength, y);
-            ctx.strokeStyle = '#0000FF'; // Colore blu per le barre dell'istogramma
+            ctx.strokeStyle = '#0000FF';
             ctx.lineWidth = 2;
             ctx.stroke();
             ctx.closePath();
         }
     }
 
-    // Disegna l'istogramma per la metà (n/2) sulla linea verde
     drawHistogram(midPenetrationData, midLineX);
-
-    // Disegna l'istogramma per la fine (n) sulla linea rossa!!
     drawHistogram(finalPenetrationData, maxScoreX);
 }
-

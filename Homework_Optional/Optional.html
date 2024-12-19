@@ -144,26 +144,11 @@
             return distributions;
         }
 
-        // Function to calculate entropy and Simpson diversity index
-        function calculateDiversityMetrics(distributions) {
-            const results = {};
-            for (let [g, freq] of Object.entries(distributions)) {
-                const total = Object.values(freq).reduce((sum, f) => sum + f, 0);
-                const probabilities = Object.values(freq).map(f => f / total);
-
-                const entropy = -probabilities.reduce((sum, p) => sum + (p > 0 ? p * Math.log2(p) : 0), 0);
-                const simpsonIndex = 1 - probabilities.reduce((sum, p) => sum + p ** 2, 0);
-
-                results[g] = { entropy: entropy.toFixed(4), simpsonIndex: simpsonIndex.toFixed(4) };
-            }
-            return results;
-        }
-
         // Function to render metrics as styled inputs
         function renderMetrics(metrics, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear previous metrics
-            for (let [g, { entropy, simpsonIndex }] of Object.entries(metrics)) {
+            for (let [g, { entropy }] of Object.entries(metrics)) {
                 const metricBox = document.createElement('div');
                 metricBox.className = 'metric-box';
 
@@ -176,12 +161,6 @@
                 entropyInput.value = `Entropy: ${entropy}`;
                 entropyInput.readOnly = true;
                 metricBox.appendChild(entropyInput);
-
-                const simpsonInput = document.createElement('input');
-                simpsonInput.type = 'text';
-                simpsonInput.value = `Simpson: ${simpsonIndex}`;
-                simpsonInput.readOnly = true;
-                metricBox.appendChild(simpsonInput);
 
                 container.appendChild(metricBox);
             }
@@ -196,9 +175,22 @@
         const distributionsA = computeDistribution(caseA.n, caseA.gValues, maxU);
         const distributionsB = computeDistribution(caseB.n, caseB.gValues, maxU);
 
-        // Calculate diversity metrics
-        const metricsA = calculateDiversityMetrics(distributionsA);
-        const metricsB = calculateDiversityMetrics(distributionsB);
+        // Calculate entropy (remove Simpson index calculation)
+        function calculateEntropy(distributions) {
+            const results = {};
+            for (let [g, freq] of Object.entries(distributions)) {
+                const total = Object.values(freq).reduce((sum, f) => sum + f, 0);
+                const probabilities = Object.values(freq).map(f => f / total);
+
+                const entropy = -probabilities.reduce((sum, p) => sum + (p > 0 ? p * Math.log2(p) : 0), 0);
+
+                results[g] = { entropy: entropy.toFixed(4) };
+            }
+            return results;
+        }
+
+        const metricsA = calculateEntropy(distributionsA);
+        const metricsB = calculateEntropy(distributionsB);
 
         // Render metrics
         renderMetrics(metricsA, 'metricsContainerA');
@@ -232,16 +224,29 @@
         const chartDataA = prepareChartData(distributionsA, caseA.n);
         const chartDataB = prepareChartData(distributionsB, caseB.n);
 
+        // Render the charts
         new Chart(document.getElementById('chartCaseA'), {
             type: 'bar',
             data: chartDataA,
-            options: { responsive: true, scales: { x: { title: { display: true, text: 'Residues' } }, y: { title: { display: true, text: 'Frequency' }, beginAtZero: true } } }
+            options: {
+                responsive: true,
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
         });
 
         new Chart(document.getElementById('chartCaseB'), {
             type: 'bar',
             data: chartDataB,
-            options: { responsive: true, scales: { x: { title: { display: true, text: 'Residues' } }, y: { title: { display: true, text: 'Frequency' }, beginAtZero: true } } }
+            options: {
+                responsive: true,
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
         });
     </script>
 </body>
