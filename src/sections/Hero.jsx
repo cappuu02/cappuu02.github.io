@@ -15,7 +15,13 @@ const Hero = () => {
         {/* LEFT */}
         <div className="flex-1">
           <h1 className="font-display text-4xl md:text-6xl font-semibold leading-tight tracking-tight">
-            <SplitText text="Ciao, sono Luca" />
+            <span
+                className="glitch text-primary"
+                data-text="Ciao, sono Luca"
+              >
+                Ciao, sono Luca
+              </span>
+
             <br />
             <SplitText
               text="Studente e futuro cybersecurity specialist."

@@ -1,69 +1,87 @@
 import { motion } from "framer-motion";
+import MatrixRain from "../components/MatrixRain";
 
-const projects = [
+const PROJECTS = [
   {
-    title: "Network Defense Lab",
-    desc: "Virtual lab with IDS, VPN and firewall rules to explore detection and hardening.",
-    tag: "security-lab",
+    title: "VulnScan Toolkit",
+    desc: "Toolkit personalizzato per vulnerability discovery automatico.",
+    tech: ["Python", "Nmap", "Regex", "Reporting Engine"],
   },
   {
-    title: "Windows Security Playground",
-    desc: "Privilege escalation, credential dumping and defense testing in Windows environments.",
-    tag: "windows-security",
+    title: "CyberRange Lab",
+    desc: "Ambiente locale per test di attacchi/analisi basato su VMs.",
+    tech: ["VMware", "Kali", "Windows AD", "Networking"],
   },
   {
-    title: "Personal Portfolio",
-    desc: "This very site: a hacker-flavoured, animated portfolio built with React, Vite and Tailwind.",
-    tag: "front-end",
+    title: "WebSec Playground",
+    desc: "Mini-piattaforma per simulare attacchi XSS, SQLi, CSRF.",
+    tech: ["Node.js", "Express", "Javascript", "Burp Suite"],
   },
 ];
 
-const Projects = () => {
+export default function Projects() {
   return (
-    <motion.section
+    <section
       id="projects"
-      className="section-padding min-h-screen flex items-center justify-center"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7 }}
+      className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-24 overflow-hidden"
     >
-      <div className="max-w-5xl w-full">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          <span className="font-mono text-primary">luca@portfolio:~$</span>{" "}
-          <span>tail ./projects.log</span>
-        </h2>
+      {/* MATRIX BACKGROUND */}
+      <MatrixRain opacity={0.35} />
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {projects.map((p, index) => (
-            <motion.article
-              key={p.title}
-              className="panel flex flex-col justify-between bg-terminal/90"
-              initial={{ opacity: 0, y: 24 }}
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center">
+
+        {/* TITLE */}
+        <motion.h2
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-5xl font-display text-green-300 drop-shadow-lg mb-6"
+        >
+          Cyber Projects
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-green-200/80 max-w-xl mb-12"
+        >
+          Una raccolta di progetti sperimentali creati durante il mio percorso da Cybersecurity Specialist.
+        </motion.p>
+
+        {/* GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {PROJECTS.map((p, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              className="
+                bg-[#001b11]/60 border border-green-500/30 
+                backdrop-blur-sm rounded-xl p-6 font-mono text-green-300
+                hover:shadow-[0_0_18px_rgba(34,197,94,0.5)]
+                hover:scale-[1.02] transition
+                animate-[crtVibration_0.18s_ease-in-out_infinite_alternate]
+              "
             >
-              <div>
-                <h3 className="font-mono text-sm text-primary mb-2">
-                  [{p.tag}]
-                </h3>
-                <p className="font-semibold text-sm md:text-base">
-                  {p.title}
-                </p>
-                <p className="mt-3 text-xs md:text-sm text-slate-300">
-                  {p.desc}
-                </p>
+              <p className="text-xl font-bold mb-2">{p.title}</p>
+              <p className="text-green-400 text-sm mb-3">{p.desc}</p>
+
+              <div className="flex flex-wrap gap-2 mt-3">
+                {p.tech.map((t, j) => (
+                  <span
+                    key={j}
+                    className="px-2 py-1 text-xs bg-green-500/10 border border-green-500/20 rounded"
+                  >
+                    {t}
+                  </span>
+                ))}
               </div>
-              <p className="mt-4 text-[11px] text-slate-500 font-mono">
-                {">"} status: <span className="text-primary">online</span>
-              </p>
-            </motion.article>
+            </motion.div>
           ))}
         </div>
       </div>
-    </motion.section>
+    </section>
   );
-};
-
-export default Projects;
+}

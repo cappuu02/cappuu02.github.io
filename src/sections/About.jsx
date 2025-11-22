@@ -1,41 +1,138 @@
 import { motion } from "framer-motion";
 
-const About = () => {
+export default function About() {
   return (
     <motion.section
       id="about"
-      className="section-padding min-h-screen flex items-center justify-center"
+      className="section-padding min-h-screen flex flex-col justify-center"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.6 }}
     >
-      <div className="max-w-4xl w-full">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          <span className="font-mono text-primary">luca@portfolio:~$</span>{" "}
-          <span>cat ./about.txt</span>
-        </h2>
+      <div className="max-w-5xl mx-auto">
 
-        <div className="panel font-mono text-sm md:text-[15px] space-y-3">
-          <p>
-            {">"} name: Luca
-          </p>
-          <p>
-            {">"} current_studies: Cybersecurity @ Sapienza University of Rome
-          </p>
-          <p>
-            {">"} bachelor: Computer Science (L-31) @ University of Perugia
-          </p>
-          <p>
-            {">"} passion: building secure, modern and playful interfaces
-          </p>
-          <p>
-            {">"} interests: security, front-end, clean design, motion, labs
-          </p>
+        {/* ⬛ HACKER TERMINAL HEADER */}
+        <div className="panel mb-10">
+          <div className="terminal-header">
+            <div className="dot-red"></div>
+            <div className="dot-yellow"></div>
+            <div className="dot-green"></div>
+            <span className="ml-3">/usr/bin/about_me — v2.3.1</span>
+          </div>
+
+          <div className="terminal-body">
+            <p>
+              <span className="text-primary">root@portfolio</span>:~$ whoami  
+            </p>
+            <p className="text-secondary pl-4">luca — cybersecurity enthusiast</p>
+
+            <br />
+
+            <p>
+              <span className="text-primary">root@portfolio</span>:~$ cat profile.txt  
+            </p>
+
+            <pre className="pl-4 text-xs leading-relaxed text-slate-300">
+{String.raw`{
+  "name": "Luca Cappu",
+  "role": "Cybersecurity Student",
+  "location": "Italy",
+  "interests": ["hacking", "CTFs", "reverse engineering", "front-end magic"],
+  "status": "always_learning"
+}`}
+            </pre>
+          </div>
         </div>
+
+        {/* 🟩 TWO-COLUMN LAYOUT FUN + HACKER */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {/* LEFT */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.6 }}
+            className="panel"
+          >
+            <h2 className="font-mono text-lg text-primary mb-3">
+              ▶ system_overview()
+            </h2>
+            <p className="text-slate-300 leading-relaxed text-sm md:text-base">
+              Sono uno studente di <span className="text-secondary">Cybersecurity</span> alla Sapienza, 
+              con background triennale in Informatica (Perugia).  
+              Amo i sistemi puliti, l’UI animata e tutto ciò che 
+              sembra uscito da un laboratorio segreto dell’NSA.
+              <br /><br />
+              Nel tempo libero rompo cose (eticalmente),
+              creo interfacce dark, e bevo più caffè di quanto 
+              uno studente universitario dovrebbe.
+            </p>
+          </motion.div>
+
+          {/* RIGHT — HACKER CARD */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.6 }}
+            className="panel relative overflow-hidden"
+          >
+            <h2 className="font-mono text-lg text-secondary mb-3">
+              ▶ bio_dump.txt
+            </h2>
+
+            <div className="relative z-10 text-sm md:text-base text-slate-300 space-y-2">
+              <p>• 🚀 Studente Cybersecurity Specialist</p>
+              <p>• 👨‍💻 Amante di UI dark / neon animate</p>
+              <p>• 🔐 Interest: offensive security, exploit dev</p>
+              <p>• 🧠 Full-time learner & problem solver</p>
+              <p>• ☕ Caffè > RAM installata</p>
+            </div>
+
+            {/* animated scanlines */}
+            <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:100%_4px] animate-[noiseShift_6s_linear_infinite]"></div>
+          </motion.div>
+        </div>
+
+        {/* 🟦 FUN FACTS HACKER CARDS */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            show: {
+              transition: { staggerChildren: 0.15 }
+            }
+          }}
+        >
+          {[
+            { label: "CTF SCORE", value: "UPDATING…" },
+            { label: "COFFEINE LEVEL", value: "95%" },
+            { label: "BRAIN UPTIME", value: "24/7" }
+          ].map((card, i) => (
+            <motion.div
+              key={i}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0 }
+              }}
+              className="panel text-center"
+            >
+              <p className="font-mono text-xs text-slate-400">
+                {card.label}
+              </p>
+              <p className="text-xl font-bold text-primary">
+                {card.value}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
       </div>
     </motion.section>
   );
-};
-
-export default About;
+}

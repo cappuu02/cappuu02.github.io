@@ -1,17 +1,29 @@
 import { motion } from "framer-motion";
 
 export default function SplitText({ text, delay = 0 }) {
+  const letters = text.split("");
+
   return (
     <span className="inline-block">
-      {text.split("").map((char, index) => (
+      {letters.map((char, i) => (
         <motion.span
-          key={index}
+          key={i}
           className="inline-block"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{
+            opacity: 0,
+            y: 20,
+            rotateX: -90,
+            filter: "blur(4px)",
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            filter: "blur(0px)",
+          }}
           transition={{
-            delay: delay + index * 0.03,
-            duration: 0.4,
+            delay: delay + i * 0.035,
+            duration: 0.35,
             ease: "easeOut",
           }}
         >
