@@ -27,8 +27,8 @@ export default function Contact() {
 
         <div className="panel text-center space-y-6">
           <p className="text-sm md:text-base text-slate-300">
-            Vuoi collaborare, parlare di cybersecurity o costruire qualcosa di
-            moderno e un po' hacker? Ecco i miei canali principali.
+            Want to collaborate, talk about cybersecurity, or build something
+            modern and a bit hacker-esque? Here are my main channels.
           </p>
 
           {/* Email */}
@@ -36,7 +36,7 @@ export default function Contact() {
             href="mailto:your-email@example.com"
             className="block w-full rounded-xl bg-gradient-to-r from-primary to-secondary py-2.5 font-medium text-black shadow-glow hover:brightness-110 transition"
           >
-            Inviami un'email
+            Send me an email
           </a>
 
           {/* Social Buttons */}

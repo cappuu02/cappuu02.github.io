@@ -4,17 +4,17 @@ import MatrixRain from "../components/MatrixRain";
 const PROJECTS = [
   {
     title: "VulnScan Toolkit",
-    desc: "Toolkit personalizzato per vulnerability discovery automatico.",
+    desc: "Custom toolkit for automated vulnerability discovery.",
     tech: ["Python", "Nmap", "Regex", "Reporting Engine"],
   },
   {
     title: "CyberRange Lab",
-    desc: "Ambiente locale per test di attacchi/analisi basato su VMs.",
+    desc: "Local environment for attack/analysis testing based on VMs.",
     tech: ["VMware", "Kali", "Windows AD", "Networking"],
   },
   {
     title: "WebSec Playground",
-    desc: "Mini-piattaforma per simulare attacchi XSS, SQLi, CSRF.",
+    desc: "Mini platform to simulate XSS, SQLi, and CSRF attacks.",
     tech: ["Node.js", "Express", "Javascript", "Burp Suite"],
   },
 ];
@@ -46,7 +46,7 @@ export default function Projects() {
           viewport={{ once: true }}
           className="text-green-200/80 max-w-xl mb-12 text-sm sm:text-base"
         >
-          Una raccolta di progetti sperimentali creati durante il mio percorso da Cybersecurity Specialist.
+          A collection of experimental projects created during my journey as a Cybersecurity Specialist.
         </motion.p>
 
         {/* GRID */}

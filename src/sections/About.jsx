@@ -60,14 +60,14 @@ export default function About() {
               ▶ system_overview()
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm md:text-base">
-              Sono uno studente di <span className="text-secondary">Cybersecurity</span> alla Sapienza, 
-              con background triennale in Informatica (Perugia).  
-              Amo i sistemi puliti, l’UI animata e tutto ciò che 
-              sembra uscito da un laboratorio segreto dell’NSA.
+              I am a <span className="text-secondary">Cybersecurity</span> student at Sapienza,
+              with a Bachelor's background in Computer Science (Perugia).
+              I love clean systems, animated UIs, and anything that
+              looks like it came from a secret NSA lab.
               <br /><br />
-              Nel tempo libero rompo cose (eticalmente),
-              creo interfacce dark, e bevo più caffè di quanto 
-              uno studente universitario dovrebbe.
+              In my free time I break things (ethically),
+              build dark interfaces, and drink more coffee than
+              a university student probably should.
             </p>
           </motion.div>
 
@@ -84,11 +84,11 @@ export default function About() {
             </h2>
 
             <div className="relative z-10 text-sm sm:text-sm md:text-base text-slate-300 space-y-2">
-              <p>• 🚀 Studente Cybersecurity Specialist</p>
-              <p>• 👨‍💻 Amante di UI dark / neon animate</p>
-              <p>• 🔐 Interest: offensive security, exploit dev</p>
+              <p>• 🚀 Cybersecurity student</p>
+              <p>• 👨‍💻 Lover of animated dark / neon UIs</p>
+              <p>• 🔐 Interests: offensive security, exploit development</p>
               <p>• 🧠 Full-time learner & problem solver</p>
-              <p>• ☕ Caffè > RAM installata</p>
+              <p>• ☕ Coffee &gt; installed RAM</p>
             </div>
 
             {/* animated scanlines */}

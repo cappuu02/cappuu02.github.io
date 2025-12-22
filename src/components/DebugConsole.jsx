@@ -6,7 +6,7 @@ export default function DebugConsole() {
 
   useEffect(() => {
     const handler = (e) => {
-      // toggle con Ctrl + Shift + L
+      // toggle with Ctrl + Shift + L
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") {
         setOpen((prev) => !prev);
       }
@@ -39,7 +39,7 @@ export default function DebugConsole() {
         <p>{">"} user: luca</p>
         <p>{">"} mood: learning · breaking · fixing</p>
         <p className="text-primary">
-          {">"} tip: modificala per loggare i tuoi progetti, TODO o note.
+          {">"} tip: modify it to log your projects, TODOs, or notes.
         </p>
       </div>
     </motion.div>

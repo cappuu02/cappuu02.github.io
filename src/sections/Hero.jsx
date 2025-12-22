@@ -15,18 +15,18 @@ const Hero = () => {
         {/* LEFT */}
         <div className="flex-1">
           <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight tracking-tight">
-            <span
+              <span
                 className="glitch text-primary"
-                data-text="Ciao, sono Luca"
+                data-text="Hi, I'm Luca"
               >
-                Ciao, sono Luca
+                Hi, I'm Luca
               </span>
 
             <br />
-            <SplitText
-              text="Studente e futuro cybersecurity specialist."
-              delay={0.6}
-            />
+              <SplitText
+                text="Student and aspiring cybersecurity specialist."
+                delay={0.6}
+              />
           </h1>
 
           <motion.p
@@ -35,10 +35,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            Sono uno studente di Cybersecurity all’Università di Roma La
-            Sapienza e sto per laurearmi in Informatica (L-31) all’Università
-            degli Studi di Perugia. Mi piacciono interfacce dark, pulite e un
-            po’ hacker, ma con un’esperienza moderna e curata.
+            I earned a Bachelor's degree in Computer Science (L-31) at the University of Perugia with a grade of 104, and I'm continuing my studies with a specialization in Cybersecurity at Sapienza University of Rome. I have a deep passion for interface design: I prefer a dark, hacker-oriented style while pursuing a clean, modern aesthetic with careful attention to detail.
           </motion.p>
 
           <motion.div
@@ -51,13 +48,13 @@ const Hero = () => {
               href="#projects"
               className="rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-2.5 text-sm font-medium text-black shadow-glow hover:brightness-110 transition"
             >
-              Guarda i progetti
+              View projects
             </a>
             <a
               href="#contact"
               className="rounded-full border border-primary/40 bg-terminal/80 px-6 py-2.5 text-sm font-medium text-slate-100 hover:bg-terminal/60 transition"
             >
-              Contattami
+              Contact me
             </a>
           </motion.div>
 

@@ -54,8 +54,8 @@ export default function Skills() {
           whileInView={{ opacity: 1, y: 0 }}
           className="text-center max-w-2xl text-green-200/80 mb-12"
         >
-          Competenze stile <span className="text-green-400">Hacker CRT</span>,
-          tra glow neon, Matrix rain e animazioni terminal-like.
+          Skills in a <span className="text-green-400">Hacker CRT</span> style,
+          featuring neon glow, Matrix rain, and terminal-like animations.
         </motion.p>
 
         {/* SKILL CARDS */}
