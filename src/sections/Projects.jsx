@@ -28,14 +28,14 @@ export default function Projects() {
       {/* MATRIX BACKGROUND */}
       <MatrixRain opacity={0.35} />
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center">
+      <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center px-4">
 
         {/* TITLE */}
         <motion.h2
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-display text-green-300 drop-shadow-lg mb-6"
+          className="text-3xl sm:text-4xl md:text-5xl font-display text-green-300 drop-shadow-lg mb-6"
         >
           Cyber Projects
         </motion.h2>
@@ -44,13 +44,13 @@ export default function Projects() {
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-green-200/80 max-w-xl mb-12"
+          className="text-green-200/80 max-w-xl mb-12 text-sm sm:text-base"
         >
           Una raccolta di progetti sperimentali creati durante il mio percorso da Cybersecurity Specialist.
         </motion.p>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {PROJECTS.map((p, i) => (
             <motion.div
               key={i}
@@ -59,14 +59,14 @@ export default function Projects() {
               viewport={{ once: true }}
               className="
                 bg-[#001b11]/60 border border-green-500/30 
-                backdrop-blur-sm rounded-xl p-6 font-mono text-green-300
+                backdrop-blur-sm rounded-xl p-6 font-mono text-green-300 w-full
                 hover:shadow-[0_0_18px_rgba(34,197,94,0.5)]
                 hover:scale-[1.02] transition
                 animate-[crtVibration_0.18s_ease-in-out_infinite_alternate]
               "
             >
-              <p className="text-xl font-bold mb-2">{p.title}</p>
-              <p className="text-green-400 text-sm mb-3">{p.desc}</p>
+              <p className="text-lg sm:text-xl font-bold mb-2">{p.title}</p>
+              <p className="text-green-400 text-sm sm:text-base mb-3">{p.desc}</p>
 
               <div className="flex flex-wrap gap-2 mt-3">
                 {p.tech.map((t, j) => (

@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 const ProjectCard = ({ project, index }) => {
   return (
     <motion.article
-      className="glass group flex flex-col justify-between rounded-3xl p-6 transition-transform hover:-translate-y-1"
+      className="glass group flex flex-col justify-between rounded-3xl p-6 transition-transform hover:-translate-y-1 w-full"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
     >
       <div>
-        <h3 className="font-display text-lg font-semibold text-slate-50">
+        <h3 className="font-display text-base sm:text-lg font-semibold text-slate-50">
           {project.title}
         </h3>
-        <p className="mt-3 text-sm text-slate-400">{project.description}</p>
+        <p className="mt-3 text-sm sm:text-base text-slate-400">{project.description}</p>
 
         <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
           {project.tags.map((tag) => (

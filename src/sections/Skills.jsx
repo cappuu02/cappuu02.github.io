@@ -23,7 +23,6 @@ const SKILL_PROGRESS = [
   { name: "CTF Skills", percent: 75 },
 ];
 
-<MatrixRain opacity={0.35} />
 
 // =============================
 // MAIN COMPONENT
@@ -67,13 +66,13 @@ export default function Skills() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="
-                w-52 h-24 flex flex-col items-center justify-center
-                bg-[#001204]/70 border border-green-500/40 rounded-xl
-                backdrop-blur-sm font-mono text-green-300
-                hover:brightness-125 hover:shadow-[0_0_15px_rgba(0,255,0,0.6)]
-                transition cursor-default
-                animate-[crtVibration_0.18s_ease-in-out_infinite_alternate]
-              "
+                  w-full max-w-xs sm:w-52 h-24 flex flex-col items-center justify-center
+                  bg-[#001204]/70 border border-green-500/40 rounded-xl
+                  backdrop-blur-sm font-mono text-green-300
+                  hover:brightness-125 hover:shadow-[0_0_15px_rgba(0,255,0,0.6)]
+                  transition cursor-default
+                  animate-[crtVibration_0.18s_ease-in-out_infinite_alternate]
+                "
             >
               <p className="text-xl mb-1">{skill.name}</p>
               <p className="text-xs text-green-400">Level: {skill.level}</p>

@@ -27,8 +27,11 @@ function App() {
       <ScrollProgress />
       <SideNav />
 
-      {/* MAIN SCROLL AREA */}
-      <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
+        {/* MAIN SCROLL AREA
+          - Scroll snap & smooth only enabled on md+ (desktop/tablet).
+          - On mobile we use normal, fluid scrolling to avoid "mechanical" snapping.
+        */}
+        <main className="md:snap-y md:snap-mandatory md:h-screen md:overflow-y-scroll md:scroll-smooth overflow-y-auto">
         
         {/* Ogni sezione **DEVE** avere un ID */}
         <section id="hero" className="snap-start">

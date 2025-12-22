@@ -11,10 +11,10 @@ const Hero = () => {
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.7 }}
     >
-      <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-12 md:flex-row md:gap-16">
+      <div className="mx-auto flex max-w-5xl flex-col-reverse items-center gap-8 sm:gap-12 md:flex-row md:gap-16">
         {/* LEFT */}
         <div className="flex-1">
-          <h1 className="font-display text-4xl md:text-6xl font-semibold leading-tight tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight tracking-tight">
             <span
                 className="glitch text-primary"
                 data-text="Ciao, sono Luca"
@@ -30,7 +30,7 @@ const Hero = () => {
           </h1>
 
           <motion.p
-            className="mt-6 max-w-xl text-sm md:text-base text-slate-300 leading-relaxed"
+            className="mt-6 max-w-xl text-sm sm:text-base md:text-base text-slate-300 leading-relaxed"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -100,12 +100,12 @@ const Hero = () => {
             whileHover={{ rotateY: 8, rotateX: -6, scale: 1.03 }}
             transition={{ type: "spring", stiffness: 120, damping: 12 }}
           >
-            <div className="absolute -inset-10 rounded-full bg-gradient-to-br from-primary/25 via-secondary/25 to-accent/25 blur-3xl opacity-80" />
+            <div className="absolute -inset-6 sm:-inset-10 rounded-full bg-gradient-to-br from-primary/25 via-secondary/25 to-accent/25 blur-3xl opacity-80" />
 
             <motion.img
               src="/profile.jpg"
               alt="Luca"
-              className="relative z-10 h-64 w-64 md:h-80 md:w-80 rounded-full border border-primary/40 shadow-2xl object-cover"
+              className="relative z-10 h-40 w-40 sm:h-56 sm:w-56 md:h-80 md:w-80 rounded-full border border-primary/40 shadow-2xl object-cover max-w-full"
             />
           </motion.div>
         </motion.div>

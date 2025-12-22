@@ -5,7 +5,7 @@ export default function SideNav() {
   const active = useActiveSection();
 
   return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-5">
+    <div className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-30 flex-col gap-5">
       {SECTION_IDS.map((id) => {
         const isActive = active === id;
 

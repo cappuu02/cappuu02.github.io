@@ -4,13 +4,13 @@ export default function About() {
   return (
     <motion.section
       id="about"
-      className="section-padding min-h-screen flex flex-col justify-center"
+      className="section-padding md:min-h-screen flex flex-col justify-center py-12 md:py-24 overflow-x-hidden"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* ⬛ HACKER TERMINAL HEADER */}
         <div className="panel mb-10">
@@ -33,7 +33,7 @@ export default function About() {
               <span className="text-primary">root@portfolio</span>:~$ cat profile.txt  
             </p>
 
-            <pre className="pl-4 text-xs leading-relaxed text-slate-300">
+            <pre className="pl-4 text-xs leading-relaxed text-slate-300 whitespace-pre-wrap rounded-md bg-[#061014]/30 p-3">
 {String.raw`{
   "name": "Luca Cappu",
   "role": "Cybersecurity Student",
@@ -83,7 +83,7 @@ export default function About() {
               ▶ bio_dump.txt
             </h2>
 
-            <div className="relative z-10 text-sm md:text-base text-slate-300 space-y-2">
+            <div className="relative z-10 text-sm sm:text-sm md:text-base text-slate-300 space-y-2">
               <p>• 🚀 Studente Cybersecurity Specialist</p>
               <p>• 👨‍💻 Amante di UI dark / neon animate</p>
               <p>• 🔐 Interest: offensive security, exploit dev</p>
