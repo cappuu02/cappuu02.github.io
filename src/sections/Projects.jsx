@@ -1,86 +1,121 @@
 import { motion } from "framer-motion";
-import MatrixRain from "../components/MatrixRain";
+
+const PROJECT_STATS = [
+  { label: "Security Tools", value: "12", detail: "Automation & exploitation utilities" },
+  { label: "Lab Builds", value: "5", detail: "Isolated AD + cloud ranges" },
+  { label: "CTF Writeups", value: "30+", detail: "Shared with the community" }
+];
 
 const PROJECTS = [
   {
     title: "VulnScan Toolkit",
-    desc: "Custom toolkit for automated vulnerability discovery.",
-    tech: ["Python", "Nmap", "Regex", "Reporting Engine"],
+    desc: "Automation suite that chains Nmap, regex parsing, and report templates to accelerate recon by 60%.",
+    tech: ["Python", "Nmap", "Regex", "Report Engine"],
+    status: "Active",
+    year: "2024",
+    impact: "Used on every pentest; exports markdown-ready findings.",
+    type: "Automation"
   },
   {
     title: "CyberRange Lab",
-    desc: "Local environment for attack/analysis testing based on VMs.",
-    tech: ["VMware", "Kali", "Windows AD", "Networking"],
+    desc: "Modular VM lab with AD forest, misconfigured services, and purple-team playbooks for daily drills.",
+    tech: ["VMware", "Kali", "Windows AD", "Terraform"],
+    status: "Iterating",
+    year: "2023-2024",
+    impact: "Replicates enterprise environments for exploit rehearsal.",
+    type: "Infrastructure"
   },
   {
     title: "WebSec Playground",
-    desc: "Mini platform to simulate XSS, SQLi, and CSRF attacks.",
-    tech: ["Node.js", "Express", "Javascript", "Burp Suite"],
+    desc: "Hands-on platform simulating OWASP Top 10 with guided exploitation steps and Burp macros.",
+    tech: ["Node.js", "Express", "Mongo", "Burp Suite"],
+    status: "Released",
+    year: "2024",
+    impact: "Train teammates on XSS/SQLi/CSRF defenses.",
+    type: "Education"
   },
+  {
+    title: "Portfolio Console",
+    desc: "This interactive CV with hacker aesthetics, Lenis smooth scroll, and framer-motion micro-interactions.",
+    tech: ["React", "Framer Motion", "Tailwind", "Lenis"],
+    status: "Live",
+    year: "2025",
+    impact: "Showcases personal brand & UI engineering chops.",
+    type: "UI"
+  }
 ];
 
 export default function Projects() {
   return (
-    <section
-      id="projects"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-24 overflow-hidden"
-    >
-      {/* MATRIX BACKGROUND */}
-      <MatrixRain opacity={0.35} />
+    <section id="projects" className="w-full space-y-10">
+      <div>
+        <p className="text-xs font-mono text-green-400/80">~/build-log</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold text-green-400 mb-2 font-mono">
+          $ Projects
+        </h2>
+        <p className="text-sm text-slate-400 max-w-2xl">
+          A blend of offensive tooling, training platforms, and UI experiments. Each build focuses on solving a practical security pain point.
+        </p>
+      </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center px-4">
+      <div className="grid gap-4 md:grid-cols-3">
+        {PROJECT_STATS.map((stat) => (
+          <div key={stat.label} className="rounded-2xl border border-slate-700/60 bg-slate-900/50 p-5">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">{stat.label}</p>
+            <p className="text-3xl font-semibold text-green-300 mt-2">{stat.value}</p>
+            <p className="text-xs text-slate-400 mt-1">{stat.detail}</p>
+          </div>
+        ))}
+      </div>
 
-        {/* TITLE */}
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-5xl font-display text-green-300 drop-shadow-lg mb-6"
-        >
-          Cyber Projects
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-green-200/80 max-w-xl mb-12 text-sm sm:text-base"
-        >
-          A collection of experimental projects created during my journey as a Cybersecurity Specialist.
-        </motion.p>
-
-        {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {PROJECTS.map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="
-                bg-[#001b11]/60 border border-green-500/30 
-                backdrop-blur-sm rounded-xl p-6 font-mono text-green-300 w-full
-                hover:shadow-[0_0_18px_rgba(34,197,94,0.5)]
-                hover:scale-[1.02] transition
-                animate-[crtVibration_0.18s_ease-in-out_infinite_alternate]
-              "
-            >
-              <p className="text-lg sm:text-xl font-bold mb-2">{p.title}</p>
-              <p className="text-green-400 text-sm sm:text-base mb-3">{p.desc}</p>
-
-              <div className="flex flex-wrap gap-2 mt-3">
-                {p.tech.map((t, j) => (
-                  <span
-                    key={j}
-                    className="px-2 py-1 text-xs bg-green-500/10 border border-green-500/20 rounded"
-                  >
-                    {t}
-                  </span>
-                ))}
+      <div className="grid gap-6 md:grid-cols-2">
+        {PROJECTS.map((project, i) => (
+          <motion.article
+            key={project.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            className="rounded-3xl border border-green-500/20 bg-slate-900/40 p-6 flex flex-col gap-4 hover:border-green-400/40 hover:bg-slate-900/60 transition"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-mono text-slate-500 uppercase tracking-[0.35em]">{project.type}</p>
+                <h3 className="text-xl font-semibold text-slate-100 mt-1">{project.title}</h3>
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <div className="text-right">
+                <span className="text-xs font-mono text-slate-400 block">{project.year}</span>
+                <span className={`text-xs font-semibold font-mono px-2 py-1 rounded-full border ${
+                  project.status === "Live"
+                    ? "border-green-400/60 text-green-300"
+                    : project.status === "Active"
+                    ? "border-cyan-400/60 text-cyan-200"
+                    : "border-yellow-400/60 text-yellow-200"
+                }`}>
+                  {project.status}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-300 leading-relaxed">{project.desc}</p>
+
+            <div className="rounded-xl border border-slate-800/60 bg-slate-900/60 p-3">
+              <p className="text-xs font-mono text-slate-400 mb-1">Impact</p>
+              <p className="text-sm text-slate-200">{project.impact}</p>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {project.tech.map((tech) => (
+                <span
+                  key={tech}
+                  className="text-[11px] font-mono uppercase tracking-wide px-3 py-1 rounded-full border border-green-500/30 text-green-200"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.article>
+        ))}
       </div>
     </section>
   );

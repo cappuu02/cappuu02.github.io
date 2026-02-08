@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,11 +6,27 @@
 
 @layer base {
   body {
-    @apply bg-bg text-slate-100 font-sans antialiased;
-    background-image:
-      radial-gradient(circle at 0% 0%, rgba(56,189,248,0.18), transparent 55%),
-      radial-gradient(circle at 100% 100%, rgba(34,197,94,0.18), transparent 55%);
-    background-color: #020617;
+    @apply text-zinc-200 font-sans antialiased;
+    background-color: #09090b; /* Zinc-950 - Neutral Black */
+    color: #e4e4e7; /* Zinc-200 */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tight text-white;
+  }
+
+  code {
+    @apply font-mono;
+  }
+}
+
+@layer utilities {
+  .noise-bg {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  
+  .glass-card {
+    @apply bg-zinc-900/50 backdrop-blur-md border border-zinc-800 shadow-xl;
   }
 }
 
@@ -20,212 +36,11 @@
   }
 
   .panel {
-    @apply bg-terminal/80 border border-slate-700/70 rounded-2xl p-5 md:p-6 shadow-glow;
-  }
-
-  .terminal-header {
-    @apply flex items-center gap-2 mb-4 text-xs font-mono text-slate-400;
-  }
-
-  .dot {
-    @apply h-2 w-2 rounded-full;
-  }
-
-  .dot-red {
-    @apply dot bg-red-500/80;
-  }
-  .dot-yellow {
-    @apply dot bg-yellow-400/80;
-  }
-  .dot-green {
-    @apply dot bg-primary;
-  }
-
-  .terminal-body {
-    @apply font-mono text-xs md:text-sm text-slate-300;
+    @apply bg-zinc-900/30 border border-zinc-800 rounded-lg p-5 md:p-6 shadow-md;
   }
   
-/* ============================= */
-/* 🔥 HACKER NOISE / SCANLINES   */
-/* ============================= */
-
-.noise-overlay {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background-image: repeating-linear-gradient(
-      0deg,
-      rgba(15, 23, 42, 0.5) 0px,
-      rgba(15, 23, 42, 0.5) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  opacity: 0.24;
-  mix-blend-mode: soft-light;
-  animation: noiseShift 7s linear infinite alternate;
-}
-
-@keyframes noiseShift {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-30px);
+  .btn-primary {
+    @apply px-6 py-2 bg-white hover:bg-zinc-200 text-black rounded-lg transition-all shadow-lg shadow-white/10 font-medium;
   }
 }
 
-/* ============================= */
-/* 🔥 GLITCH EFFECT (Hacker)     */
-/* ============================= */
-
-.glitch {
-  position: relative;
-  display: inline-block;
-  animation: glitch-skew 1.5s infinite linear alternate-reverse;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 100%;
-}
-
-.glitch::before {
-  left: 2px;
-  text-shadow: -2px 0 #22c55e;
-  clip-path: inset(0 0 0 0);
-  animation: glitch-1 2s infinite linear alternate-reverse;
-}
-
-.glitch::after {
-  left: -2px;
-  text-shadow: -2px 0 #38bdf8;
-  clip-path: inset(0 0 0 0);
-  animation: glitch-2 1.8s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-1 {
-  0% { clip-path: inset(10% 0 85% 0); }
-  20% { clip-path: inset(40% 0 20% 0); }
-  40% { clip-path: inset(20% 0 60% 0); }
-  60% { clip-path: inset(70% 0 5% 0); }
-  80% { clip-path: inset(15% 0 70% 0); }
-  100% { clip-path: inset(5% 0 80% 0); }
-}
-
-@keyframes glitch-2 {
-  0% { clip-path: inset(80% 0 5% 0); }
-  20% { clip-path: inset(15% 0 70% 0); }
-  40% { clip-path: inset(60% 0 20% 0); }
-  60% { clip-path: inset(25% 0 55% 0); }
-  80% { clip-path: inset(45% 0 35% 0); }
-  100% { clip-path: inset(85% 0 10% 0); }
-}
-
-@keyframes glitch-skew {
-  0% { transform: skew(0deg); }
-  25% { transform: skew(1deg); }
-  50% { transform: skew(-1.5deg); }
-  75% { transform: skew(0.5deg); }
-  100% { transform: skew(-1deg); }
-}
-
-/* =============================== */
-/*  🔥 MATRIX BACKGROUND EFFECT    */
-/* =============================== */
-
-.matrix-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  opacity: 0.22;
-  pointer-events: none;
-}
-
-.matrix-row {
-  font-family: "JetBrains Mono", monospace;
-  color: #00ff99;
-  white-space: nowrap;
-  font-size: 15px;
-  line-height: 17px;
-  opacity: 0.8;
-  animation: matrix-scroll 6s linear infinite;
-}
-
-@keyframes matrix-scroll {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-/* =============================== */
-/*  🔥 CRT CARD EFFECT              */
-/* =============================== */
-
-.crt-card {
-  background: rgba(15, 23, 42, 0.58);
-  border: 1px solid rgba(0, 255, 150, 0.25);
-  border-radius: 14px;
-  backdrop-filter: blur(8px);
-  padding: 18px;
-  transition: 0.2s ease-out;
-  position: relative;
-  overflow: hidden;
-}
-
-.crt-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 255, 150, 0.04) 0px,
-    rgba(0, 255, 150, 0.04) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.crt-card:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 0 18px rgba(0, 255, 150, 0.35);
-}
-
-/* CRT vibration */
-.crt-wobble {
-  animation: crt-wobble 0.18s infinite alternate ease-in-out;
-}
-
-@keyframes crt-wobble {
-  0% {
-    transform: translateX(-0.5px);
-  }
-  100% {
-    transform: translateX(0.5px);
-  }
-}
-
-@keyframes matrixFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-1200px); }
-}
-
-@keyframes crtVibration {
-  0% { transform: translate(0px, 0px); }
-  100% { transform: translate(0.6px, -0.6px); }
-}
-
-
-}
